@@ -5,4 +5,4 @@ npm install
 npm run dev
 ```
 
-Visit `http://localhost:8080/` to take a look.
+Visit `http://localhost:5005/` to take a look.
