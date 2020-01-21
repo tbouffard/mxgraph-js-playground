@@ -1,9 +1,12 @@
 export class TemplateService {
+  private readonly message: string;
 
-    constructor() {};
+  constructor() {
+    this.message = 'test after calling service';
+  }
 
-    test() {
-        return 'test after calling service';
-    }
+  public test() {
+    return this.message;
+  }
 
 }
