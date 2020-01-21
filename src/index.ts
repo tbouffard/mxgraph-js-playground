@@ -1,1 +1,1 @@
-import './components/template-component';
+import './bpmn-visu/bpmn-visu';

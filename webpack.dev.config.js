@@ -2,6 +2,7 @@ const path = require("path");
 const dist = path.resolve(__dirname, "dist");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: "./src/index.ts",
@@ -41,6 +42,13 @@ module.exports = {
     }),
     new HtmlWebpackHarddiskPlugin({
       outputPath: path.resolve(__dirname, "dist")
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        //Note:- No wildcard is specified hence will copy all files and folders
+        from: 'src/static', //Will resolve to RepoDir/src/assets
+        to: dist //Copies all files from above dest to dist/assets
+      }
+      ])
   ]
 };
