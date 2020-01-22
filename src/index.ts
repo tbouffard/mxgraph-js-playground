@@ -1,1 +1,1 @@
-import './bpmn-visu/bpmn-visu';
+import './components/bpmn-visu/bpmn-visu';

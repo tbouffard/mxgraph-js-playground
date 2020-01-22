@@ -45,10 +45,9 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       {
-        //Note:- No wildcard is specified hence will copy all files and folders
-        from: 'src/static', //Will resolve to RepoDir/src/assets
-        to: dist //Copies all files from above dest to dist/assets
+        from: 'src/static',
+        to: dist
       }
-      ])
+    ])
   ]
 };
