@@ -1,18 +1,18 @@
-import {css, customElement, html, LitElement, property} from 'lit-element';
+import { css, CSSResult, customElement, html, LitElement, property } from 'lit-element';
+import { TemplateResult } from 'lit-html/lib/template-result';
 
-import {BpmnJs} from '../../libs/bpmn-js/bpmn-js';
+import { BpmnJs } from '../../libs/bpmn-js/bpmn-js';
 import getStyle from './style';
-
 
 @customElement('bpmn-visu')
 export class BpmnVisu extends LitElement {
   private static containerIdCss = css`visu-container`;
 
-  static get styles() {
+  static get styles(): CSSResult {
     return getStyle(BpmnVisu.containerIdCss);
   }
 
-  @property({type: String})
+  @property({ type: String })
   private config = '';
 
   private bpmnJs: BpmnJs;
@@ -21,7 +21,7 @@ export class BpmnVisu extends LitElement {
     super();
   }
 
-  public render() {
+  public render(): TemplateResult {
     return html`
       <div id="${BpmnVisu.containerIdCss}">
         <slot id="graphSlot" name="graph"></slot>
@@ -30,7 +30,7 @@ export class BpmnVisu extends LitElement {
     `;
   }
 
-  protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>): void {
+  protected firstUpdated(): void {
     // Initialize bpmn-js
     this.bpmnJs = new BpmnJs(this.config);
 

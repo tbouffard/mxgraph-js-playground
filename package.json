@@ -2,25 +2,31 @@
   "name": "demo-visu",
   "version": "1.0.0",
   "description": "Demo visu BPMN",
-  "scripts": {
-    "dev": "webpack-dev-server --config webpack.dev.config.js",
-    "build-dev": "webpack --config webpack.dev.config.js"
-  },
   "author": "",
   "license": "",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "html-webpack-harddisk-plugin": "^1.0.1",
     "html-webpack-plugin": "^3.2.0",
     "lit-element": "^2.2.1",
+    "prettier": "^1.19.1",
     "ts-loader": "^5.4.5",
-    "tslint": "^5.20.1",
     "typescript": "^3.7.4",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1",
-    "copy-webpack-plugin": "^5.1.1"
+    "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
     "mxgraph-factory": "^4.0.6"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --config webpack.dev.config.js",
+    "build-dev": "webpack --config webpack.dev.config.js",
+    "lint": "tsc --noEmit && eslint */**/*.{js,ts,tsx} --quiet --fix"
   }
 }
