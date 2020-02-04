@@ -1,4 +1,4 @@
-# Demo visu
+# mxgraph-js-playground
 
 ```
 npm install
