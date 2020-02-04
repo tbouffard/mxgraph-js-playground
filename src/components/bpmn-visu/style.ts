@@ -20,7 +20,7 @@ export default function(containerId): CSSResult {
       border-style: solid;
       border-color: #f2f2f2;
       border-width: 1px;
-      background: url('images/grid.gif');
+      // background: url('images/grid.gif');
     }
   `;
 }
