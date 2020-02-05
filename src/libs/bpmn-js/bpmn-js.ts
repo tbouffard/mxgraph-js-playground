@@ -38,7 +38,16 @@ export class BpmnJs {
   }
 
   public loadGraph(): void {
-    this.loadSampleGraph();
+    this.loadGraphFromFile();
+  }
+
+  private loadGraphFromFile(): void {
+    const req = mxUtils.load('resources/diagrams/travel-booking.xml');
+    const root = req.getDocumentElement();
+
+    // const newGraphModel = mxUtils.parseXml(root);
+    // const node = newGraphModel.documentElement;
+    this.editor.readGraphModel(root);
   }
 
   private loadSampleGraph(): void {
