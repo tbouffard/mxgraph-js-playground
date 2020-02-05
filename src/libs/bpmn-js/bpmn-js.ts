@@ -17,6 +17,8 @@ const {
   mxImage,
   // to manipulate mxgraph console
   mxLog,
+  // for create tasks registration
+  mxResources,
 } = mxgraphFactory({
   mxLoadResources: false,
   mxLoadStylesheets: false,
@@ -87,6 +89,8 @@ export class BpmnJs {
         this.enableTitleUpdate();
         this.initOverlays();
 
+        // this.registerCreateTasks();
+
         mxLog.show();
         mxLog.TRACE = true;
         // TODO log warn: js docs explain we can pass a message
@@ -138,6 +142,116 @@ export class BpmnJs {
     };
     this.editor.graph.allowAutoPanning = true;
     this.editor.graph.timerAutoScroll = true;
+  }
+
+  // private initViewXmlButton(): void {
+  //   const graph = this.editor.graph;
+  //   const button = mxUtils.button('View XML', function() {
+  //     const encoder = new mxCodec();
+  //     const node = encoder.encode(graph.getModel());
+  //     mxUtils.popup(mxUtils.getPrettyXml(node), true);
+  //   });
+  // }
+
+  /*
+  * 		<add as="myFirstAction"><![CDATA[
+			function (editor, cell)
+			{
+				var encoder = new mxCodec();
+				var node = encoder.encode(editor.graph.getModel());
+				mxUtils.popup(mxUtils.getPrettyXml(node), true);
+			}
+		]]></add>
+  *
+  *
+  * */
+
+  private registerCreateTasks() {
+    console.log('register create tasks');
+    const currentEditor = this.editor;
+    mxEditor.prototype.createTasks = function(div) {
+      // const mxResources = currentEditor.
+      const off = 30;
+      console.log('call createTasks');
+      // mxUtils.error('call createTasks!', 200, true);
+
+      if (currentEditor.graph != null) {
+        const layer = currentEditor.graph.model.root.getChildAt(0);
+        mxUtils.para(div, mxResources.get('examples'));
+        mxUtils.linkInvoke(div, mxResources.get('newDiagram'), currentEditor, 'open', 'diagrams/empty.xml', off);
+        mxUtils.br(div);
+        mxUtils.linkInvoke(div, mxResources.get('swimlanes'), currentEditor, 'open', 'diagrams/swimlanes.xml', off);
+        mxUtils.br(div);
+        mxUtils.linkInvoke(div, mxResources.get('travelBooking'), currentEditor, 'open', 'diagrams/travel-booking.xml', off);
+        mxUtils.br(div);
+
+        if (!currentEditor.graph.isSelectionEmpty()) {
+          const cell = currentEditor.graph.getSelectionCell();
+          if ((currentEditor.graph.getSelectionCount() == 1 && currentEditor.graph.model.isVertex(cell) && cell.getEdgeCount() > 0) || currentEditor.graph.isSwimlane(cell)) {
+            mxUtils.para(div, 'Layout');
+            mxUtils.linkAction(div, mxResources.get('verticalTree'), currentEditor, 'verticalTree', off);
+            mxUtils.br(div);
+            mxUtils.linkAction(div, mxResources.get('horizontalTree'), currentEditor, 'horizontalTree', off);
+            mxUtils.br(div);
+          }
+
+          mxUtils.para(div, 'Format');
+
+          if (mxUtils.isNode(cell.value, 'Symbol')) {
+            mxUtils.linkAction(div, mxResources.get('image'), currentEditor, 'image', off);
+            mxUtils.br(div);
+          } else {
+            mxUtils.linkAction(div, mxResources.get('opacity'), currentEditor, 'opacity', off);
+            mxUtils.br(div);
+            if (currentEditor.graph.model.isVertex(cell) || (cell.style != null && cell.style.indexOf('arrowEdge') >= 0)) {
+              mxUtils.linkAction(div, mxResources.get('gradientColor'), currentEditor, 'gradientColor', off);
+              mxUtils.br(div);
+            }
+            if (currentEditor.graph.model.isEdge(cell)) {
+              mxUtils.linkAction(div, 'Straight Connector', currentEditor, 'straightConnector', off);
+              mxUtils.br(div);
+              mxUtils.linkAction(div, 'Elbow Connector', currentEditor, 'elbowConnector', off);
+              mxUtils.br(div);
+              mxUtils.linkAction(div, 'Arrow Connector', currentEditor, 'arrowConnector', off);
+              mxUtils.br(div);
+            }
+          }
+
+          mxUtils.linkAction(div, 'Rounded', currentEditor, 'toggleRounded', off);
+          mxUtils.br(div);
+          if (currentEditor.graph.isSwimlane(cell) || currentEditor.graph.model.isEdge(cell)) {
+            mxUtils.linkAction(div, 'Orientation', currentEditor, 'toggleOrientation', off);
+            mxUtils.br(div);
+          }
+
+          if (currentEditor.graph.getSelectionCount() > 1) {
+            mxUtils.para(div, mxResources.get('align'));
+            mxUtils.linkAction(div, mxResources.get('left'), currentEditor, 'alignCellsLeft', off);
+            mxUtils.br(div);
+            mxUtils.linkAction(div, mxResources.get('center'), currentEditor, 'alignCellsCenter', off);
+            mxUtils.br(div);
+            mxUtils.linkAction(div, mxResources.get('right'), currentEditor, 'alignCellsRight', off);
+            mxUtils.br(div);
+            mxUtils.linkAction(div, mxResources.get('top'), currentEditor, 'alignCellsTop', off);
+            mxUtils.br(div);
+            mxUtils.linkAction(div, mxResources.get('middle'), currentEditor, 'alignCellsMiddle', off);
+            mxUtils.br(div);
+            mxUtils.linkAction(div, mxResources.get('bottom'), currentEditor, 'alignCellsBottom', off);
+            mxUtils.br(div);
+          }
+
+          mxUtils.para(div, mxResources.get('selection'));
+          mxUtils.linkAction(div, mxResources.get('clearSelection'), currentEditor, 'selectNone', off);
+          mxUtils.br(div);
+        } else if (layer.getChildCount() > 0) {
+          mxUtils.para(div, mxResources.get('selection'));
+          mxUtils.linkAction(div, mxResources.get('selectAll'), currentEditor, 'selectAll', off);
+          mxUtils.br(div);
+        }
+
+        mxUtils.br(div);
+      }
+    };
   }
 
   // ===========================================================================================================================================================================
