@@ -34,6 +34,6 @@ export class BpmnVisu extends LitElement {
     // Initialize bpmn-js
     this.bpmnJs = new BpmnJs(this.config);
 
-    this.bpmnJs.loadSampleGraph();
+    this.bpmnJs.loadGraph();
   }
 }

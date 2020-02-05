@@ -33,7 +33,11 @@ export class BpmnJs {
     this.init();
   }
 
-  public loadSampleGraph(): void {
+  public loadGraph(): void {
+    this.loadSampleGraph();
+  }
+
+  private loadSampleGraph(): void {
     // Adds cells to the model in a single step
     this.editor.graph.getModel().beginUpdate();
 
@@ -67,6 +71,10 @@ export class BpmnJs {
       this.editor.graph.getModel().endUpdate();
     }
   }
+
+  // ===========================================================================================================================================================================
+  // CONFIGURATION
+  // ===========================================================================================================================================================================
 
   public init(): void {
     try {
