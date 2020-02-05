@@ -1,6 +1,21 @@
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 
-const { mxGraph, mxEvent, mxClient, mxUtils, mxConstants, mxEditor, mxPanningManager, mxEdgeHandler, mxGuide, mxGraphHandler } = mxgraphFactory({
+const {
+  mxGraph,
+  mxEvent,
+  mxClient,
+  mxUtils,
+  mxConstants,
+  mxEditor,
+  mxPanningManager,
+  mxEdgeHandler,
+  mxGuide,
+  mxGraphHandler,
+  // for overlays example
+  mxCellOverlay,
+  mxCellTracker,
+  mxImage,
+} = mxgraphFactory({
   mxLoadResources: false,
   mxLoadStylesheets: false,
 });
@@ -21,6 +36,7 @@ export class BpmnJs {
   public loadSampleGraph(): void {
     // Adds cells to the model in a single step
     this.editor.graph.getModel().beginUpdate();
+
     try {
       const style = mxUtils.clone(this.editor.graph.getStylesheet().getDefaultVertexStyle());
 
@@ -39,13 +55,13 @@ export class BpmnJs {
       const parent = this.editor.graph.getDefaultParent();
 
       // already existing styles
-      const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane,', 200, 500, 300, 160, 'swimlane;fillColor=#83027F');
+      const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane,', 20, 20, 600, 400, 'swimlane;fillColor=#83027F');
 
-      const v1 = this.editor.graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30, 'condition');
-      const v2 = this.editor.graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30, 'styleCloud');
-      this.editor.graph.insertEdge(parent, null, '', v1, v2);
-      const end = this.editor.graph.insertVertex(parent, null, 'end event', 200, 300, 30, 30, 'end');
-      this.editor.graph.insertEdge(parent, null, '', v2, end);
+      const v1 = this.editor.graph.insertVertex(swimlane, null, 'Hello,', 40, 20, 80, 30, 'condition');
+      const v2 = this.editor.graph.insertVertex(swimlane, null, 'World!', 200, 150, 80, 30, 'styleCloud');
+      this.editor.graph.insertEdge(swimlane, null, '', v1, v2);
+      const end = this.editor.graph.insertVertex(swimlane, null, 'end event', 200, 300, 30, 30, 'end');
+      this.editor.graph.insertEdge(swimlane, null, '', v2, end);
     } finally {
       // Updates the display
       this.editor.graph.getModel().endUpdate();
@@ -59,8 +75,9 @@ export class BpmnJs {
       } else {
         this.initPanning();
         this.enableTitleUpdate();
+        this.initOverlays();
         // Displays version in statusbar
-        this.editor.setStatus('mxGraph ' + mxClient.VERSION);
+        this.editor.setStatus('POC using mxGraph ' + mxClient.VERSION);
       }
     } catch (e) {
       // Shows an error message if the editor cannot start
@@ -104,5 +121,46 @@ export class BpmnJs {
     };
     this.editor.graph.allowAutoPanning = true;
     this.editor.graph.timerAutoScroll = true;
+  }
+
+  // ===========================================================================================================================================================================
+  // Adapted from the 'overlays' example
+  // mainly 'var' --> 'const'
+  // ===========================================================================================================================================================================
+  private initOverlays(): void {
+    const graph = this.editor.graph;
+    // Disables basic selection and cell handling --> don't do it here to keep editor features
+    // graph.setEnabled(false);
+
+    // Highlights the vertices when the mouse enters
+    const highlight = new mxCellTracker(graph, 'red', null); // TS add a function as 3rd argument
+
+    // Enables tooltips for the overlays
+    graph.setTooltips(true);
+
+    // Installs a handler for click events in the graph
+    // that toggles the overlay for the respective cell
+    graph.addListener(mxEvent.CLICK, function(sender, evt) {
+      const cell = evt.getProperty('cell');
+
+      if (cell != null) {
+        const overlays = graph.getCellOverlays(cell);
+
+        if (overlays == null) {
+          // Creates a new overlay with an image and a tooltip
+          const overlay = new mxCellOverlay(new mxImage('images/overlays/check.png', 16, 16), 'Overlay tooltip');
+
+          // Installs a handler for clicks on the overlay
+          overlay.addListener(mxEvent.CLICK, function(sender, evt2) {
+            mxUtils.alert('Overlay clicked');
+          });
+
+          // Sets the overlay for the cell in the graph
+          graph.addCellOverlay(cell, overlay);
+        } else {
+          graph.removeCellOverlays(cell);
+        }
+      }
+    });
   }
 }
