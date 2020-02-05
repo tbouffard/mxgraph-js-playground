@@ -15,6 +15,8 @@ const {
   mxCellOverlay,
   mxCellTracker,
   mxImage,
+  // to manipulate mxgraph console
+  mxLog,
 } = mxgraphFactory({
   mxLoadResources: false,
   mxLoadStylesheets: false,
@@ -84,6 +86,13 @@ export class BpmnJs {
         this.initPanning();
         this.enableTitleUpdate();
         this.initOverlays();
+
+        mxLog.show();
+        mxLog.TRACE = true;
+        // TODO log warn: js docs explain we can pass a message
+        // mxLog.warn('Hello, World!');
+        // mxLog.warn();
+
         // Displays version in statusbar
         this.editor.setStatus('POC using mxGraph ' + mxClient.VERSION);
       }
