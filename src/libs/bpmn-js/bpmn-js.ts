@@ -55,7 +55,7 @@ export class BpmnJs {
       const parent = this.editor.graph.getDefaultParent();
 
       // already existing styles
-      const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane,', 20, 20, 600, 400, 'swimlane;fillColor=#83027F');
+      const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane', 20, 20, 600, 400, 'swimlane');
 
       const v1 = this.editor.graph.insertVertex(swimlane, null, 'Hello,', 40, 20, 80, 30, 'condition');
       const v2 = this.editor.graph.insertVertex(swimlane, null, 'World!', 200, 150, 80, 30, 'styleCloud');

@@ -115,6 +115,7 @@
             <add as="horizontal" value="0"/>
             <add as="verticalAlign" value="top"/>
             <add as="fontColor" value="white"/>
+            <add as="fillColor" value="#83027F"/>
             <add as="labelBackgroundColor" value="none"/>
         </add>
         <add as="group">
