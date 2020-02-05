@@ -1,4 +1,11 @@
 <mxDefaultToolbar>
+    <add as="open" action="open" icon="images/open.gif"><![CDATA[
+			function (editor)
+			{
+			    console.log('Call open function');
+				editor.open(mxUtils.prompt('Enter filename', 'workflow.xml'));
+			}
+    ]]></add>
     <add as="save" action="save" icon="images/save.gif"/>
     <add as="show" action="show" icon="images/preview.gif"/>
     <add as="print" action="print" icon="images/print.gif"/>
@@ -18,6 +25,7 @@
     <add as="connect" mode="connect" icon="images/straight.gif"><![CDATA[
 		function (editor)
 		{
+			console.log('Connect!!!!')
 			if (editor.defaultEdge != null)
 			{
 				editor.defaultEdge.style = 'straightEdge';
@@ -71,4 +79,6 @@
     <add as="tasks" action="toggleTasks" icon="images/tasks.gif"/>
     <add as="help" action="toggleHelp" icon="images/help.gif"/>
     <add as="console" action="toggleConsole" icon="images/console.gif"/>
+    <br/><hr/>
+    <add as="show xml" action="showXml" icon="images/bell.png"/>
 </mxDefaultToolbar>

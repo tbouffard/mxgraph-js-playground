@@ -260,5 +260,14 @@
 				editor.treeLayout(cell, false);
 			}
 		]]></add>
+        <add as="showXml"><![CDATA[
+        function (editor, cell)
+        {
+            console.log('show xml!!!!')
+            var encoder = new mxCodec();
+            var node = encoder.encode(editor.graph.getModel());
+            mxUtils.popup(mxUtils.getPrettyXml(node), true);
+        }
+		]]></add>
     </Array>
 </mxEditor>
