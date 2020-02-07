@@ -18,7 +18,7 @@ const {
   // to manipulate mxgraph console
   mxLog,
   // for create tasks registration
-  mxResources,
+  //mxResources,
 } = mxgraphFactory({
   mxLoadResources: false, // for graph and editors resources files
   mxLoadStylesheets: false,
@@ -101,7 +101,7 @@ export class BpmnJs {
         this.configureEditorFunctions();
 
         this.registerCreateTasks();
-        //this.editor.showTasks();
+        this.editor.showTasks();
 
         mxLog.show();
         mxLog.TRACE = true;
@@ -208,41 +208,40 @@ export class BpmnJs {
 
     //mxEditor.prototype.createTasks = function(div) {
     this.editor.createTasks = function(div) {
-      // const mxResources = currentEditor.
       const off = 30;
       console.log('call createTasks');
       //mxUtils.error('call createTasks!', 200, true);
 
       if (currentEditor.graph != null) {
         const layer = currentEditor.graph.model.root.getChildAt(0);
-        mxUtils.para(div, mxResources.get('examples'));
-        mxUtils.linkInvoke(div, mxResources.get('newDiagram'), currentEditor, 'open', 'diagrams/empty.xml', off);
+        mxUtils.para(div, 'examples');
+        mxUtils.linkInvoke(div, 'newDiagram', currentEditor, 'open', 'diagrams/empty.xml', off);
         mxUtils.br(div);
-        mxUtils.linkInvoke(div, mxResources.get('swimlanes'), currentEditor, 'open', 'diagrams/swimlanes.xml', off);
+        mxUtils.linkInvoke(div, 'swimlanes', currentEditor, 'open', 'diagrams/swimlanes.xml', off);
         mxUtils.br(div);
-        mxUtils.linkInvoke(div, mxResources.get('travelBooking'), currentEditor, 'open', 'diagrams/travel-booking.xml', off);
+        mxUtils.linkInvoke(div, 'travelBooking', currentEditor, 'open', 'diagrams/travel-booking.xml', off);
         mxUtils.br(div);
 
         if (!currentEditor.graph.isSelectionEmpty()) {
           const cell = currentEditor.graph.getSelectionCell();
           if ((currentEditor.graph.getSelectionCount() == 1 && currentEditor.graph.model.isVertex(cell) && cell.getEdgeCount() > 0) || currentEditor.graph.isSwimlane(cell)) {
             mxUtils.para(div, 'Layout');
-            mxUtils.linkAction(div, mxResources.get('verticalTree'), currentEditor, 'verticalTree', off);
+            mxUtils.linkAction(div, 'verticalTree', currentEditor, 'verticalTree', off);
             mxUtils.br(div);
-            mxUtils.linkAction(div, mxResources.get('horizontalTree'), currentEditor, 'horizontalTree', off);
+            mxUtils.linkAction(div, 'horizontalTree', currentEditor, 'horizontalTree', off);
             mxUtils.br(div);
           }
 
           mxUtils.para(div, 'Format');
 
           if (mxUtils.isNode(cell.value, 'Symbol')) {
-            mxUtils.linkAction(div, mxResources.get('image'), currentEditor, 'image', off);
+            mxUtils.linkAction(div, 'image', currentEditor, 'image', off);
             mxUtils.br(div);
           } else {
-            mxUtils.linkAction(div, mxResources.get('opacity'), currentEditor, 'opacity', off);
+            mxUtils.linkAction(div, 'opacity', currentEditor, 'opacity', off);
             mxUtils.br(div);
             if (currentEditor.graph.model.isVertex(cell) || (cell.style != null && cell.style.indexOf('arrowEdge') >= 0)) {
-              mxUtils.linkAction(div, mxResources.get('gradientColor'), currentEditor, 'gradientColor', off);
+              mxUtils.linkAction(div, 'gradientColor', currentEditor, 'gradientColor', off);
               mxUtils.br(div);
             }
             if (currentEditor.graph.model.isEdge(cell)) {
@@ -263,27 +262,27 @@ export class BpmnJs {
           }
 
           if (currentEditor.graph.getSelectionCount() > 1) {
-            mxUtils.para(div, mxResources.get('align'));
-            mxUtils.linkAction(div, mxResources.get('left'), currentEditor, 'alignCellsLeft', off);
+            mxUtils.para(div, 'align');
+            mxUtils.linkAction(div, 'left', currentEditor, 'alignCellsLeft', off);
             mxUtils.br(div);
-            mxUtils.linkAction(div, mxResources.get('center'), currentEditor, 'alignCellsCenter', off);
+            mxUtils.linkAction(div, 'center', currentEditor, 'alignCellsCenter', off);
             mxUtils.br(div);
-            mxUtils.linkAction(div, mxResources.get('right'), currentEditor, 'alignCellsRight', off);
+            mxUtils.linkAction(div, 'right', currentEditor, 'alignCellsRight', off);
             mxUtils.br(div);
-            mxUtils.linkAction(div, mxResources.get('top'), currentEditor, 'alignCellsTop', off);
+            mxUtils.linkAction(div, 'top', currentEditor, 'alignCellsTop', off);
             mxUtils.br(div);
-            mxUtils.linkAction(div, mxResources.get('middle'), currentEditor, 'alignCellsMiddle', off);
+            mxUtils.linkAction(div, 'middle', currentEditor, 'alignCellsMiddle', off);
             mxUtils.br(div);
-            mxUtils.linkAction(div, mxResources.get('bottom'), currentEditor, 'alignCellsBottom', off);
+            mxUtils.linkAction(div, 'bottom', currentEditor, 'alignCellsBottom', off);
             mxUtils.br(div);
           }
 
-          mxUtils.para(div, mxResources.get('selection'));
-          mxUtils.linkAction(div, mxResources.get('clearSelection'), currentEditor, 'selectNone', off);
+          mxUtils.para(div, 'selection');
+          mxUtils.linkAction(div, 'clearSelection', currentEditor, 'selectNone', off);
           mxUtils.br(div);
         } else if (layer.getChildCount() > 0) {
-          mxUtils.para(div, mxResources.get('selection'));
-          mxUtils.linkAction(div, mxResources.get('selectAll'), currentEditor, 'selectAll', off);
+          mxUtils.para(div, 'selection');
+          mxUtils.linkAction(div, 'selectAll', currentEditor, 'selectAll', off);
           mxUtils.br(div);
         }
 
