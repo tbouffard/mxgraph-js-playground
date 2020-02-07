@@ -101,7 +101,7 @@ export class BpmnJs {
       } else {
         this.initPanning();
         this.enableTitleUpdate();
-        //this.initOverlays();
+
         this.configureEditorFunctions();
         this.configureEditorActions();
 
@@ -194,7 +194,7 @@ export class BpmnJs {
         editor.graph.setCellStyles('opacity', opacity);
       }
     });
-    this.editor.addAction('showXml', function(editor, cell) {
+    this.editor.addAction('showXml', function(editor) {
       const encoder = new mxCodec();
       const node = encoder.encode(editor.graph.getModel());
       mxUtils.popup(mxUtils.getPrettyXml(node), true);
@@ -239,9 +239,17 @@ export class BpmnJs {
 
       editor.treeLayout(cell, false);
     });
+
+    // custom actions
+    const currentConfigurator = this;
+    this.editor.addAction('activateCustomOverlays', function(editor) {
+      console.log('call activateCustomOverlays');
+      currentConfigurator.initCustomOverlays();
+      console.log('called activateCustomOverlays');
+    });
   }
 
-  private registerCreateTasks() {
+  private registerCreateTasks(): void {
     const currentEditor = this.editor;
 
     this.editor.createTasks = function(div) {
@@ -255,6 +263,10 @@ export class BpmnJs {
         // mxUtils.linkInvoke(div, 'swimlanes', currentEditor, 'open', 'resources/diagrams/swimlanes.xml', off);
         // mxUtils.br(div);
         mxUtils.linkInvoke(div, 'travelBooking', currentEditor, 'open', 'resources/diagrams/travel-booking.xml', off);
+        mxUtils.br(div);
+
+        mxUtils.para(div, 'Global');
+        mxUtils.linkAction(div, 'activateCustomOverlays', currentEditor, 'activateCustomOverlays', off);
         mxUtils.br(div);
 
         if (!currentEditor.graph.isSelectionEmpty()) {
@@ -330,7 +342,7 @@ export class BpmnJs {
   // Adapted from the 'overlays' example
   // mainly 'var' --> 'const'
   // ===========================================================================================================================================================================
-  private initOverlays(): void {
+  public initCustomOverlays(): void {
     const graph = this.editor.graph;
     // Disables basic selection and cell handling --> don't do it here to keep editor features
     // graph.setEnabled(false);
