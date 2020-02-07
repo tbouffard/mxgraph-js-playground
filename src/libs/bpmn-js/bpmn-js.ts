@@ -19,6 +19,8 @@ const {
   mxLog,
   // for create tasks registration
   //mxResources,
+  // for xml display
+  mxCodec,
 } = mxgraphFactory({
   mxLoadResources: false, // for graph and editors resources files
   mxLoadStylesheets: false,
@@ -99,6 +101,7 @@ export class BpmnJs {
         this.enableTitleUpdate();
         //this.initOverlays();
         this.configureEditorFunctions();
+        this.configureEditorActions();
 
         this.registerCreateTasks();
         this.editor.showTasks();
@@ -180,27 +183,43 @@ export class BpmnJs {
     };
   }
 
-  // private initViewXmlButton(): void {
-  //   const graph = this.editor.graph;
-  //   const button = mxUtils.button('View XML', function() {
-  //     const encoder = new mxCodec();
-  //     const node = encoder.encode(graph.getModel());
-  //     mxUtils.popup(mxUtils.getPrettyXml(node), true);
-  //   });
-  // }
+  // the following actions are defined in the xml configuration but seem not loaded in our typescript/webcomponent poc
+  private configureEditorActions(): void {
+    this.editor.addAction('opacity', function(editor) {
+      const opacity = mxUtils.prompt('enterOpacity', '100');
 
-  /*
-  * 		<add as="myFirstAction"><![CDATA[
-			function (editor, cell)
-			{
-				var encoder = new mxCodec();
-				var node = encoder.encode(editor.graph.getModel());
-				mxUtils.popup(mxUtils.getPrettyXml(node), true);
-			}
-		]]></add>
-  *
-  *
-  * */
+      if (opacity != null && opacity >= 0 && opacity <= 100) {
+        editor.graph.setCellStyles('opacity', opacity);
+      }
+    });
+    this.editor.addAction('showXml', function(editor, cell) {
+      const encoder = new mxCodec();
+      const node = encoder.encode(editor.graph.getModel());
+      mxUtils.popup(mxUtils.getPrettyXml(node), true);
+    });
+    this.editor.addAction('open', function(editor) {
+      editor.open(mxUtils.prompt('Enter filename', 'workflow.xml'));
+    });
+    this.editor.addAction('openHref', function(editor, cell) {
+      cell = cell || editor.graph.getSelectionCell();
+
+      if (cell == null) {
+        cell = editor.graph.getCurrentRoot();
+        if (cell == null) {
+          cell = editor.graph.getModel().getRoot();
+        }
+      }
+      if (cell != null) {
+        const href = cell.getAttribute('href');
+        if (href != null && href.length > 0) {
+          window.open(href);
+        } else {
+          mxUtils.alert('No URL defined. Showing properties...');
+          editor.execute('showProperties', cell);
+        }
+      }
+    });
+  }
 
   private registerCreateTasks() {
     console.log('register create tasks');
