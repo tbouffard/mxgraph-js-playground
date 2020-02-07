@@ -367,11 +367,8 @@ export class BpmnJs {
     // that toggles the overlay for the respective cell
     graph.addListener(mxEvent.CLICK, function(sender, evt) {
       const cell = evt.getProperty('cell');
-      console.log('global click evt, cell ' + cell);
 
       if (cell != null) {
-        const mxCell: mxgraph.mxCell = cell as mxgraph.mxCell;
-        console.log('mxCell: edge? ' + mxCell.isEdge() + ' / vertex? ' + mxCell.isVertex());
         const overlays = graph.getCellOverlays(cell);
 
         if (overlays == null) {
@@ -398,74 +395,133 @@ export class BpmnJs {
     // Highlights the vertices when the mouse enters
     //const marker = new mxCellTracker(graph, 'blue', null); // TS add a function as 3rd argument
 
-
     // TODO voir pour utiliser directement https://jgraph.github.io/mxgraph/docs/js-api/files/handler/mxCellHighlight-js.html
     // et un listener qui appel le highlighter sur une grappe de cells via un listener
-  // * var marker = new mxCellMarker(graph);
-  // * graph.addMouseListener({
-  //     *   mouseDown: function() {},
-  //     *   mouseMove: function(sender, me)
-  //     *   {
-  //       *     marker.process(me);
-  // *   },
-  // *   mouseUp: function() {}
-  // * });
-
-
+    // * var marker = new mxCellMarker(graph);
+    // * graph.addMouseListener({
+    //     *   mouseDown: function() {},
+    //     *   mouseMove: function(sender, me)
+    //     *   {
+    //       *     marker.process(me);
+    // *   },
+    // *   mouseUp: function() {}
+    // * });
 
     // marker.setEnabled(true);
     // marker.setEventsEnabled(true);
     // marker.setHotspotEnabled(true);
 
-    // graph.addListener(mxEvent.MARK, (sender, evt) => {
-    //   console.log('marked! sender: ' + sender + ' / evt: ' + evt);
-    // });
+    graph.addListener(mxEvent.CLICK, function(sender, evt: mxgraph.mxEventObject) {
+      const cell = evt.getProperty('cell');
+      console.log('global click evt, cell ' + cell);
 
-    // graph.addMouseListener({
-    //   cell: null,
-    //   mouseDown: function(sender, me) {},
-    //   mouseMove: function(sender, me) {
-    //     const tmp = me.getCell();
-    //
-    //     if (tmp != this.cell) {
-    //       if (this.cell != null) {
-    //         this.dragLeave(me.getEvent(), this.cell);
-    //       }
-    //
-    //       this.cell = tmp;
-    //
-    //       if (this.cell != null) {
-    //         this.dragEnter(me.getEvent(), this.cell);
-    //       }
-    //     }
-    //
-    //     if (this.cell != null) {
-    //       this.dragOver(me.getEvent(), this.cell);
-    //     }
-    //   },
-    //   mouseUp: function(sender, me) {},
-    //   dragEnter: function(evt, cell) {
-    //     console.log('dragEnter', cell.value);
-    //   },
-    //   dragOver: function(evt, cell) {
-    //     console.log('dragOver', cell.value);
-    //   },
-    //   dragLeave: function(evt, cell) {
-    //     console.log('dragLeave', cell.value);
-    //   },
-    // });
+      if (cell != null) {
+        const mxCell: mxgraph.mxCell = cell as mxgraph.mxCell;
 
-    // graph.addMouseListener({
-    //   mouseDown: () => {
-    //     // do nothing
-    //   },
-    //   mouseMove: (sender, me) => {
-    //     console.log('mouseMove: ' + me);
-    //     // marker.process(me);
-    //   },
-    //   mouseUp: () => {
-    //     // do nothing
-    //   },
-    // });
+        const mxCellsToHighlight: mxgraph.mxCell[] = [];
+
+        let previousVertexes: mxgraph.mxCell[] = BpmnJs.findPreviousVertexesInGraph(mxCell, mxCellsToHighlight);
+        while (previousVertexes.length > 0) {
+          let newPreviousVertexes: mxgraph.mxCell[] = [];
+          previousVertexes.forEach(vertex => {
+            const toBeMerged = BpmnJs.findPreviousVertexesInGraph(vertex, mxCellsToHighlight);
+            newPreviousVertexes = [...newPreviousVertexes, ...toBeMerged];
+          });
+          previousVertexes = newPreviousVertexes;
+        }
+
+        console.log('mxCellsToHighlight: ' + mxCellsToHighlight.length);
+      }
+    });
   }
+
+  // TODO create a function to get all previous vertexes
+
+  // TODO manage duplicates that could occur on loop (should check if not already present) - risk of infinite loop
+  // TODO rename alreadyDetectedCells into graphCells
+  // TODO rename into find direct previous .....
+  private static findPreviousVertexesInGraph(mxCell: mxgraph.mxCell, alreadyDetectedCells: mxgraph.mxCell[]): mxgraph.mxCell[] {
+    const previousVertexes: mxgraph.mxCell[] = [];
+
+    console.log('entering findPreviousVertexesInGraph');
+    console.log('alreadyDetectedCells: ' + alreadyDetectedCells.length);
+    alreadyDetectedCells.push(mxCell);
+
+    console.log('Edges count: ' + mxCell.getEdgeCount());
+    if (mxCell.getEdgeCount()) {
+      console.log('Has edges, processing');
+      const currentCellId = mxCell.getId();
+      console.log('currentCellId: ' + currentCellId);
+
+      mxCell.edges.forEach(edge => {
+        console.log(edge);
+        if (edge.target.getId() == currentCellId) {
+          console.log('edge target the current mxCell');
+          alreadyDetectedCells.push(edge);
+          previousVertexes.push(edge.source);
+        }
+      });
+    }
+
+    if (mxCell.isEdge()) {
+      console.log('is edge, getting source');
+      previousVertexes.push(mxCell.source);
+    }
+
+    console.log('exiting findPreviousVertexesInGraph');
+    console.log('alreadyDetectedCells: ' + alreadyDetectedCells.length);
+    console.log('previousVertexes: ' + previousVertexes.length);
+    return previousVertexes;
+  }
+
+  // graph.addListener(mxEvent.MARK, (sender, evt) => {
+  //   console.log('marked! sender: ' + sender + ' / evt: ' + evt);
+  // });
+
+  // graph.addMouseListener({
+  //   cell: null,
+  //   mouseDown: function(sender, me) {},
+  //   mouseMove: function(sender, me) {
+  //     const tmp = me.getCell();
+  //
+  //     if (tmp != this.cell) {
+  //       if (this.cell != null) {
+  //         this.dragLeave(me.getEvent(), this.cell);
+  //       }
+  //
+  //       this.cell = tmp;
+  //
+  //       if (this.cell != null) {
+  //         this.dragEnter(me.getEvent(), this.cell);
+  //       }
+  //     }
+  //
+  //     if (this.cell != null) {
+  //       this.dragOver(me.getEvent(), this.cell);
+  //     }
+  //   },
+  //   mouseUp: function(sender, me) {},
+  //   dragEnter: function(evt, cell) {
+  //     console.log('dragEnter', cell.value);
+  //   },
+  //   dragOver: function(evt, cell) {
+  //     console.log('dragOver', cell.value);
+  //   },
+  //   dragLeave: function(evt, cell) {
+  //     console.log('dragLeave', cell.value);
+  //   },
+  // });
+
+  // graph.addMouseListener({
+  //   mouseDown: () => {
+  //     // do nothing
+  //   },
+  //   mouseMove: (sender, me) => {
+  //     console.log('mouseMove: ' + me);
+  //     // marker.process(me);
+  //   },
+  //   mouseUp: () => {
+  //     // do nothing
+  //   },
+  // });
 }
