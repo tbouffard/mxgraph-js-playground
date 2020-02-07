@@ -416,17 +416,18 @@ export class BpmnJs {
       console.log('global click evt, cell ' + cell);
 
       if (cell != null) {
-        const mxCellsToHighlight: mxgraph.mxCell[] = BpmnJs.findAllPreviousGraphStartingFrom(cell as mxgraph.mxCell);
-        console.log('mxCellsToHighlight: ' + mxCellsToHighlight.length);
+        const mxCellsToHighlight = BpmnJs.findAllPreviousGraphStartingFrom(cell as mxgraph.mxCell);
+        console.log('mxCellsToHighlight: ' + mxCellsToHighlight.size);
       }
     });
   }
 
-  private static findAllPreviousGraphStartingFrom(startingCell: mxgraph.mxCell): mxgraph.mxCell[] {
-    const allCells: mxgraph.mxCell[] = [];
+  private static findAllPreviousGraphStartingFrom(startingCell: mxgraph.mxCell): Set<mxgraph.mxCell> {
+    const allCells = new Set<mxgraph.mxCell>();
 
     let previousVertexes: mxgraph.mxCell[] = BpmnJs.findDirectPreviousVertexesInGraph(startingCell, allCells);
-    while (previousVertexes.length > 0) {
+    // TODO remove 'allCells.size check' when duplicates mgt is done
+    while (previousVertexes.length > 0 && allCells.size < 50) {
       let newPreviousVertexes: mxgraph.mxCell[] = [];
       previousVertexes.forEach(vertex => {
         const toBeMerged = BpmnJs.findDirectPreviousVertexesInGraph(vertex, allCells);
@@ -439,25 +440,29 @@ export class BpmnJs {
   }
 
   // TODO manage duplicates that could occur on loop (should check if not already present) - risk of infinite loop
-  private static findDirectPreviousVertexesInGraph(mxCell: mxgraph.mxCell, alreadyDetectedCells: mxgraph.mxCell[]): mxgraph.mxCell[] {
+  private static findDirectPreviousVertexesInGraph(mxCell: mxgraph.mxCell, alreadyDetectedCells: Set<mxgraph.mxCell>): mxgraph.mxCell[] {
     const previousVertexes: mxgraph.mxCell[] = [];
-
     console.log('entering findPreviousVertexesInGraph');
-    console.log('alreadyDetectedCells: ' + alreadyDetectedCells.length);
-    alreadyDetectedCells.push(mxCell);
+
+    console.log('alreadyDetectedCells: ' + alreadyDetectedCells.size);
+    const currentCellId = mxCell.getId();
+    console.log('Current cell id: ' + currentCellId);
+    // TODO do we really need to proceed if already in list
+    alreadyDetectedCells.add(mxCell);
 
     console.log('Edges count: ' + mxCell.getEdgeCount());
     if (mxCell.getEdgeCount()) {
       console.log('Has edges, processing');
-      const currentCellId = mxCell.getId();
-      console.log('Vertex id: ' + currentCellId);
 
       mxCell.edges.forEach(edge => {
         console.log(edge);
         if (edge.target.getId() == currentCellId) {
           console.log('edge target the current mxCell');
-          alreadyDetectedCells.push(edge);
-          previousVertexes.push(edge.source);
+          if (!alreadyDetectedCells.has(edge)) {
+            console.log('edge not already detected');
+            alreadyDetectedCells.add(edge);
+            previousVertexes.push(edge.source);
+          }
         }
       });
     }
@@ -468,7 +473,7 @@ export class BpmnJs {
     }
 
     console.log('exiting findPreviousVertexesInGraph');
-    console.log('alreadyDetectedCells: ' + alreadyDetectedCells.length);
+    console.log('alreadyDetectedCells: ' + alreadyDetectedCells.size);
     console.log('previousVertexes: ' + previousVertexes.length);
     return previousVertexes;
   }
