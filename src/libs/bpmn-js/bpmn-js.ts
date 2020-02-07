@@ -222,14 +222,10 @@ export class BpmnJs {
   }
 
   private registerCreateTasks() {
-    console.log('register create tasks');
     const currentEditor = this.editor;
 
-    //mxEditor.prototype.createTasks = function(div) {
     this.editor.createTasks = function(div) {
       const off = 30;
-      console.log('call createTasks');
-      //mxUtils.error('call createTasks!', 200, true);
 
       if (currentEditor.graph != null) {
         const layer = currentEditor.graph.model.root.getChildAt(0);
