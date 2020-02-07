@@ -269,6 +269,14 @@ export class BpmnJs {
         mxUtils.linkAction(div, 'activateCustomOverlays', currentEditor, 'activateCustomOverlays', off);
         mxUtils.br(div);
 
+        mxUtils.para(div, 'Highlight Paths');
+        mxUtils.linkAction(div, 'disable', currentEditor, 'disablePathHighLights', off);
+        mxUtils.br(div);
+        mxUtils.linkAction(div, 'path 1', currentEditor, 'highlightPath1', off);
+        mxUtils.br(div);
+        mxUtils.linkAction(div, 'path 2', currentEditor, 'highlightPath2', off);
+        mxUtils.br(div);
+
         if (!currentEditor.graph.isSelectionEmpty()) {
           const cell = currentEditor.graph.getSelectionCell();
           if ((currentEditor.graph.getSelectionCount() == 1 && currentEditor.graph.model.isVertex(cell) && cell.getEdgeCount() > 0) || currentEditor.graph.isSwimlane(cell)) {
