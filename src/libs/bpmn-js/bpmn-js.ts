@@ -367,8 +367,11 @@ export class BpmnJs {
     // that toggles the overlay for the respective cell
     graph.addListener(mxEvent.CLICK, function(sender, evt) {
       const cell = evt.getProperty('cell');
+      console.log('global click evt, cell ' + cell);
 
       if (cell != null) {
+        const mxCell: mxgraph.mxCell = cell as mxgraph.mxCell;
+        console.log('mxCell: edge? ' + mxCell.isEdge() + ' / vertex? ' + mxCell.isVertex());
         const overlays = graph.getCellOverlays(cell);
 
         if (overlays == null) {
