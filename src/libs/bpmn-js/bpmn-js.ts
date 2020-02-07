@@ -108,6 +108,8 @@ export class BpmnJs {
         this.registerCreateTasks();
         this.editor.showTasks();
 
+        this.configureCellPrecedingHighlighter();
+
         mxLog.show();
         mxLog.TRACE = true;
         mxLog.DEBUG = true;
@@ -385,5 +387,82 @@ export class BpmnJs {
         }
       }
     });
+  }
+
+  // TODO change by enable/disable
+  private configureCellPrecedingHighlighter(): void {
+    const graph = this.editor.graph;
+    // Highlights the vertices when the mouse enters
+    //const marker = new mxCellTracker(graph, 'blue', null); // TS add a function as 3rd argument
+
+
+    // TODO voir pour utiliser directement https://jgraph.github.io/mxgraph/docs/js-api/files/handler/mxCellHighlight-js.html
+    // et un listener qui appel le highlighter sur une grappe de cells via un listener
+  // * var marker = new mxCellMarker(graph);
+  // * graph.addMouseListener({
+  //     *   mouseDown: function() {},
+  //     *   mouseMove: function(sender, me)
+  //     *   {
+  //       *     marker.process(me);
+  // *   },
+  // *   mouseUp: function() {}
+  // * });
+
+
+
+    // marker.setEnabled(true);
+    // marker.setEventsEnabled(true);
+    // marker.setHotspotEnabled(true);
+
+    // graph.addListener(mxEvent.MARK, (sender, evt) => {
+    //   console.log('marked! sender: ' + sender + ' / evt: ' + evt);
+    // });
+
+    // graph.addMouseListener({
+    //   cell: null,
+    //   mouseDown: function(sender, me) {},
+    //   mouseMove: function(sender, me) {
+    //     const tmp = me.getCell();
+    //
+    //     if (tmp != this.cell) {
+    //       if (this.cell != null) {
+    //         this.dragLeave(me.getEvent(), this.cell);
+    //       }
+    //
+    //       this.cell = tmp;
+    //
+    //       if (this.cell != null) {
+    //         this.dragEnter(me.getEvent(), this.cell);
+    //       }
+    //     }
+    //
+    //     if (this.cell != null) {
+    //       this.dragOver(me.getEvent(), this.cell);
+    //     }
+    //   },
+    //   mouseUp: function(sender, me) {},
+    //   dragEnter: function(evt, cell) {
+    //     console.log('dragEnter', cell.value);
+    //   },
+    //   dragOver: function(evt, cell) {
+    //     console.log('dragOver', cell.value);
+    //   },
+    //   dragLeave: function(evt, cell) {
+    //     console.log('dragLeave', cell.value);
+    //   },
+    // });
+
+    // graph.addMouseListener({
+    //   mouseDown: () => {
+    //     // do nothing
+    //   },
+    //   mouseMove: (sender, me) => {
+    //     console.log('mouseMove: ' + me);
+    //     // marker.process(me);
+    //   },
+    //   mouseUp: () => {
+    //     // do nothing
+    //   },
+    // });
   }
 }
