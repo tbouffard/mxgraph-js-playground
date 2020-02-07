@@ -8,7 +8,7 @@
 		</Layer>
 		<Swimlane label="Travel Booking" customAttribute="text value"
 			id="2">
-			<mxCell style="swimlane;fillColor=#83027F" parent="1"
+			<mxCell style="swimlane;fillColor=green" parent="1"
 				vertex="1" connectable="0">
 				<mxGeometry x="10" y="30" width="770" height="370"
 					as="geometry" />
@@ -24,11 +24,11 @@
 				</mxGeometry>
 			</mxCell>
 		</Edge>
-		<Symbol label="Symbol" description="" href="" id="4">
+		<Symbol label="Request" description="" href="" id="4">
 			<mxCell
 				style="symbol;image=images/symbols/message.png" parent="2"
 				vertex="1">
-				<mxGeometry x="40" y="150" width="32" height="32"
+				<mxGeometry x="30" y="149" width="32" height="32"
 					as="geometry" />
 			</mxCell>
 		</Symbol>
@@ -38,7 +38,7 @@
 					as="geometry" />
 			</mxCell>
 		</Subprocess>
-		<Symbol label="Symbol" description="" href="" id="6">
+		<Symbol label="Error" description="" href="" id="6">
 			<mxCell
 				style="symbol;image=images/symbols/error.png" parent="5"
 				vertex="1">
@@ -76,7 +76,7 @@
 					as="geometry" />
 			</mxCell>
 		</Subprocess>
-		<Symbol label="Symbol" description="" href="" id="12">
+		<Symbol label="" description="" href="" id="12">
 			<mxCell
 				style="symbol;image=images/symbols/fork.png" parent="2"
 				vertex="1">
@@ -102,11 +102,11 @@
 					as="geometry" />
 			</mxCell>
 		</Subprocess>
-		<Symbol label="Reply" description="" href="" id="16">
+		<Symbol label="Reply Error" description="" href="" id="16">
 			<mxCell
 				style="symbol;image=images/symbols/message_end.png"
 				parent="2" vertex="1">
-				<mxGeometry x="260" y="290" width="32" height="32"
+				<mxGeometry x="260" y="289" width="32" height="32"
 					as="geometry" />
 			</mxCell>
 		</Symbol>
@@ -114,7 +114,7 @@
 			<mxCell
 				style="symbol;image=images/symbols/message_end.png"
 				parent="2" vertex="1">
-				<mxGeometry x="720" y="150" width="32" height="32"
+				<mxGeometry x="720" y="149" width="32" height="32"
 					as="geometry" />
 			</mxCell>
 		</Symbol>
