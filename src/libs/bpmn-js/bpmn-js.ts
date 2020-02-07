@@ -20,7 +20,7 @@ const {
   // for create tasks registration
   mxResources,
 } = mxgraphFactory({
-  mxLoadResources: false,
+  mxLoadResources: false, // for graph and editors resources files
   mxLoadStylesheets: false,
 });
 
@@ -39,6 +39,7 @@ export class BpmnJs {
 
   public loadGraph(): void {
     this.loadGraphFromFile();
+    //this.loadSampleGraph();
   }
 
   private loadGraphFromFile(): void {
@@ -96,12 +97,15 @@ export class BpmnJs {
       } else {
         this.initPanning();
         this.enableTitleUpdate();
-        this.initOverlays();
+        //this.initOverlays();
+        this.configureEditorFunctions();
 
-        // this.registerCreateTasks();
+        this.registerCreateTasks();
+        //this.editor.showTasks();
 
         mxLog.show();
         mxLog.TRACE = true;
+        mxLog.DEBUG = true;
         // TODO log warn: js docs explain we can pass a message
         // mxLog.warn('Hello, World!');
         // mxLog.warn();
@@ -153,6 +157,29 @@ export class BpmnJs {
     this.editor.graph.timerAutoScroll = true;
   }
 
+  // the following functions are defined in the xml configuration but seem not loaded in our typescript/webcomponent poc
+  private configureEditorFunctions(): void {
+    // ensure the cell labels are taken from the xml model, see https://jgraph.github.io/mxgraph/docs/js-api/files/view/mxGraph-js.html#mxGraph.convertValueToString
+    this.editor.graph.convertValueToString = function(cell) {
+      return cell.getAttribute('label');
+    };
+
+    this.editor.graph.getTooltipForCell = function(cell) {
+      let href = cell.getAttribute('href');
+      href = href != null && href.length > 0 ? '<br>' + href : '';
+      const maxLen = 30;
+      let desc = cell.getAttribute('description');
+      if (desc == null || desc.length == 0) {
+        desc = '';
+      } else if (desc.length < maxLen) {
+        desc = '<br>' + desc;
+      } else {
+        desc = '<br>' + desc.substring(0, maxLen) + '...';
+      }
+      return '<b>' + cell.getAttribute('label') + '</b> (' + cell.getId() + ')' + href + desc + '<br>Edges: ' + cell.getEdgeCount() + '<br>Children: ' + cell.getChildCount();
+    };
+  }
+
   // private initViewXmlButton(): void {
   //   const graph = this.editor.graph;
   //   const button = mxUtils.button('View XML', function() {
@@ -178,11 +205,13 @@ export class BpmnJs {
   private registerCreateTasks() {
     console.log('register create tasks');
     const currentEditor = this.editor;
-    mxEditor.prototype.createTasks = function(div) {
+
+    //mxEditor.prototype.createTasks = function(div) {
+    this.editor.createTasks = function(div) {
       // const mxResources = currentEditor.
       const off = 30;
       console.log('call createTasks');
-      // mxUtils.error('call createTasks!', 200, true);
+      //mxUtils.error('call createTasks!', 200, true);
 
       if (currentEditor.graph != null) {
         const layer = currentEditor.graph.model.root.getChildAt(0);
