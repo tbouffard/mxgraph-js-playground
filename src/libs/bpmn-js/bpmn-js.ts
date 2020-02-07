@@ -51,6 +51,8 @@ export class BpmnJs {
     // const newGraphModel = mxUtils.parseXml(root);
     // const node = newGraphModel.documentElement;
     this.editor.readGraphModel(root);
+
+    this.editor.execute('fit', null, null);
   }
 
   private loadSampleGraph(): void {
