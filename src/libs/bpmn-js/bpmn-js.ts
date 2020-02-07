@@ -416,31 +416,30 @@ export class BpmnJs {
       console.log('global click evt, cell ' + cell);
 
       if (cell != null) {
-        const mxCell: mxgraph.mxCell = cell as mxgraph.mxCell;
-
-        const mxCellsToHighlight: mxgraph.mxCell[] = [];
-
-        let previousVertexes: mxgraph.mxCell[] = BpmnJs.findPreviousVertexesInGraph(mxCell, mxCellsToHighlight);
-        while (previousVertexes.length > 0) {
-          let newPreviousVertexes: mxgraph.mxCell[] = [];
-          previousVertexes.forEach(vertex => {
-            const toBeMerged = BpmnJs.findPreviousVertexesInGraph(vertex, mxCellsToHighlight);
-            newPreviousVertexes = [...newPreviousVertexes, ...toBeMerged];
-          });
-          previousVertexes = newPreviousVertexes;
-        }
-
+        const mxCellsToHighlight: mxgraph.mxCell[] = BpmnJs.findAllPreviousGraphStartingFrom(cell as mxgraph.mxCell);
         console.log('mxCellsToHighlight: ' + mxCellsToHighlight.length);
       }
     });
   }
 
-  // TODO create a function to get all previous vertexes
+  private static findAllPreviousGraphStartingFrom(startingCell: mxgraph.mxCell): mxgraph.mxCell[] {
+    const allCells: mxgraph.mxCell[] = [];
+
+    let previousVertexes: mxgraph.mxCell[] = BpmnJs.findDirectPreviousVertexesInGraph(startingCell, allCells);
+    while (previousVertexes.length > 0) {
+      let newPreviousVertexes: mxgraph.mxCell[] = [];
+      previousVertexes.forEach(vertex => {
+        const toBeMerged = BpmnJs.findDirectPreviousVertexesInGraph(vertex, allCells);
+        newPreviousVertexes = [...newPreviousVertexes, ...toBeMerged];
+      });
+      previousVertexes = newPreviousVertexes;
+    }
+
+    return allCells;
+  }
 
   // TODO manage duplicates that could occur on loop (should check if not already present) - risk of infinite loop
-  // TODO rename alreadyDetectedCells into graphCells
-  // TODO rename into find direct previous .....
-  private static findPreviousVertexesInGraph(mxCell: mxgraph.mxCell, alreadyDetectedCells: mxgraph.mxCell[]): mxgraph.mxCell[] {
+  private static findDirectPreviousVertexesInGraph(mxCell: mxgraph.mxCell, alreadyDetectedCells: mxgraph.mxCell[]): mxgraph.mxCell[] {
     const previousVertexes: mxgraph.mxCell[] = [];
 
     console.log('entering findPreviousVertexesInGraph');
@@ -451,7 +450,7 @@ export class BpmnJs {
     if (mxCell.getEdgeCount()) {
       console.log('Has edges, processing');
       const currentCellId = mxCell.getId();
-      console.log('currentCellId: ' + currentCellId);
+      console.log('Vertex id: ' + currentCellId);
 
       mxCell.edges.forEach(edge => {
         console.log(edge);
