@@ -221,6 +221,24 @@ export class BpmnJs {
         }
       }
     });
+
+    // Layout
+    this.editor.addAction('horizontalTree', function(editor, cell) {
+      cell = cell || editor.graph.getSelectionCell();
+      if (cell == null) {
+        cell = editor.graph.getDefaultParent();
+      }
+
+      editor.treeLayout(cell, true);
+    });
+    this.editor.addAction('verticalTree', function(editor, cell) {
+      cell = cell || editor.graph.getSelectionCell();
+      if (cell == null) {
+        cell = editor.graph.getDefaultParent();
+      }
+
+      editor.treeLayout(cell, false);
+    });
   }
 
   private registerCreateTasks() {
