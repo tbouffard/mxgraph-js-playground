@@ -13,46 +13,13 @@ export class BpmnJs {
   private readonly editor: VisuEditor;
 
   constructor(config) {
-    const configNode = mxUtils.load(config).getDocumentElement();
-    this.editor = new mxEditor(configNode) as VisuEditor;
-    this.init();
-  }
-
-  public loadSampleGraph(): void {
-    // Adds cells to the model in a single step
-    this.editor.graph.getModel().beginUpdate();
-    try {
-      const style = mxUtils.clone(this.editor.graph.getStylesheet().getDefaultVertexStyle());
-
-      const styleRhombus = mxUtils.clone(style);
-      styleRhombus[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RHOMBUS;
-      this.editor.graph.getStylesheet().putCellStyle('condition', styleRhombus);
-
-      const styleCloud = mxUtils.clone(style);
-      styleCloud[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_CLOUD;
-      this.editor.graph.getStylesheet().putCellStyle('styleCloud', styleCloud);
-
-      const styleEnd = mxUtils.clone(styleRhombus);
-      styleEnd[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_DOUBLE_ELLIPSE;
-      this.editor.graph.getStylesheet().putCellStyle('end', styleEnd);
-
-      const parent = this.editor.graph.getDefaultParent();
-      const v1 = this.editor.graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30, 'condition');
-      const v2 = this.editor.graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30, 'styleCloud');
-      this.editor.graph.insertEdge(parent, null, '', v1, v2);
-      const end = this.editor.graph.insertVertex(parent, null, 'end event', 200, 300, 30, 30, 'end');
-      this.editor.graph.insertEdge(parent, null, '', v2, end);
-    } finally {
-      // Updates the display
-      this.editor.graph.getModel().endUpdate();
-    }
-  }
-
-  public init(): void {
     try {
       if (!mxClient.isBrowserSupported()) {
         mxUtils.error('Browser is not supported!', 200, false);
       } else {
+        const configNode = mxUtils.load(config).getDocumentElement();
+        this.editor = new mxEditor(configNode) as VisuEditor;
+
         this.initPanning();
         this.enableTitleUpdate();
         // Displays version in statusbar
@@ -100,5 +67,35 @@ export class BpmnJs {
     };
     this.editor.graph.allowAutoPanning = true;
     this.editor.graph.timerAutoScroll = true;
+  }
+
+  public loadSampleGraph(): void {
+    // Adds cells to the model in a single step
+    this.editor.graph.getModel().beginUpdate();
+    try {
+      const style = mxUtils.clone(this.editor.graph.getStylesheet().getDefaultVertexStyle());
+
+      const styleRhombus = mxUtils.clone(style);
+      styleRhombus[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RHOMBUS;
+      this.editor.graph.getStylesheet().putCellStyle('condition', styleRhombus);
+
+      const styleCloud = mxUtils.clone(style);
+      styleCloud[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_CLOUD;
+      this.editor.graph.getStylesheet().putCellStyle('styleCloud', styleCloud);
+
+      const styleEnd = mxUtils.clone(styleRhombus);
+      styleEnd[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_DOUBLE_ELLIPSE;
+      this.editor.graph.getStylesheet().putCellStyle('end', styleEnd);
+
+      const parent = this.editor.graph.getDefaultParent();
+      const v1 = this.editor.graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30, 'condition');
+      const v2 = this.editor.graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30, 'styleCloud');
+      this.editor.graph.insertEdge(parent, null, '', v1, v2);
+      const end = this.editor.graph.insertVertex(parent, null, 'end event', 200, 300, 30, 30, 'end');
+      this.editor.graph.insertEdge(parent, null, '', v2, end);
+    } finally {
+      // Updates the display
+      this.editor.graph.getModel().endUpdate();
+    }
   }
 }
