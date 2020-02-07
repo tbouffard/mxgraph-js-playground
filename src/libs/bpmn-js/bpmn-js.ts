@@ -232,11 +232,11 @@ export class BpmnJs {
       if (currentEditor.graph != null) {
         const layer = currentEditor.graph.model.root.getChildAt(0);
         mxUtils.para(div, 'examples');
-        mxUtils.linkInvoke(div, 'newDiagram', currentEditor, 'open', 'diagrams/empty.xml', off);
+        mxUtils.linkInvoke(div, 'newDiagram', currentEditor, 'open', 'resources/diagrams/empty.xml', off);
         mxUtils.br(div);
-        mxUtils.linkInvoke(div, 'swimlanes', currentEditor, 'open', 'diagrams/swimlanes.xml', off);
-        mxUtils.br(div);
-        mxUtils.linkInvoke(div, 'travelBooking', currentEditor, 'open', 'diagrams/travel-booking.xml', off);
+        // mxUtils.linkInvoke(div, 'swimlanes', currentEditor, 'open', 'resources/diagrams/swimlanes.xml', off);
+        // mxUtils.br(div);
+        mxUtils.linkInvoke(div, 'travelBooking', currentEditor, 'open', 'resources/diagrams/travel-booking.xml', off);
         mxUtils.br(div);
 
         if (!currentEditor.graph.isSelectionEmpty()) {
