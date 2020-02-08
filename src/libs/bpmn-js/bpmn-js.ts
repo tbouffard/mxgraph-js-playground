@@ -303,10 +303,10 @@ export class BpmnJs {
         mxUtils.linkAction(div, 'Custom travel-booking', currentEditor, 'loadGraphTravelBooking', off);
         mxUtils.br(div);
 
-        // mxUtils.linkInvoke(div, 'swimlanes', currentEditor, 'open', 'resources/diagrams/swimlanes.xml', off);
-        // mxUtils.br(div);
-        // mxUtils.linkInvoke(div, 'Open action for travel-booking', currentEditor, 'open', 'resources/diagrams/travel-booking.xml', off);
-        // mxUtils.br(div);
+        mxUtils.linkInvoke(div, 'Open swimlanes', currentEditor, 'open', 'resources/diagrams/swimlanes.xml', off);
+        mxUtils.br(div);
+        mxUtils.linkInvoke(div, 'Open withdrawal', currentEditor, 'open', 'resources/diagrams/withdrawal.xml', off);
+        mxUtils.br(div);
 
         mxUtils.para(div, 'Global');
         mxUtils.linkAction(div, 'Path Highlighter', currentEditor, 'changePathHighlighterState', off);
