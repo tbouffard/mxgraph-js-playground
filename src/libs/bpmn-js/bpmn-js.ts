@@ -40,8 +40,21 @@ export class BpmnJs {
   }
 
   public loadGraph(): void {
-    this.loadGraphFromFile();
-    //this.loadSampleGraph();
+    this.loadGraph_(null);
+  }
+
+  public loadGraph_(graphName: string): void {
+    if (graphName == null) {
+      console.info('Do not log graph, do this with UI through actions');
+      return;
+    }
+
+    if (graphName == 'sample') {
+      this.loadGraphSample();
+    } else {
+      this.loadGraphFromFile();
+    }
+    this.editor.execute('fit', null, null);
   }
 
   private loadGraphFromFile(): void {
@@ -51,15 +64,14 @@ export class BpmnJs {
     // const newGraphModel = mxUtils.parseXml(root);
     // const node = newGraphModel.documentElement;
     this.editor.readGraphModel(root);
-
-    this.editor.execute('fit', null, null);
   }
 
-  private loadSampleGraph(): void {
+  private loadGraphSample(): void {
     // Adds cells to the model in a single step
     this.editor.graph.getModel().beginUpdate();
 
     try {
+      this.editor.graph.getModel().clear(); // ensure to remove manual changes or already loaded graphs
       const style = mxUtils.clone(this.editor.graph.getStylesheet().getDefaultVertexStyle());
 
       const styleRhombus = mxUtils.clone(style);
@@ -166,9 +178,25 @@ export class BpmnJs {
 
   // the following functions are defined in the xml configuration but seem not loaded in our typescript/webcomponent poc
   private configureEditorFunctions(): void {
-    // ensure the cell labels are taken from the xml model, see https://jgraph.github.io/mxgraph/docs/js-api/files/view/mxGraph-js.html#mxGraph.convertValueToString
     this.editor.graph.convertValueToString = function(cell) {
-      return cell.getAttribute('label');
+      // ensure the cell labels are taken from the xml model when exist, see https://jgraph.github.io/mxgraph/docs/js-api/files/view/mxGraph-js.html#mxGraph.convertValueToString
+      const label = cell.getAttribute('label');
+      if (label != null) {
+        return label;
+      }
+
+      // original implementation, display value created directly with the api, like in loadGraphSample
+      const value = this.model.getValue(cell);
+      if (value != null) {
+        return value;
+        // if (mxUtils.isNode(value)) {
+        //   return value.nodeName;
+        // } else if (typeof value.toString == 'function') {
+        //   return value.toString();
+        // }
+      }
+
+      return '';
     };
 
     this.editor.graph.getTooltipForCell = function(cell) {
@@ -250,6 +278,12 @@ export class BpmnJs {
     this.editor.addAction('changePathHighlighterState', function(editor) {
       currentConfigurator.changePathHighlighterState();
     });
+    this.editor.addAction('loadGraphSample', function(editor) {
+      currentConfigurator.loadGraph_('sample');
+    });
+    this.editor.addAction('loadGraphTravelBooking', function(editor) {
+      currentConfigurator.loadGraph_('travel-booking');
+    });
   }
 
   private registerCreateTasks(): void {
@@ -261,13 +295,18 @@ export class BpmnJs {
 
       if (currentEditor.graph != null) {
         const layer = currentEditor.graph.model.root.getChildAt(0);
-        mxUtils.para(div, 'examples');
-        mxUtils.linkInvoke(div, 'newDiagram', currentEditor, 'open', 'resources/diagrams/empty.xml', off);
+        mxUtils.para(div, 'Graphs');
+        mxUtils.linkInvoke(div, 'New', currentEditor, 'open', 'resources/diagrams/empty.xml', off);
         mxUtils.br(div);
+        mxUtils.linkAction(div, 'Marcin Sample', currentEditor, 'loadGraphSample', off);
+        mxUtils.br(div);
+        mxUtils.linkAction(div, 'Custom travel-booking', currentEditor, 'loadGraphTravelBooking', off);
+        mxUtils.br(div);
+
         // mxUtils.linkInvoke(div, 'swimlanes', currentEditor, 'open', 'resources/diagrams/swimlanes.xml', off);
         // mxUtils.br(div);
-        mxUtils.linkInvoke(div, 'travelBooking', currentEditor, 'open', 'resources/diagrams/travel-booking.xml', off);
-        mxUtils.br(div);
+        // mxUtils.linkInvoke(div, 'Open action for travel-booking', currentEditor, 'open', 'resources/diagrams/travel-booking.xml', off);
+        // mxUtils.br(div);
 
         mxUtils.para(div, 'Global');
         mxUtils.linkAction(div, 'Path Highlighter', currentEditor, 'changePathHighlighterState', off);
