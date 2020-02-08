@@ -244,14 +244,16 @@ export class BpmnJs {
 
     // custom actions
     const currentConfigurator = this;
-    this.editor.addAction('activateCustomOverlays', function(editor) {
-      console.log('call activateCustomOverlays');
-      currentConfigurator.initCustomOverlays();
-      console.log('called activateCustomOverlays');
+    this.editor.addAction('changeCustomOverlaysState', function(editor) {
+      currentConfigurator.changeCustomOverlaysState();
+    });
+    this.editor.addAction('changePathHighlighterState', function(editor) {
+      currentConfigurator.changePathHighlighterState();
     });
   }
 
   private registerCreateTasks(): void {
+    const configurator = this;
     const currentEditor = this.editor;
 
     this.editor.createTasks = function(div) {
@@ -268,7 +270,9 @@ export class BpmnJs {
         mxUtils.br(div);
 
         mxUtils.para(div, 'Global');
-        mxUtils.linkAction(div, 'activateCustomOverlays', currentEditor, 'activateCustomOverlays', off);
+        mxUtils.linkAction(div, 'Path Highlighter', currentEditor, 'changePathHighlighterState', off);
+        mxUtils.br(div);
+        mxUtils.linkAction(div, 'Custom Overlays', currentEditor, 'changeCustomOverlaysState', off);
         mxUtils.br(div);
 
         mxUtils.para(div, 'Highlight Paths');
@@ -352,42 +356,81 @@ export class BpmnJs {
   // UGLY, SHOULD BE MOVED IN DEDICATED CLASSES
   // ===========================================================================================================================================================================
   // Adapted from the 'overlays' example
-  // mainly 'var' --> 'const'
-  public initCustomOverlays(): void {
+  // private customOverlaysListener: any;
+  private isCustomOverlaysEnabled = false;
+  private customOverlaysCellTracker: mxgraph.mxCellTracker;
+
+  private changeCustomOverlaysState(): void {
     const graph = this.editor.graph;
+    if (!this.isCustomOverlaysEnabled) {
+      graph.addListener(mxEvent.CLICK, this.customOverlaysListener);
+      // Highlights the vertices when the mouse enters
+      if (this.customOverlaysCellTracker == null) {
+        this.customOverlaysCellTracker = new mxCellTracker(graph, 'red', null); // TS force usage of a function as 3rd argument (getCell)
+      }
+      this.customOverlaysCellTracker.setEnabled(true);
+    } else {
+      graph.removeListener(this.customOverlaysListener);
+      this.customOverlaysCellTracker.setEnabled(false);
+    }
+    this.isCustomOverlaysEnabled = !this.isCustomOverlaysEnabled;
+  }
+
+  public customOverlaysListener(sender, evt): void {
+    console.info(sender);
+    const graph = sender.cellEditor.graph;
+    // const graph = this.editor.graph;
     // Disables basic selection and cell handling --> don't do it here to keep editor features
     // graph.setEnabled(false);
 
     // Highlights the vertices when the mouse enters
-    const cellTracker = new mxCellTracker(graph, 'red', null); // TS add a function as 3rd argument
-
-    // Enables tooltips for the overlays
-    graph.setTooltips(true);
+    // const cellTracker = new mxCellTracker(graph, 'red', null); // TS add a function as 3rd argument
+    //
+    // // Enables tooltips for the overlays
+    // graph.setTooltips(true);
 
     // Installs a handler for click events in the graph
     // that toggles the overlay for the respective cell
-    graph.addListener(mxEvent.CLICK, function(sender, evt) {
-      const cell = evt.getProperty('cell');
+    // graph.addListener(mxEvent.CLICK, function(sender, evt) {
+    const cell = evt.getProperty('cell');
 
-      if (cell != null) {
-        const overlays = graph.getCellOverlays(cell);
+    if (cell != null) {
+      const overlays = graph.getCellOverlays(cell);
 
-        if (overlays == null) {
-          // Creates a new overlay with an image and a tooltip
-          const overlay = new mxCellOverlay(new mxImage('images/overlays/check.png', 16, 16), 'Overlay tooltip');
+      if (overlays == null) {
+        // Creates a new overlay with an image and a tooltip
+        const overlay = new mxCellOverlay(new mxImage('images/overlays/check.png', 16, 16), 'Overlay tooltip');
 
-          // Installs a handler for clicks on the overlay
-          overlay.addListener(mxEvent.CLICK, function(sender, evt2) {
-            mxUtils.alert('Overlay clicked');
-          });
+        // Installs a handler for clicks on the overlay
+        overlay.addListener(mxEvent.CLICK, function(sender, evt2) {
+          mxUtils.alert('Overlay clicked');
+        });
 
-          // Sets the overlay for the cell in the graph
-          graph.addCellOverlay(cell, overlay);
-        } else {
-          graph.removeCellOverlays(cell);
-        }
+        // Sets the overlay for the cell in the graph
+        graph.addCellOverlay(cell, overlay);
+      } else {
+        graph.removeCellOverlays(cell);
       }
-    });
+    }
+    // });
+  }
+
+  // ===========================================================================================================================================================================
+  // UGLY, SHOULD BE MOVED IN DEDICATED CLASSES
+  // Path highlighter
+  // ===========================================================================================================================================================================
+
+  private highlightMouseListener: any;
+  private isHighlightPreviousPathEnabled = false;
+
+  private changePathHighlighterState(): void {
+    const graph = this.editor.graph;
+    if (!this.isHighlightPreviousPathEnabled) {
+      graph.addMouseListener(this.highlightMouseListener);
+    } else {
+      graph.removeMouseListener(this.highlightMouseListener);
+    }
+    this.isHighlightPreviousPathEnabled = !this.isHighlightPreviousPathEnabled;
   }
 
   // TODO change by enable/disable
@@ -487,23 +530,7 @@ export class BpmnJs {
     return previousVertexes;
   }
 
-  private highlightMouseListener: any;
-  private isHighlightPreviousPathEnabled = true;
-
   private configureMouseListenerForCellHighlight(graph: mxgraph.mxGraph): void {
-    // graph.addMouseListener({
-    //   mouseDown: () => {
-    //     // do nothing
-    //   },
-    //   mouseMove: (sender, me) => {
-    //     console.log('mouseMove');
-    //     console.log(me);
-    //   },
-    //   mouseUp: () => {
-    //     // do nothing
-    //   },
-    // });
-
     this.highlightMouseListener = {
       cell: null,
       mouseDown: function(sender, me) {},
@@ -547,7 +574,7 @@ export class BpmnJs {
       dragLeave: function(evt, cell) {
         console.log('dragLeave', cell.value);
         console.log(cell);
-        // TODO create a method inModelTransaction taking a function as parameter
+        // TODO duplication, use the markCells function
         graph.getModel().beginUpdate();
         try {
           mxUtils.setCellStyles(graph.getModel(), Array.from(BpmnJs.findAllPreviousGraphStartingFrom(cell)), 'opacity', 100);
@@ -570,45 +597,5 @@ export class BpmnJs {
         }
       },
     };
-
-    graph.addMouseListener(this.highlightMouseListener);
-    // graph.addMouseListener({
-    //   cell: null,
-    //   mouseDown: function(sender, me) {},
-    //   mouseMove: function(sender, me) {
-    //     const tmp = me.getCell();
-    //
-    //     if (tmp != this.cell) {
-    //       if (this.cell != null) {
-    //         this.dragLeave(me.getEvent(), this.cell);
-    //       }
-    //
-    //       this.cell = tmp;
-    //
-    //       if (this.cell != null) {
-    //         this.dragEnter(me.getEvent(), this.cell);
-    //       }
-    //     }
-    //
-    //     // if (this.cell != null) {
-    //     //   this.dragOver(me.getEvent(), this.cell);
-    //     // }
-    //   },
-    //   mouseUp: function(sender, me) {},
-    //   dragEnter: function(evt, cell) {
-    //     console.log('dragEnter', cell.value);
-    //     console.log(cell);
-    //     BpmnJs.findAllPreviousGraphStartingFrom(cell as mxgraph.mxCell);
-    //     // if (cell instanceof mxgraph.mxCell) {
-    //     // }
-    //   },
-    //   dragOver: function(evt, cell) {
-    //     console.log('dragOver', cell.value);
-    //   },
-    //   dragLeave: function(evt, cell) {
-    //     console.log('dragLeave', cell.value);
-    //     console.log(cell);
-    //   },
-    // });
   }
 }
