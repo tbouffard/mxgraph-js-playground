@@ -30,7 +30,8 @@ module.exports = {
   devServer: {
     contentBase: dist,
     compress: true,
-    port: 5005
+    port: 5005,
+    host: '0.0.0.0'
   },
   plugins: [
     new HtmlWebpackPlugin({
