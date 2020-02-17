@@ -16,6 +16,7 @@ const {
   mxPoint,
   mxStackLayout,
   mxEdgeHandler,
+  mxGraphHandler,
 } = mxgraphFactory({
   mxLoadResources: false,
   mxLoadStylesheets: false,
@@ -43,8 +44,10 @@ export class BpmnJs {
 
       mxGraph.prototype.edgeLabelsMovable = false;
       mxGraph.prototype.cellsLocked = true;
+      // Disables the built-in context menu
+      mxEvent.disableContextMenu(container);
 
-/*      mxEdgeHandler.prototype.removeEnabled = false;
+      /*      mxEdgeHandler.prototype.removeEnabled = false;
       mxEdgeHandler.prototype.cloneEnabled = false;
       mxEdgeHandler.prototype.addEnabled = false;
       mxEdgeHandler.prototype.dblClickRemoveEnabled = false;
@@ -62,11 +65,116 @@ export class BpmnJs {
       swimlaneManager.setEnabled(false);
 
       this.createStackLayout(graph, model);
+
+      // Relative children cannot be removed from parent
+      graph.graphHandler.shouldRemoveCellsFromParent = function(parent, cells, evt) {
+        return cells.length == 0 && !cells[0].geometry.relative && mxGraphHandler.prototype.shouldRemoveCellsFromParent.apply(this, arguments);
+      };
+
+      // Removes folding icon for relative children
+      graph.isCellFoldable = function(cell, collapse) {
+        const childCount = this.model.getChildCount(cell);
+
+        for (let i = 0; i < childCount; i++) {
+          const child = this.model.getChildAt(cell, i);
+          const geo = this.getCellGeometry(child);
+
+          if (geo != null && geo.relative) {
+            return false;
+          }
+        }
+
+        return childCount > 0;
+      };
+
+      // Replaces translation for relative children
+      graph.translateCell = function(cell, dx, dy) {
+        const rel = this.getRelativePosition(this.view.getState(cell), dx * graph.view.scale, dy * graph.view.scale);
+
+        if (rel != null) {
+          let geo = this.model.getGeometry(cell);
+
+          if (geo != null && geo.relative) {
+            geo = geo.clone();
+            geo.x = rel.x;
+            geo.y = rel.y;
+
+            this.model.setGeometry(cell, geo);
+          }
+        } else {
+          mxGraph.prototype.translateCell.apply(this, arguments);
+        }
+      };
+
+      // Replaces move preview for relative children
+      graph.graphHandler.getDelta = function(me) {
+        const point = mxUtils.convertPoint(this.graph.container, me.getX(), me.getY());
+        let delta = new mxPoint(point.x - this.first.x, point.y - this.first.y);
+
+        if (this.cells != null && this.cells.length > 0 && this.cells[0] != null) {
+          const state = this.graph.view.getState(this.cells[0]);
+          const rel = this.getRelativePosition(state, delta.x, delta.y);
+
+          if (rel != null) {
+            const pstate = this.graph.view.getState(this.graph.model.getParent(state.cell));
+
+            if (pstate != null) {
+              delta = new mxPoint(pstate.x + pstate.width * rel.x - state.getCenterX(), pstate.y + pstate.height * rel.y - state.getCenterY());
+            }
+          }
+        }
+
+        return delta;
+      };
     } catch (e) {
       // Shows an error message if the editor cannot start
       mxUtils.alert('Cannot start application: ' + e.message);
       throw e; // for debugging
     }
+  }
+
+  // Returns the relative position of the given child
+  private getRelativePosition(state, dx, dy) {
+    (state, dx, dy) => {
+      if (state != null) {
+        const model = this.graph.getModel();
+        const geo = model.getGeometry(state.cell);
+
+        if (geo != null && geo.relative && !model.isEdge(state.cell)) {
+          const parent = model.getParent(state.cell);
+
+          if (model.isVertex(parent)) {
+            const pstate = this.graph.view.getState(parent);
+
+            if (pstate != null) {
+              const scale = this.graph.view.scale;
+              let x = state.x + dx;
+              let y = state.y + dy;
+
+              if (geo.offset != null) {
+                x -= geo.offset.x * scale;
+                y -= geo.offset.y * scale;
+              }
+
+              x = (x - pstate.x) / pstate.width;
+              y = (y - pstate.y) / pstate.height;
+
+              if (Math.abs(y - 0.5) <= Math.abs((x - 0.5) / 2)) {
+                x = x > 0.5 ? 1 : 0;
+                y = Math.min(1, Math.max(0, y));
+              } else {
+                x = Math.min(1, Math.max(0, x));
+                y = y > 0.5 ? 1 : 0;
+              }
+
+              return new mxPoint(x, y);
+            }
+          }
+        }
+      }
+
+      return null;
+    };
   }
 
   private addAutomaticLayoutAndVariousSwitches(graph: mxgraph.mxGraph) {
@@ -225,6 +333,7 @@ export class BpmnJs {
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
     style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = 'white';
+    style[mxConstants.STYLE_FILLCOLOR] = '#ffffff';
     style[mxConstants.STYLE_FONTSIZE] = 11;
     style[mxConstants.STYLE_STARTSIZE] = 22;
     style[mxConstants.STYLE_HORIZONTAL] = false;
@@ -235,9 +344,9 @@ export class BpmnJs {
     style[mxConstants.STYLE_ROTATABLE] = false;
     style[mxConstants.STYLE_DELETABLE] = false;
     //style[mxConstants.STYLE_MOVABLE] = false;
-    delete style[mxConstants.STYLE_FILLCOLOR];
 
     style = mxUtils.clone(style);
+    delete style[mxConstants.STYLE_FILLCOLOR];
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
     style[mxConstants.STYLE_FONTSIZE] = 10;
     style[mxConstants.STYLE_ROUNDED] = true;
@@ -280,7 +389,6 @@ export class BpmnJs {
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_DASHED] = true;
     style[mxConstants.STYLE_ENDARROW] = mxConstants.ARROW_OPEN;
-    style[mxConstants.STYLE_STARTARROW] = mxConstants.ARROW_OVAL;
     graph.getStylesheet().putCellStyle('crossover', style);
 
     // Installs double click on middle control point and
@@ -329,12 +437,18 @@ export class BpmnJs {
       const end1 = graph.insertVertex(lane1a, null, 'A', 560, 40, 30, 30, 'end');
 
       const step1 = graph.insertVertex(lane1a, null, 'Contact\nProvider', 90, 30, 80, 50, 'process');
+      const step1Out = graph.insertVertex(step1, null, 'Out', 0.5, 1, 25, 20, 'fontSize=9;shape=ellipse;resizable=0;horizontal=1;');
+      step1Out.geometry.offset = new mxPoint(-10, -10);
+      step1Out.geometry.relative = true;
       const step11 = graph.insertVertex(lane1a, null, 'Complete\nAppropriate\nRequest', 190, 30, 80, 50, 'process');
       const step111 = graph.insertVertex(lane1a, null, 'Receive and\nAcknowledge', 385, 30, 80, 50, 'process');
 
       const start2 = graph.insertVertex(lane2b, null, null, 40, 40, 30, 30, 'state');
 
       const step2 = graph.insertVertex(lane2b, null, 'Receive\nRequest', 90, 30, 80, 50, 'process');
+      const step2In = graph.insertVertex(step2, null, 'In', 0.5, -0.5, 25, 20, 'fontSize=9;shape=ellipse;resizable=0;horizontal=1;');
+      step2In.geometry.offset = new mxPoint(-10, -10);
+      step2In.geometry.relative = true;
       const step22 = graph.insertVertex(lane2b, null, 'Refer to Tap\nSystems\nCoordinator', 190, 30, 80, 50, 'process');
 
       const step3 = graph.insertVertex(lane1b, null, 'Request 1st-\nGate\nInformation', 190, 30, 80, 50, 'process');
@@ -360,13 +474,13 @@ export class BpmnJs {
       graph.insertEdge(lane1b, null, null, step3, step33);
       graph.insertEdge(lane2a, null, null, step4, step44);
       graph.insertEdge(lane2a, null, 'No', step44, step444, 'verticalAlign=bottom');
-      graph.insertEdge(parent, null, 'Yes', step44, step111, 'verticalAlign=bottom;horizontal=0;labelBackgroundColor=white;');
+      graph.insertEdge(parent, null, 'Yes', step44, step111, 'verticalAlign=bottom;horizontal=0;');
 
       graph.insertEdge(lane2a, null, 'Yes', step444, end2, 'verticalAlign=bottom');
       e = graph.insertEdge(lane2a, null, 'No', step444, end3, 'verticalAlign=top');
       e.geometry.points = [new mxPoint(step444.geometry.x + step444.geometry.width / 2, end3.geometry.y + end3.geometry.height / 2)];
 
-      graph.insertEdge(parent, null, null, step1, step2, 'crossover');
+      graph.insertEdge(parent, null, null, step1Out, step2In, 'crossover');
       graph.insertEdge(parent, null, null, step3, step11, 'crossover');
       e = graph.insertEdge(lane1a, null, null, step11, step33, 'crossover');
       e.geometry.points = [new mxPoint(step33.geometry.x + step33.geometry.width / 2 + 20, step11.geometry.y + (step11.geometry.height * 4) / 5)];
