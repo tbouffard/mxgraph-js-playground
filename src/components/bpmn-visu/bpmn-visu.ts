@@ -2,6 +2,7 @@ import { css, CSSResult, customElement, html, LitElement, property } from 'lit-e
 import { TemplateResult } from 'lit-html/lib/template-result';
 
 import { BpmnJs } from '../../libs/bpmn-js/bpmn-js';
+//import { BpmnJs } from '../../libs/bpmn-js/mymxgraph';
 import getStyle from './style';
 
 @customElement('bpmn-visu')
@@ -13,7 +14,7 @@ export class BpmnVisu extends LitElement {
   }
 
   @property({ type: String })
-  private config = '';
+  private containerId = '';
 
   private bpmnJs: BpmnJs;
 
@@ -22,18 +23,19 @@ export class BpmnVisu extends LitElement {
   }
 
   public render(): TemplateResult {
+    /*return html``;*/
+
     return html`
       <div id="${BpmnVisu.containerIdCss}">
-        <slot id="graphSlot" name="graph"></slot>
-        <slot id="statusSlot" name="status"></slot>
+        <slot id="graphContainerSlot" name="graphContainer" ></slot>
       </div>
     `;
   }
 
   protected firstUpdated(): void {
     // Initialize bpmn-js
-    this.bpmnJs = new BpmnJs(this.config);
+    this.bpmnJs = new BpmnJs(document.getElementById(this.containerId));
 
-    this.bpmnJs.loadSampleGraph();
+    this.bpmnJs.loadGraph();
   }
 }
