@@ -14870,6 +14870,24 @@ declare module mxgraph {
      */
     getTooltipForCell(cell: any): any;
     /**
+     * Returns the string to be used as the link for the given cell.
+     * This implementation returns null.
+     *
+     * Example:
+     *
+     * (code)
+     * graph.getLinkForCell = function(cell)
+     * {
+     *   return 'plop';
+     * }
+     * (end)
+     *
+     * Replaces all links with the string plop
+     *
+     * cell - <mxCell> whose link should be returned.
+     */
+    getLinkForCell(cell: any): any;
+    /**
      * Returns the cursor value to be used for the CSS of the shape for the
      * given event. This implementation calls <getCursorForCell>.
      *
