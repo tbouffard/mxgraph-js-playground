@@ -1,6 +1,6 @@
 import { MxCell, MxGraph } from 'mxgraph';
 import { mxgraphFactory } from '../../components/mxgraph-factory';
-const { mxClient, mxUtils, mxConstants, mxGraph, mxEdgeStyle, mxGraphModel, mxPerimeter, mxPoint } = mxgraphFactory({
+const { mxEvent, mxClient, mxUtils, mxConstants, mxGraph, mxEdgeStyle, mxGraphModel, mxPerimeter, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
   mxLoadStylesheets: false,
 });
@@ -36,6 +36,38 @@ export class BpmnJs {
 
       mxGraph.prototype.edgeLabelsMovable = false;
       mxGraph.prototype.cellsLocked = true;
+
+      // Overrides method to provide a cell label in the display
+      graph.convertValueToString = function(cell) {
+        if (mxUtils.isNode(cell.value)) {
+          if (cell.value.nodeName != undefined && cell.value.nodeName.toLowerCase() == 'task') {
+            return cell.getAttribute('name');
+          }
+        }
+
+        return cell.value;
+      };
+
+      graph.addListener(mxEvent.CLICK, function(sender, evt) {
+        const cell = evt.getProperty('cell'); // cell may be null
+
+        if (cell != null) {
+          if (cell.vertex != null && cell.vertex == 1) {
+            if (cell.value.nodeName != undefined && cell.value.nodeName.toLowerCase() == 'task') {
+              // Do something useful with cell and consume the event
+              evt.consume();
+
+              const href = cell.getAttribute('href');
+              if (href != null && href.length > 0) {
+                window.open(href);
+              } else {
+                mxUtils.alert('No URL defined');
+                console.log('No URL defined');
+              }
+            }
+          }
+        }
+      });
 
       this.autoResizeContainer(graph);
       this.setVertexStyle(graph);
@@ -261,7 +293,13 @@ export class BpmnJs {
     const lane2a = graph.insertVertex(pool, null, 'Lane A', 0, 0, LANE_WIDTH, LANE_HEIGHT_LARGE);
     lane2a.setConnectable(false);
 
-    const step4 = graph.insertVertex(lane2a, null, 'Receive and\nAcknowledge', 650, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
+    // Note that these XML nodes will be enclosing the mxCell nodes for the model cells in the output
+    const doc = mxUtils.createXmlDocument();
+    const task4 = doc.createElement('Task');
+    task4.setAttribute('name', 'Receive and\nAcknowledge');
+    task4.setAttribute('href', 'https://jgraph.github.io/mxgraph/docs/js-api/files/model/mxCell-js.html#mxCell');
+    const step4 = graph.insertVertex(lane2a, null, task4, 650, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
+
     const step44 = graph.insertVertex(lane2a, null, 'Contract\nConstraints?', 950, TASK_Y_LARGE, TASK_HEIGHT, TASK_HEIGHT, 'condition');
     const step444 = graph.insertVertex(lane2a, null, 'Tap for gas\ndelivery?', LANE_WIDTH - 300, TASK_Y_LARGE, TASK_HEIGHT, TASK_HEIGHT, 'condition');
 
