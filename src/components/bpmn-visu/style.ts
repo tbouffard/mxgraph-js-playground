@@ -5,17 +5,17 @@ export default function(containerId): CSSResult {
     #${containerId} {
       touch-action: none;
     }
-    #graphContainerSlot::slotted(#graph) {
+    #graphContainerSlot::slotted(#graphContainer) {
       position: absolute;
       overflow: hidden;
       font-family: Arial;
       font-size: 8pt;
     }
-    #graphContainerSlot::slotted(#graph) {
+    #graphContainerSlot::slotted(#graphContainer) {
       border-style: solid;
       border-color: #f2f2f2;
       border-width: 1px;
-      background: url('images/grid.gif');
+      //background: url('images/grid.gif');
     }
   `;
 }

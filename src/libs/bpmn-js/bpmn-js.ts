@@ -36,10 +36,22 @@ export class BpmnJs {
 
       mxGraph.prototype.edgeLabelsMovable = false;
       mxGraph.prototype.cellsLocked = true;
-      mxGraph.prototype.autoSizeCellsOnAdd = true;
 
       this.autoResizeContainer(graph);
       this.setVertexStyle(graph);
+
+      /*// Animation on all transitions
+      graph.addListener('size', function() {
+        // Adds animation to edge shape and makes "pipe" visible
+        graph.view.states.visit(function(key, state) {
+          if (graph.model.isEdge(state.cell)) {
+            state.shape.node.getElementsByTagName('path')[0].removeAttribute('visibility');
+            state.shape.node.getElementsByTagName('path')[0].setAttribute('stroke-width', '3');
+            state.shape.node.getElementsByTagName('path')[0].setAttribute('stroke', 'pink');
+            state.shape.node.getElementsByTagName('path')[1].setAttribute('class', 'flow');
+          }
+        });
+      });*/
     } catch (e) {
       // Shows an error message if the editor cannot start
       mxUtils.alert('Cannot start application: ' + e.message);
@@ -51,18 +63,12 @@ export class BpmnJs {
     let style = graph.getStylesheet().getDefaultVertexStyle();
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
-    style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = 'white';
-    style[mxConstants.STYLE_FILLCOLOR] = '#ffffff';
+    style[mxConstants.STYLE_FILLCOLOR] = '#d3d2d1';
     style[mxConstants.STYLE_FONTSIZE] = 20;
     style[mxConstants.STYLE_STARTSIZE] = 30;
     style[mxConstants.STYLE_HORIZONTAL] = false;
     style[mxConstants.STYLE_FONTCOLOR] = 'black';
     style[mxConstants.STYLE_STROKECOLOR] = 'black';
-    style[mxConstants.STYLE_EDITABLE] = false;
-    style[mxConstants.STYLE_CLONEABLE] = false;
-    style[mxConstants.STYLE_ROTATABLE] = false;
-    style[mxConstants.STYLE_DELETABLE] = false;
-    //style[mxConstants.STYLE_MOVABLE] = false;
 
     // Task style
     style = mxUtils.clone(style);
@@ -108,7 +114,6 @@ export class BpmnJs {
 
     // End style
     style = mxUtils.clone(style);
-    delete style[mxConstants.STYLE_FILLCOLOR];
     delete style[mxConstants.STYLE_GRADIENTCOLOR];
     delete style[mxConstants.STYLE_SPACING_RIGHT];
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_DOUBLE_ELLIPSE;
@@ -127,6 +132,7 @@ export class BpmnJs {
     style[mxConstants.STYLE_FONTSIZE] = 12;
     style[mxConstants.STYLE_HORIZONTAL] = true;
     style[mxConstants.STYLE_RESIZABLE] = false;
+    style[mxConstants.STYLE_FILLCOLOR] = 'white';
     style[mxConstants.STYLE_STROKECOLOR] = '#2C6DA3';
     style[mxConstants.STYLE_STROKEWIDTH] = 1.7;
     graph.getStylesheet().putCellStyle('boundary', style);
@@ -141,6 +147,10 @@ export class BpmnJs {
     style[mxConstants.STYLE_STROKECOLOR] = 'black';
 
     style = mxUtils.clone(style);
+    style[mxConstants.STYLE_STROKEWIDTH] = 6;
+    graph.getStylesheet().putCellStyle('animated', style);
+
+    style = mxUtils.clone(graph.getStylesheet().getDefaultEdgeStyle());
     style[mxConstants.STYLE_DASHED] = true;
     style[mxConstants.STYLE_ENDARROW] = mxConstants.ARROW_OPEN;
     graph.getStylesheet().putCellStyle('crossover', style);
@@ -160,6 +170,12 @@ export class BpmnJs {
 
   public loadGraph(): void {
     const graph = this.graph;
+
+    const edgesWithTransition = this.updateModel(graph);
+    this.addAnimation(graph, edgesWithTransition);
+  }
+
+  private updateModel(graph: MxGraph) {
     const model = this.graph.getModel();
     // Gets the default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
     const parent = this.graph.getDefaultParent();
@@ -167,19 +183,19 @@ export class BpmnJs {
     // Adds cells to the model in a single step
     model.beginUpdate();
     try {
-      const { step11, step111, step1Out, step3, step33 } = this.createPool1(graph, parent);
+      const { step11, step111, step1Out, step3, step33, edgesWithTransition } = this.createPool1(graph, parent);
       const { step2In, step22, step4, step44 } = this.createPool2(graph, parent);
-
-      let e = null;
 
       graph.insertEdge(parent, null, null, step22, step3);
       graph.insertEdge(parent, null, 'Yes', step44, step111, 'verticalAlign=bottom;horizontal=0;');
 
       graph.insertEdge(parent, null, null, step1Out, step2In, 'crossover');
       graph.insertEdge(parent, null, null, step3, step11, 'crossover');
-      e = graph.insertEdge(parent, null, null, step11, step33, 'crossover');
+      const e = graph.insertEdge(parent, null, null, step11, step33, 'crossover');
       e.geometry.points = [new mxPoint(step33.geometry.x + step33.geometry.width / 2 + 20, step11.geometry.y + (step11.geometry.height * 4) / 5)];
       graph.insertEdge(parent, null, null, step33, step4);
+
+      return edgesWithTransition;
     } finally {
       // Updates the display
       model.endUpdate();
@@ -190,10 +206,10 @@ export class BpmnJs {
     const pool1 = graph.insertVertex(parent, null, 'Pool 1', 0, 0, LANE_WIDTH, 0);
     pool1.setConnectable(false);
 
-    const { step1Out, step11, step111 } = this.createLane1A(graph, pool1);
+    const { step1Out, step11, step111, edgesWithTransition } = this.createLane1A(graph, pool1);
     const { step3, step33 } = this.createLane1B(graph, pool1);
 
-    return { step11, step111, step1Out, step3, step33 };
+    return { step11, step111, step1Out, step3, step33, edgesWithTransition };
   }
 
   private createLane1A(graph: MxGraph, pool: MxCell) {
@@ -210,12 +226,13 @@ export class BpmnJs {
     const step11 = graph.insertVertex(lane1a, null, 'Complete\nAppropriate\nRequest', 400, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
     const step111 = graph.insertVertex(lane1a, null, 'Receive and\nAcknowledge', 920, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
 
-    graph.insertEdge(lane1a, null, null, start1, step1);
-    graph.insertEdge(lane1a, null, null, step1, step11);
-    graph.insertEdge(lane1a, null, null, step11, step111);
-    graph.insertEdge(lane1a, null, null, step111, end1);
+    const edgesWithTransition = [];
+    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, start1, step1, 'animated'));
+    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, step1, step11, 'animated'));
+    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, step11, step111, 'animated'));
+    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, step111, end1, 'animated'));
 
-    return { start1, end1, step1, step1Out, step11, step111 };
+    return { start1, end1, step1, step1Out, step11, step111, edgesWithTransition };
   }
 
   private createLane1B(graph: MxGraph, pool: MxCell) {
@@ -277,5 +294,17 @@ export class BpmnJs {
     graph.insertEdge(lane2b, null, null, step2, step22);
 
     return { start2, step2, step2In, step22 };
+  }
+
+  private addAnimation(graph, edgesWithTransition: MxCell[]) {
+    // Adds animation to edge shape and makes "pipe" visible
+    graph.orderCells(true, edgesWithTransition);
+    edgesWithTransition.forEach(edge => {
+      const state = graph.view.getState(edge);
+      state.shape.node.getElementsByTagName('path')[0].removeAttribute('visibility');
+      state.shape.node.getElementsByTagName('path')[0].setAttribute('stroke-width', '6');
+      state.shape.node.getElementsByTagName('path')[0].setAttribute('stroke', 'pink');
+      state.shape.node.getElementsByTagName('path')[1].setAttribute('class', 'flow');
+    });
   }
 }
