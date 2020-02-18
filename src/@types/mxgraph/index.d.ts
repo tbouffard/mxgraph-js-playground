@@ -1,5 +1,5 @@
 declare module mxgraph {
-  export let mxClient: {
+  export var mxClient: {
     VERSION: string;
     IS_IE: boolean;
     IS_IE6: boolean;
@@ -220,7 +220,7 @@ declare module mxgraph {
    * - "x", "y", "w", "h", required decimals. The (x,y) position of the sub-shape
    * and its width and height.
    */
-  export class MxStencil {
+  export class mxStencil {
     /**
      * Static global variable that specifies the default value for the localized
      * attribute of the text element. Default is false.
@@ -239,7 +239,7 @@ declare module mxgraph {
     /**
      * Holds an array of <mxConnectionConstraints> as defined in the shape.
      */
-    constraints: MxConnectionConstraint[];
+    constraints: mxConnectionConstraint[];
     /**
      * Holds the aspect of the shape. Default is 'auto'.
      */
@@ -283,7 +283,7 @@ declare module mxgraph {
     /**
      * Parses the given XML node and returns its <mxConnectionConstraint>.
      */
-    parseConstraint(node: Element): MxConnectionConstraint;
+    parseConstraint(node: Element): mxConnectionConstraint;
     /**
      * Gets the given attribute as a text. The return value from <evaluateAttribute>
      * is used as a key to <mxResources.get> if the localized attribute in the text
@@ -314,7 +314,7 @@ declare module mxgraph {
      * bounds - <mxRectangle> that should contain the stencil.
      * direction - Optional direction of the shape to be darwn.
      */
-    computeAspect(shape: any, x: any, y: any, w: any, h: any, direction?: any): MxRectangle;
+    computeAspect(shape: any, x: any, y: any, w: any, h: any, direction?: any): mxRectangle;
     /**
      * Draws this stencil inside the given bounds.
      */
@@ -373,7 +373,7 @@ declare module mxgraph {
    * style[mxConstants.STYLE_SHAPE] = 'customShape';
    * (end)
    */
-  export class MxShape {
+  export class mxShape {
     /**
      * Holds the dialect in which the shape is to be painted.
      * This can be one of the DIALECT constants in <mxConstants>.
@@ -390,11 +390,11 @@ declare module mxgraph {
     /**
      * Holds the <mxRectangle> that specifies the bounds of this shape.
      */
-    bounds: MxRectangle;
+    bounds: mxRectangle;
     /**
      * Holds the array of <mxPoints> that specify the points of this shape.
      */
-    points: MxPoint[];
+    points: mxPoint[];
     /**
      * Holds the outermost DOM node that represents this shape.
      */
@@ -402,7 +402,7 @@ declare module mxgraph {
     /**
      * Optional reference to the corresponding <mxCellState>.
      */
-    state: MxCellState;
+    state: mxCellState;
     /**
      * Optional reference to the style of the corresponding <mxCellState>.
      */
@@ -411,11 +411,11 @@ declare module mxgraph {
      * Contains the bounding box of the shape, that is, the smallest rectangle
      * that includes all pixels of the shape.
      */
-    boundingBox: MxRectangle;
+    boundingBox: mxRectangle;
     /**
      * Holds the <mxStencil> that defines the shape.
      */
-    stencil: MxStencil;
+    stencil: mxStencil;
     /**
      * Event-tolerance for SVG strokes (in px). Default is 8. This is only passed
      * to the canvas in <createSvgCanvas> if <pointerEvents> is true.
@@ -574,11 +574,11 @@ declare module mxgraph {
     /**
      * Creates a new canvas for drawing this shape. May return null.
      */
-    createCanvas(): MxSvgCanvas2D | MxVmlCanvas2D;
+    createCanvas(): mxSvgCanvas2D | mxVmlCanvas2D;
     /**
      * Creates and returns an <mxSvgCanvas2D> for rendering this shape.
      */
-    createSvgCanvas(): MxSvgCanvas2D;
+    createSvgCanvas(): mxSvgCanvas2D;
     /**
      * Creates and returns an <mxVmlCanvas2D> for rendering this shape.
      */
@@ -619,7 +619,7 @@ declare module mxgraph {
     /**
      * Returns the bounding box for the gradient box for this shape.
      */
-    getGradientBounds(c: any, x: any, y: any, w: any, h: any): MxRectangle;
+    getGradientBounds(c: any, x: any, y: any, w: any, h: any): mxRectangle;
     /**
      * Sets the scale and rotation on the given canvas.
      */
@@ -768,13 +768,13 @@ declare module mxgraph {
    * }
    * (end)
    */
-  export let mxStencilRegistry: {
+  export var mxStencilRegistry: {
     stencils: {};
     addStencil(name: any, stencil: any): void;
     getStencil(name: any): any;
   };
 
-  export let mxMarker: {
+  export var mxMarker: {
     markers: any[];
     addMarker(type: any, funct: any): void;
     createMarker(canvas: any, shape: any, type: any, pe: any, unitX: any, unitY: any, size: any, source: any, sw: any, filled: any): any;
@@ -805,7 +805,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_ACTOR> in
    * <mxCellRenderer>.
    *
-   * Constructor: MxActor
+   * Constructor: mxActor
    *
    * Constructs a new actor shape.
    *
@@ -818,7 +818,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxActor extends MxShape {
+  export class mxActor extends mxShape {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Redirects to redrawPath for subclasses to work.
@@ -836,7 +836,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_CLOUD> in
    * <mxCellRenderer>.
    *
-   * Constructor: MxCloud
+   * Constructor: mxCloud
    *
    * Constructs a new cloud shape.
    *
@@ -849,7 +849,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxCloud extends MxActor {
+  export class mxCloud extends mxActor {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Draws the path for this shape.
@@ -862,7 +862,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_RECTANGLE>
    * in <mxCellRenderer>.
    */
-  export class MxRectangleShape extends MxShape {
+  export class mxRectangleShape extends mxShape {
     /**
      * Constructs a new rectangle shape.
      *
@@ -873,7 +873,7 @@ declare module mxgraph {
      * @param strokewidth - Optional integer that defines the stroke width. Default is
      * 1. This is stored in <strokewidth>.
      */
-    constructor(bounds: MxRectangle, fill: string, stroke: string, strokewidth?: number);
+    constructor(bounds: mxRectangle, fill: string, stroke: string, strokewidth?: number);
     /**
      * Returns true for non-rounded, non-rotated shapes with no glass gradient.
      */
@@ -893,7 +893,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_ELLIPSE>
    * in <mxCellRenderer>.
    *
-   * Constructor: MxEllipse
+   * Constructor: mxEllipse
    *
    * Constructs a new ellipse shape.
    *
@@ -906,7 +906,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxEllipse extends MxShape {
+  export class mxEllipse extends mxShape {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Paints the ellipse shape.
@@ -940,7 +940,7 @@ declare module mxgraph {
    * };
    * (end)
    *
-   * Constructor: MxDoubleEllipse
+   * Constructor: mxDoubleEllipse
    *
    * Constructs a new ellipse shape.
    *
@@ -953,7 +953,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxDoubleEllipse extends MxShape {
+  export class mxDoubleEllipse extends mxShape {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Paints the background.
@@ -966,7 +966,7 @@ declare module mxgraph {
     /**
      * Returns the bounds for the label.
      */
-    getLabelBounds(rect: any): MxRectangle;
+    getLabelBounds(rect: any): mxRectangle;
   }
 
   /**
@@ -974,7 +974,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_RHOMBUS>
    * in <mxCellRenderer>.
    *
-   * Constructor: MxRhombus
+   * Constructor: mxRhombus
    *
    * Constructs a new rhombus shape.
    *
@@ -987,7 +987,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxRhombus extends MxShape {
+  export class mxRhombus extends mxShape {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Generic painting implementation.
@@ -1000,7 +1000,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_POLYLINE> in
    * <mxCellRenderer>.
    *
-   * Constructor: MxPolyline
+   * Constructor: mxPolyline
    *
    * Constructs a new polyline shape.
    *
@@ -1013,8 +1013,8 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxPolyline extends MxShape {
-    constructor(points: MxPoint[], stroke: string, strokewidth?: number);
+  export class mxPolyline extends mxShape {
+    constructor(points: mxPoint[], stroke: string, strokewidth?: number);
     /**
      * Returns 0.
      */
@@ -1047,7 +1047,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_ARROW>
    * in <mxCellRenderer>.
    *
-   * Constructor: MxArrow
+   * Constructor: mxArrow
    *
    * Constructs a new arrow shape.
    *
@@ -1067,7 +1067,7 @@ declare module mxgraph {
    * endSize - Optional integer that defines the size of the arrowhead. Default
    * is <mxConstants.ARROW_SIZE>. This is stored in <endSize>.
    */
-  export class MxArrow extends MxShape {
+  export class mxArrow extends mxShape {
     constructor(points: any, fill: any, stroke: any, strokewidth?: any, arrowWidth?: any, spacing?: any, endSize?: any);
     /**
      * Augments the bounding box with the edge width and markers.
@@ -1085,7 +1085,7 @@ declare module mxgraph {
    * vertices.) This shape is registered under <mxConstants.SHAPE_ARROW_CONNECTOR>
    * in <mxCellRenderer>.
    *
-   * Constructor: MxArrowConnector
+   * Constructor: mxArrowConnector
    *
    * Constructs a new arrow shape.
    *
@@ -1105,7 +1105,7 @@ declare module mxgraph {
    * endSize - Optional integer that defines the size of the arrowhead. Default
    * is <mxConstants.ARROW_SIZE>. This is stored in <endSize>.
    */
-  export class MxArrowConnector extends MxShape {
+  export class mxArrowConnector extends mxShape {
     constructor(points: any, fill: any, stroke: any, strokewidth?: any, arrowWidth?: any, spacing?: any, endSize?: any);
     /**
      * Overrides mxShape to reset spacing.
@@ -1164,7 +1164,7 @@ declare module mxgraph {
    * @example
    * mxText.prototype.verticalTextRotation = 90;
    */
-  export class MxText extends MxShape {
+  export class mxText extends mxShape {
     /**
      * Specifies the spacing to be added to the top spacing. Default is 0. Use the
      * value 5 here to get the same label positions as in mxGraph 1.x.
@@ -1408,17 +1408,17 @@ declare module mxgraph {
     /**
      * Returns the spacing as an <mxPoint>.
      */
-    getSpacing(): MxPoint;
+    getSpacing(): mxPoint;
   }
 
   /**
    * Implementation of the triangle shape.
    *
-   * Constructor: MxTriangle
+   * Constructor: mxTriangle
    *
    * Constructs a new triangle shape.
    */
-  export class MxTriangle extends MxActor {
+  export class mxTriangle extends mxActor {
     constructor();
     /**
      * Draws the path for this shape.
@@ -1429,11 +1429,11 @@ declare module mxgraph {
   /**
    * Implementation of the hexagon shape.
    *
-   * Constructor: MxHexagon
+   * Constructor: mxHexagon
    *
    * Constructs a new hexagon shape.
    */
-  export class MxHexagon extends MxActor {
+  export class mxHexagon extends mxActor {
     constructor();
     /**
      * Draws the path for this shape.
@@ -1446,7 +1446,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_LINE> in
    * <mxCellRenderer>.
    *
-   * Constructor: MxLine
+   * Constructor: mxLine
    *
    * Constructs a new line shape.
    *
@@ -1459,7 +1459,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxLine extends MxShape {
+  export class mxLine extends mxShape {
     constructor(bounds: any, stroke: any, strokewidth?: any);
     /**
      * Redirects to redrawPath for subclasses to work.
@@ -1471,7 +1471,7 @@ declare module mxgraph {
    * Extends <mxShape> to implement an image shape. This shape is registered
    * under <mxConstants.SHAPE_IMAGE> in <mxCellRenderer>.
    */
-  export class MxImageShape extends MxRectangleShape {
+  export class mxImageShape extends mxRectangleShape {
     /**
      * Switch to preserve image aspect. Default is true.
      */
@@ -1491,7 +1491,7 @@ declare module mxgraph {
      * @param strokewidth - Optional integer that defines the stroke width. Default is
      * 0. This is stored in <strokewidth>.
      */
-    constructor(bounds: MxRectangle, image: string, fill: string, stroke: string, strokewidth?: number);
+    constructor(bounds: mxRectangle, image: string, fill: string, stroke: string, strokewidth?: number);
     /**
      * Disables offset in IE9 for crisper image output.
      */
@@ -1509,7 +1509,7 @@ declare module mxgraph {
      *
      * @param state - <mxCellState> of the corresponding cell.
      */
-    apply(state: MxCellState): void;
+    apply(state: mxCellState): void;
     /**
      * Returns true if HTML is allowed for this shape. This implementation always
      * returns false.
@@ -1536,7 +1536,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_LABEL> in
    * <mxCellRenderer>.
    *
-   * Constructor: MxLabel
+   * Constructor: mxLabel
    *
    * Constructs a new label shape.
    *
@@ -1549,7 +1549,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxLabel extends MxRectangleShape {
+  export class mxLabel extends mxRectangleShape {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Initializes the shape and the <indicator>.
@@ -1576,7 +1576,7 @@ declare module mxgraph {
     /**
      * Generic background painting implementation.
      */
-    getImageBounds(x: any, y: any, w: any, h: any): MxRectangle;
+    getImageBounds(x: any, y: any, w: any, h: any): mxRectangle;
     /**
      * Generic background painting implementation.
      */
@@ -1584,7 +1584,7 @@ declare module mxgraph {
     /**
      * Generic background painting implementation.
      */
-    getIndicatorBounds(x: any, y: any, w: any, h: any): MxRectangle;
+    getIndicatorBounds(x: any, y: any, w: any, h: any): mxRectangle;
     /**
      * Generic background painting implementation.
      */
@@ -1598,7 +1598,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_CYLINDER>
    * in <mxCellRenderer>.
    *
-   * Constructor: MxCylinder
+   * Constructor: mxCylinder
    *
    * Constructs a new cylinder shape.
    *
@@ -1611,7 +1611,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxCylinder extends MxShape {
+  export class mxCylinder extends mxShape {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Redirects to redrawPath for subclasses to work.
@@ -1630,7 +1630,7 @@ declare module mxgraph {
    * This shape is registered under <mxConstants.SHAPE_CONNECTOR> in
    * <mxCellRenderer>.
    *
-   * Constructor: MxConnector
+   * Constructor: mxConnector
    *
    * Constructs a new connector shape.
    *
@@ -1643,7 +1643,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxConnector extends MxPolyline {
+  export class mxConnector extends mxPolyline {
     constructor(points: any, stroke: any, strokewidth?: any);
     /**
      * Updates the <boundingBox> for this shape using <createBoundingBox> and
@@ -1675,7 +1675,7 @@ declare module mxgraph {
    * region and the content area. The <mxConstants.STYLE_HORIZONTAL> affects
    * the orientation of this shape, not only its label.
    *
-   * Constructor: MxSwimlane
+   * Constructor: mxSwimlane
    *
    * Constructs a new swimlane shape.
    *
@@ -1688,7 +1688,7 @@ declare module mxgraph {
    * strokewidth - Optional integer that defines the stroke width. Default is
    * 1. This is stored in <strokewidth>.
    */
-  export class MxSwimlane extends MxShape {
+  export class mxSwimlane extends mxShape {
     constructor(bounds: any, fill: any, stroke: any, strokewidth?: any);
     /**
      * Returns the bounding box for the gradient box for this shape.
@@ -1697,11 +1697,11 @@ declare module mxgraph {
     /**
      * Returns the bounding box for the gradient box for this shape.
      */
-    getLabelBounds(rect: any): MxRectangle;
+    getLabelBounds(rect: any): mxRectangle;
     /**
      * Returns the bounding box for the gradient box for this shape.
      */
-    getGradientBounds(c: any, x: any, y: any, w: any, h: any): MxRectangle;
+    getGradientBounds(c: any, x: any, y: any, w: any, h: any): mxRectangle;
     /**
      * Returns the arcsize for the swimlane.
      */
@@ -1729,10 +1729,10 @@ declare module mxgraph {
     /**
      * Paints the swimlane vertex shape.
      */
-    getImageBounds(x: any, y: any, w: any, h: any): MxRectangle;
+    getImageBounds(x: any, y: any, w: any, h: any): mxRectangle;
   }
 
-  export let mxLog: {
+  export var mxLog: {
     consoleName: string;
     TRACE: boolean;
     DEBUG: boolean;
@@ -1752,7 +1752,7 @@ declare module mxgraph {
     writeln(): void;
   };
 
-  export let mxObjectIdentity: {
+  export var mxObjectIdentity: {
     FIELD_NAME: string;
     counter: number;
     get(obj: any): any;
@@ -1763,11 +1763,11 @@ declare module mxgraph {
    * A wrapper class for an associative array with object keys. Note: This
    * implementation uses <mxObjectIdentitiy> to turn object keys into strings.
    *
-   * Constructor: MxEventSource
+   * Constructor: mxEventSource
    *
    * Constructs a new dictionary which allows object to be used as keys.
    */
-  export class MxDictionary {
+  export class mxDictionary {
     constructor();
     /**
      * Clears the dictionary.
@@ -1807,7 +1807,7 @@ declare module mxgraph {
     visit(visitor: any): void;
   }
 
-  export let mxResources: {
+  export var mxResources: {
     resources: any[];
     extension: string;
     resourcesEncoded: boolean;
@@ -1826,7 +1826,7 @@ declare module mxgraph {
   /**
    * Implements a 2-dimensional vector with double precision coordinates.
    */
-  export class MxPoint {
+  export class mxPoint {
     /**
      * Holds the x-coordinate of the point. Default is 0.
      * @desc Relative to left corner.
@@ -1846,7 +1846,7 @@ declare module mxgraph {
     /**
      * Returns true if the given object equals this point.
      */
-    equals(obj: MxPoint): boolean;
+    equals(obj: mxPoint): boolean;
     /**
      * Returns a clone of this <mxPoint>.
      */
@@ -1857,7 +1857,7 @@ declare module mxgraph {
    * Extends <mxPoint> to implement a 2-dimensional rectangle with double
    * precision coordinates.
    */
-  export class MxRectangle extends MxPoint {
+  export class mxRectangle extends mxPoint {
     /**
      * Holds the width of the rectangle. Default is 0.
      */
@@ -1899,13 +1899,13 @@ declare module mxgraph {
      *
      * @param rect
      */
-    add(rect: MxRectangle): void;
+    add(rect: mxRectangle): void;
     /**
      * Changes this rectangle to where it overlaps with the given rectangle.
      *
      * @param rect
      */
-    intersect(rect: MxRectangle): void;
+    intersect(rect: mxRectangle): void;
     /**
      * Grows the rectangle by the given amount, that is, this method subtracts
      * the given amount from the x- and y-coordinates and adds twice the amount
@@ -1915,7 +1915,7 @@ declare module mxgraph {
     /**
      * Returns the top, left corner as a new <mxPoint>.
      */
-    getPoint(): MxPoint;
+    getPoint(): mxPoint;
     /**
      * Rotates this rectangle by 90 degree around its center point.
      */
@@ -1923,21 +1923,21 @@ declare module mxgraph {
     /**
      * Returns true if the given object equals this rectangle.
      */
-    equals(obj: MxRectangle): boolean;
+    equals(obj: mxRectangle): boolean;
     /**
      * Returns a new <mxRectangle> which is a copy of the given rectangle.
      */
-    static fromRectangle(rect: MxRectangle): MxRectangle;
+    static fromRectangle(rect: mxRectangle): mxRectangle;
   }
 
-  export let mxEffects: {
+  export var mxEffects: {
     animateChanges(graph: any, changes: any, done: any): void;
     cascadeOpacity(graph: any, cell: any, opacity: any): void;
     fadeOut(node: any, from: any, remove: any, step: any, delay: any, isEnabled: any): void;
   };
 
   /**
-   * Class: MxUtils
+   * Class: mxUtils
    *
    * A singleton class that provides cross-browser helper methods.
    * This is a global functionality. To access the functions in this
@@ -1956,7 +1956,7 @@ declare module mxgraph {
    * resource for this key does not exist then the value is used as
    * the title. Default is 'error'.
    */
-  export let mxUtils: {
+  export var mxUtils: {
     errorResource: string;
 
     /**
@@ -3045,7 +3045,7 @@ declare module mxgraph {
     isInteger(n: any): boolean;
 
     /**
-     * Function: Mod
+     * Function: mod
      *
      * Returns the remainder of division of n by m. You should use this instead
      * of the built-in operation as the built-in operation does not properly
@@ -3474,7 +3474,7 @@ declare module mxgraph {
     error(message: string, width: number, close?: boolean, icon?: boolean): any;
 
     /**
-     * Function: MakeDraggable
+     * Function: makeDraggable
      *
      * Configures the given DOM element to act as a drag source for the
      * specified graph. Returns a a new <mxDragSource>. If
@@ -3555,7 +3555,7 @@ declare module mxgraph {
     ): any;
   };
 
-  export let mxConstants: {
+  export var mxConstants: {
     DEFAULT_HOTSPOT: number;
     MIN_HOTSPOT_SIZE: number;
     MAX_HOTSPOT_SIZE: number;
@@ -3643,10 +3643,10 @@ declare module mxgraph {
     ARROW_SPACING: number;
     ARROW_WIDTH: number;
     ARROW_SIZE: number;
-    PAGE_FORMAT_A4_PORTRAIT: MxRectangle;
-    PAGE_FORMAT_A4_LANDSCAPE: MxRectangle;
-    PAGE_FORMAT_LETTER_PORTRAIT: MxRectangle;
-    PAGE_FORMAT_LETTER_LANDSCAPE: MxRectangle;
+    PAGE_FORMAT_A4_PORTRAIT: mxRectangle;
+    PAGE_FORMAT_A4_LANDSCAPE: mxRectangle;
+    PAGE_FORMAT_LETTER_PORTRAIT: mxRectangle;
+    PAGE_FORMAT_LETTER_LANDSCAPE: mxRectangle;
     NONE: string;
     STYLE_PERIMETER: string;
     STYLE_SOURCE_PORT: string;
@@ -3834,7 +3834,7 @@ declare module mxgraph {
    * evt.consume();
    * INV: evt.isConsumed() == true
    */
-  export class MxEventObject {
+  export class mxEventObject {
     /**
      * Holds the name.
      */
@@ -3899,7 +3899,7 @@ declare module mxgraph {
    * });
    * (end)
    *
-   * Constructor: MxMouseEvent
+   * Constructor: mxMouseEvent
    *
    * Constructs a new event object for the given arguments.
    *
@@ -3909,7 +3909,7 @@ declare module mxgraph {
    * state - Optional <mxCellState> under the mouse.
    *
    */
-  export class MxMouseEvent {
+  export class mxMouseEvent {
     constructor(evt: any, state?: any);
     /**
      * Returns <evt>.
@@ -3985,7 +3985,7 @@ declare module mxgraph {
    * <mxGraphModel>, <mxGraph>, <mxGraphView>, <mxEditor>, <mxCellOverlay>,
    * <mxToolbar>, <mxWindow>
    */
-  export class MxEventSource {
+  export class mxEventSource {
     /**
      * Holds the event names and associated listeners in an array. The array
      * contains the event name followed by the respective listener for each
@@ -4048,10 +4048,10 @@ declare module mxgraph {
      * sender - Optional sender to be passed to the listener. Default value is
      * the return value of <getEventSource>.
      */
-    fireEvent(evt: MxEventObject, sender?: MxEventSource): void;
+    fireEvent(evt: mxEventObject, sender?: mxEventSource): void;
   }
 
-  export let mxEvent: {
+  export var mxEvent: {
     objects: any[];
     addListener: (element: any, eventName: any, funct: any) => void;
     removeListener: (element: any, eventName: any, funct: any) => void;
@@ -4248,7 +4248,7 @@ declare module mxgraph {
    * Note that the linefeeds should only be replaced if the XML is
    * processed in Java, for example when creating an image.
    *
-   * Constructor: MxXmlRequest
+   * Constructor: mxXmlRequest
    *
    * Constructs an XML HTTP request.
    *
@@ -4263,7 +4263,7 @@ declare module mxgraph {
    * username - String specifying the username to be used for the request.
    * password - String specifying the password to be used for the request.
    */
-  export class MxXmlRequest {
+  export class mxXmlRequest {
     constructor(url: any, params: any, method: any, async: any, username: any, password: any);
     /**
      * Returns <binary>.
@@ -4342,7 +4342,7 @@ declare module mxgraph {
     simulate(doc: any, target: any): void;
   }
 
-  export let mxClipboard: {
+  export var mxClipboard: {
     STEPSIZE: number;
     insertCount: number;
     cells: any;
@@ -4432,75 +4432,75 @@ declare module mxgraph {
    * }));
    * (end)
    *
-   * Event: MxEvent.MOVE_START
+   * Event: mxEvent.MOVE_START
    *
    * Fires before the window is moved. The <code>event</code> property contains
    * the corresponding mouse event.
    *
-   * Event: MxEvent.MOVE
+   * Event: mxEvent.MOVE
    *
    * Fires while the window is being moved. The <code>event</code> property
    * contains the corresponding mouse event.
    *
-   * Event: MxEvent.MOVE_END
+   * Event: mxEvent.MOVE_END
    *
    * Fires after the window is moved. The <code>event</code> property contains
    * the corresponding mouse event.
    *
-   * Event: MxEvent.RESIZE_START
+   * Event: mxEvent.RESIZE_START
    *
    * Fires before the window is resized. The <code>event</code> property contains
    * the corresponding mouse event.
    *
-   * Event: MxEvent.RESIZE
+   * Event: mxEvent.RESIZE
    *
    * Fires while the window is being resized. The <code>event</code> property
    * contains the corresponding mouse event.
    *
-   * Event: MxEvent.RESIZE_END
+   * Event: mxEvent.RESIZE_END
    *
    * Fires after the window is resized. The <code>event</code> property contains
    * the corresponding mouse event.
    *
-   * Event: MxEvent.MAXIMIZE
+   * Event: mxEvent.MAXIMIZE
    *
    * Fires after the window is maximized. The <code>event</code> property
    * contains the corresponding mouse event.
    *
-   * Event: MxEvent.MINIMIZE
+   * Event: mxEvent.MINIMIZE
    *
    * Fires after the window is minimized. The <code>event</code> property
    * contains the corresponding mouse event.
    *
-   * Event: MxEvent.NORMALIZE
+   * Event: mxEvent.NORMALIZE
    *
    * Fires after the window is normalized, that is, it returned from
    * maximized or minimized state. The <code>event</code> property contains the
    * corresponding mouse event.
    *
-   * Event: MxEvent.ACTIVATE
+   * Event: mxEvent.ACTIVATE
    *
    * Fires after a window is activated. The <code>previousWindow</code> property
    * contains the previous window. The event sender is the active window.
    *
-   * Event: MxEvent.SHOW
+   * Event: mxEvent.SHOW
    *
    * Fires after the window is shown. This event has no properties.
    *
-   * Event: MxEvent.HIDE
+   * Event: mxEvent.HIDE
    *
    * Fires after the window is hidden. This event has no properties.
    *
-   * Event: MxEvent.CLOSE
+   * Event: mxEvent.CLOSE
    *
    * Fires before the window is closed. The <code>event</code> property contains
    * the corresponding mouse event.
    *
-   * Event: MxEvent.DESTROY
+   * Event: mxEvent.DESTROY
    *
    * Fires before the window is destroyed. This event has no properties.
    *
-   * Constructor: MxWindow
+   * Constructor: mxWindow
    *
    * Constructs a new window with the given dimension and title to display
    * the specified content. The window elements use the given style as a
@@ -4513,7 +4513,7 @@ declare module mxgraph {
    *   style+Pane - Style for the window pane.
    *
    * The default value for style is mxWindow, resulting in the following
-   * classnames for the window elements: MxWindow, mxWindowTitle and
+   * classnames for the window elements: mxWindow, mxWindowTitle and
    * mxWindowPane.
    *
    * If replaceNode is given then the window replaces the given DOM node in
@@ -4536,7 +4536,7 @@ declare module mxgraph {
    * style - Optional base classname for the window elements. Default is
    * mxWindow.
    */
-  export class MxWindow extends MxEventSource {
+  export class mxWindow extends mxEventSource {
     constructor(title: any, content: any, x: any, y: any, width: any, height?: any, minimizable?: any, movable?: any, replaceNode?: any, style?: any);
     /**
      * Initializes the DOM tree that represents the window.
@@ -4593,7 +4593,7 @@ declare module mxgraph {
      * A width or height of 0 means keep the existing width or height. This
      * implementation returns the height of the window title and keeps the width.
      */
-    getMinimumSize(): MxRectangle;
+    getMinimumSize(): mxRectangle;
     /**
      * Installs the event listeners required for minimizing the window.
      */
@@ -4673,11 +4673,11 @@ declare module mxgraph {
   /**
    * A simple class for creating HTML forms.
    *
-   * Constructor: MxForm
+   * Constructor: mxForm
    *
    * Creates a HTML table using the specified classname.
    */
-  export class MxForm {
+  export class mxForm {
     constructor(className: any);
     /**
      * Returns the table that contains this form.
@@ -4718,7 +4718,7 @@ declare module mxgraph {
   /**
    * Encapsulates the URL, width and height of an image.
    */
-  export class MxImage {
+  export class mxImage {
     /**
      * String that specifies the URL of the image.
      */
@@ -4760,7 +4760,7 @@ declare module mxgraph {
    * resizer.resize();
    * (end)
    *
-   * Constructor: MxDivResizer
+   * Constructor: mxDivResizer
    *
    * Constructs an object that maintains the size of a div
    * element when the window is being resized. This is only
@@ -4773,7 +4773,7 @@ declare module mxgraph {
    * container - Optional Container that contains the div. Default is the
    * window.
    */
-  export class MxDivResizer {
+  export class mxDivResizer {
     constructor(div: any, container: any);
     /**
      * Updates the style of the DIV after the window has been resized.
@@ -4798,11 +4798,11 @@ declare module mxgraph {
    * Problem is that in the dropHandler the current preview location is not
    * available, so the preview and the dropHandler must match.
    *
-   * Constructor: MxDragSource
+   * Constructor: mxDragSource
    *
    * Constructs a new drag source for the given element.
    */
-  export class MxDragSource {
+  export class mxDragSource {
     constructor(element: any, dropHandler: any);
     /**
      * Reference to the DOM node which was made draggable.
@@ -4818,7 +4818,7 @@ declare module mxgraph {
     /**
      * <mxPoint> that specifies the offset of the <dragElement>. Default is null.
      */
-    dragOffset: MxPoint;
+    dragOffset: mxPoint;
 
     /**
      * Holds the DOM node that is used to represent the drag preview. If this is
@@ -4829,7 +4829,7 @@ declare module mxgraph {
     /**
      * Optional <mxRectangle> that specifies the unscaled size of the preview.
      */
-    previewElement: MxRectangle;
+    previewElement: mxRectangle;
 
     /**
      * Specifies if this drag source is enabled. Default is true.
@@ -4854,7 +4854,7 @@ declare module mxgraph {
     /**
      * Holds an <mxGuide> for the <currentGraph> if <dragPreview> is not null.
      */
-    currentGuide: MxGuide;
+    currentGuide: mxGuide;
 
     /**
      * Holds an <mxGuide> for the <currentGraph> if <dragPreview> is not null.
@@ -5023,12 +5023,12 @@ declare module mxgraph {
    * Creates a toolbar inside a given DOM node. The toolbar may contain icons,
    * buttons and combo boxes.
    *
-   * Event: MxEvent.SELECT
+   * Event: mxEvent.SELECT
    *
    * Fires when an item was selected in the toolbar. The <code>function</code>
    * property contains the function that was selected in <selectMode>.
    *
-   * Constructor: MxToolbar
+   * Constructor: mxToolbar
    *
    * Constructs a toolbar in the specified container.
    *
@@ -5036,7 +5036,7 @@ declare module mxgraph {
    *
    * container - DOM node that contains the toolbar.
    */
-  export class MxToolbar extends MxEventSource {
+  export class mxToolbar extends mxEventSource {
     constructor(container: any);
     /**
      * Adds the given function as an image with the specified title and icon
@@ -5158,22 +5158,22 @@ declare module mxgraph {
    * graph.model.execute(new CustomChange(graph.model, name));
    * (end)
    *
-   * Event: MxEvent.EXECUTED
+   * Event: mxEvent.EXECUTED
    *
    * Fires between START_EDIT and END_EDIT after an atomic change was executed.
    * The <code>change</code> property contains the change that was executed.
    *
-   * Event: MxEvent.START_EDIT
+   * Event: mxEvent.START_EDIT
    *
    * Fires before a set of changes will be executed in <undo> or <redo>.
    * This event contains no properties.
    *
-   * Event: MxEvent.END_EDIT
+   * Event: mxEvent.END_EDIT
    *
    * Fires after a set of changeswas executed in <undo> or <redo>.
    * This event contains no properties.
    */
-  export class MxUndoableEdit {
+  export class mxUndoableEdit {
     /**
      * Specifies the source of the edit.
      */
@@ -5278,31 +5278,31 @@ declare module mxgraph {
    * <mxGraphModel> and <mxGraphView> using
    * <mxEventSource.addListener>.
    *
-   * Event: MxEvent.CLEAR
+   * Event: mxEvent.CLEAR
    *
    * Fires after <clear> was invoked. This event has no properties.
    *
-   * Event: MxEvent.UNDO
+   * Event: mxEvent.UNDO
    *
    * Fires afer a significant edit was undone in <undo>. The <code>edit</code>
    * property contains the <mxUndoableEdit> that was undone.
    *
-   * Event: MxEvent.REDO
+   * Event: mxEvent.REDO
    *
    * Fires afer a significant edit was redone in <redo>. The <code>edit</code>
    * property contains the <mxUndoableEdit> that was redone.
    *
-   * Event: MxEvent.ADD
+   * Event: mxEvent.ADD
    *
    * Fires after an undoable edit was added to the history. The <code>edit</code>
    * property contains the <mxUndoableEdit> that was added.
    *
-   * Constructor: MxUndoManager
+   * Constructor: mxUndoManager
    *
    * Constructs a new undo manager with the given history size. If no history
    * size is given, then a default size of 100 steps is used.
    */
-  export class MxUndoManager extends MxEventSource {
+  export class mxUndoManager extends mxEventSource {
     constructor(size: any);
     /**
      * Returns true if the history is empty.
@@ -5343,7 +5343,7 @@ declare module mxgraph {
    *
    * Converts relative and absolute URLs to absolute URLs with protocol and domain.
    */
-  export class MxUrlConverter {
+  export class mxUrlConverter {
     /**
      * Private helper function to update the base URL.
      */
@@ -5392,15 +5392,15 @@ declare module mxgraph {
    * };
    * (end)
    *
-   * Constructor: MxPopupMenu
+   * Constructor: mxPopupMenu
    *
    * Constructs a popupmenu.
    *
-   * Event: MxEvent.SHOW
+   * Event: mxEvent.SHOW
    *
    * Fires after the menu has been shown in <popup>.
    */
-  export class MxPopupMenu extends MxEventSource {
+  export class mxPopupMenu extends mxEventSource {
     constructor(factoryMethod?: any);
 
     /**
@@ -5573,7 +5573,7 @@ declare module mxgraph {
    * };
    * (end)
    *
-   * Constructor: MxAutoSaveManager
+   * Constructor: mxAutoSaveManager
    *
    * Constructs a new automatic layout for the given graph.
    *
@@ -5581,7 +5581,7 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing graph.
    */
-  export class MxAutoSaveManager extends MxEventSource {
+  export class mxAutoSaveManager extends mxEventSource {
     constructor(graph: any);
     /**
      * Returns true if events are handled. This implementation
@@ -5623,7 +5623,7 @@ declare module mxgraph {
    *
    * Implements a basic animation in JavaScript.
    *
-   * Constructor: MxAnimation
+   * Constructor: mxAnimation
    *
    * Constructs an animation.
    *
@@ -5631,7 +5631,7 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing <mxGraph>.
    */
-  export class MxAnimation extends MxEventSource {
+  export class mxAnimation extends mxEventSource {
     constructor(delay: any);
     /**
      * Returns true if the animation is running.
@@ -5677,7 +5677,7 @@ declare module mxgraph {
    * }
    * (end)
    *
-   * Constructor: MxMorphing
+   * Constructor: mxMorphing
    *
    * Constructs an animation.
    *
@@ -5688,7 +5688,7 @@ declare module mxgraph {
    * ease - Optional easing constant for the animation. Default is 1.5.
    * delay - Optional delay between the animation steps. Passed to <mxAnimation>.
    */
-  export class MxMorphing extends MxAnimation {
+  export class mxMorphing extends mxAnimation {
     constructor(graph: any, steps?: any, ease?: any, delay?: any);
     /**
      * Animation step.
@@ -5711,7 +5711,7 @@ declare module mxgraph {
      * Returns the vector between the current rendered state and the future
      * location of the state after the display will be updated.
      */
-    getDelta(state: any): MxPoint;
+    getDelta(state: any): mxPoint;
     /**
      * Returns the top, left corner of the given cell. TODO: Improve performance
      * by using caching inside this method as the result per cell never changes
@@ -5763,7 +5763,7 @@ declare module mxgraph {
    * support data URIs, but the maximum size is limited to 32 KB, which means
    * all data URIs should be limited to 32 KB.
    */
-  export class MxImageBundle {
+  export class mxImageBundle {
     constructor(alt: any);
     /**
      * Adds the specified entry to the map. The entry is an object with a value and
@@ -5802,11 +5802,11 @@ declare module mxgraph {
    * 		.simulate(document, '_blank');
    * (end)
    *
-   * Constructor: MxImageExport
+   * Constructor: mxImageExport
    *
    * Constructs a new image export.
    */
-  export class MxImageExport {
+  export class mxImageExport {
     /**
      * Draws the given state and all its descendants to the given canvas.
      */
@@ -5842,16 +5842,16 @@ declare module mxgraph {
    * Base class for all canvases. A description of the public API is available in <mxXmlCanvas2D>.
    * All color values of <mxConstants.NONE> will be converted to null in the state.
    *
-   * Constructor: MxAbstractCanvas2D
+   * Constructor: mxAbstractCanvas2D
    *
    * Constructs a new abstract canvas.
    */
-  export class MxAbstractCanvas2D {
+  export class mxAbstractCanvas2D {
     constructor();
     /**
      * Create a new <mxUrlConverter> and returns it.
      */
-    createUrlConverter(): MxUrlConverter;
+    createUrlConverter(): mxUrlConverter;
     /**
      * Resets the state of this canvas.
      */
@@ -6073,11 +6073,11 @@ declare module mxgraph {
    * a synthetic method, meaning that it is turned into a sequence of curves by
    * default. Subclassers may add native support for arcs.
    *
-   * Constructor: MxXmlCanvas2D
+   * Constructor: mxXmlCanvas2D
    *
    * Constructs a new abstract canvas.
    */
-  export class MxXmlCanvas2D extends MxAbstractCanvas2D {
+  export class mxXmlCanvas2D extends mxAbstractCanvas2D {
     constructor(root: any);
     /**
      * Writes the rendering defaults to <root>:
@@ -6507,7 +6507,7 @@ declare module mxgraph {
    *
    * Or set the respective attribute in the SVG element directly.
    */
-  export class MxSvgCanvas2D extends MxAbstractCanvas2D {
+  export class mxSvgCanvas2D extends mxAbstractCanvas2D {
     /**
      * Holds the current DOM node.
      */
@@ -6777,7 +6777,7 @@ declare module mxgraph {
    * bounding box of rotated shapes, not the actual bounds of the shape. See
    * also <text> for plain text label restrictions in shapes for VML.
    */
-  export class MxVmlCanvas2D extends MxAbstractCanvas2D {
+  export class mxVmlCanvas2D extends mxAbstractCanvas2D {
     constructor(root: any);
     /**
      * Creates the given element using the document.
@@ -6884,11 +6884,11 @@ declare module mxgraph {
   /**
    * Implements the alignment of selection cells to other cells in the graph.
    *
-   * Constructor: MxGuide
+   * Constructor: mxGuide
    *
    * Constructs a new guide object.
    */
-  export class MxGuide {
+  export class mxGuide {
     constructor(graph: any, states: any);
     /**
      * Sets the <mxCellStates> that should be used for alignment.
@@ -6912,7 +6912,7 @@ declare module mxgraph {
      *
      * horizontal - Boolean that specifies which guide should be created.
      */
-    createGuideShape(horizontal: any): MxPolyline;
+    createGuideShape(horizontal: any): mxPolyline;
     /**
      * Moves the <bounds> by the given <mxPoint> and returnt the snapped point.
      */
@@ -6946,7 +6946,7 @@ declare module mxgraph {
    * <mxFastOrganicLayout>, <mxParallelEdgeLayout>, <mxPartitionLayout>,
    * <mxStackLayout>
    *
-   * Constructor: MxGraphLayout
+   * Constructor: mxGraphLayout
    *
    * Constructs a new layout using the given layouts.
    *
@@ -6954,7 +6954,7 @@ declare module mxgraph {
    *
    * graph - Enclosing
    */
-  export class MxGraphLayout {
+  export class mxGraphLayout {
     constructor(graph: any);
     /**
      * Notified when a cell is being moved in a parent that has automatic
@@ -7069,7 +7069,7 @@ declare module mxgraph {
      * Determines the offset of the given parent to the parent
      * of the layout
      */
-    getParentOffset(parent: any): MxPoint;
+    getParentOffset(parent: any): mxPoint;
     /**
      * Replaces the array of mxPoints in the geometry of the given edge
      * with the given array of mxPoints.
@@ -7093,7 +7093,7 @@ declare module mxgraph {
      * Returns an <mxRectangle> that defines the bounds of the given cell or
      * the bounding box if <useBoundingBox> is true.
      */
-    getVertexBounds(cell: any): MxRectangle;
+    getVertexBounds(cell: any): mxRectangle;
     /**
      * Shortcut to <mxGraph.updateGroupBounds> with moveGroup set to true.
      */
@@ -7112,12 +7112,12 @@ declare module mxgraph {
    * layout.execute(graph.getDefaultParent());
    * (end)
    *
-   * Constructor: MxStackLayout
+   * Constructor: mxStackLayout
    *
    * Constructs a new stack layout layout for the specified graph,
    * spacing, orientation and offset.
    */
-  export class MxStackLayout extends MxGraphLayout {
+  export class mxStackLayout extends mxGraphLayout {
     /*
      * Specifies the orientation of the layout. Default is true.
      */
@@ -7240,12 +7240,12 @@ declare module mxgraph {
    * layout.execute(graph.getDefaultParent());
    * (end)
    *
-   * Constructor: MxPartitionLayout
+   * Constructor: mxPartitionLayout
    *
    * Constructs a new stack layout layout for the specified graph,
    * spacing, orientation and offset.
    */
-  export class MxPartitionLayout extends MxGraphLayout {
+  export class mxPartitionLayout extends mxGraphLayout {
     constructor(graph: any, horizontal: any, spacing: any, border: any);
     /**
      * Returns <horizontal>.
@@ -7274,12 +7274,12 @@ declare module mxgraph {
    * layout.execute(graph.getDefaultParent());
    * (end)
    *
-   * Constructor: MxCompactTreeLayout
+   * Constructor: mxCompactTreeLayout
    *
    * Constructs a new compact tree layout for the specified graph
    * and orientation.
    */
-  export class MxCompactTreeLayout extends MxGraphLayout {
+  export class mxCompactTreeLayout extends mxGraphLayout {
     constructor(graph: any, horizontal?: any, invert?: any);
     /**
      * Specifies the orientation of the layout. Default is true.
@@ -7494,7 +7494,7 @@ declare module mxgraph {
      */
     join(node: any): any;
     /**
-     * Function: Merge
+     * Function: merge
      */
     merge(p1: any, p2: any): number;
     /**
@@ -7561,11 +7561,11 @@ declare module mxgraph {
    * layout.execute(graph.getDefaultParent());
    * (end)
    *
-   * Constructor: MxRadialTreeLayout
+   * Constructor: mxRadialTreeLayout
    *
    * Constructs a new radial tree layout for the specified graph
    */
-  export class MxRadialTreeLayout extends MxCompactTreeLayout {
+  export class mxRadialTreeLayout extends mxCompactTreeLayout {
     constructor(graph: any);
     /**
      * Returns a boolean indicating if the given <mxCell> should be ignored as a
@@ -7609,7 +7609,7 @@ declare module mxgraph {
    * var layout = new mxFastOrganicLayout(graph);
    * layout.execute(graph.getDefaultParent());
    */
-  export class MxFastOrganicLayout extends MxGraphLayout {
+  export class mxFastOrganicLayout extends mxGraphLayout {
     /**
      * Specifies if the top left corner of the input cells should be the origin
      * of the layout result. Default is true.
@@ -7779,7 +7779,7 @@ declare module mxgraph {
    * layout.execute(graph.getDefaultParent());
    * (end)
    *
-   * Constructor: MxCircleLayout
+   * Constructor: mxCircleLayout
    *
    * Constructs a new circular layout for the specified radius.
    *
@@ -7788,7 +7788,7 @@ declare module mxgraph {
    * graph - <mxGraph> that contains the cells.
    * radius - Optional radius as an int. Default is 100.
    */
-  export class MxCircleLayout extends MxGraphLayout {
+  export class mxCircleLayout extends mxGraphLayout {
     constructor(graph: any, radius?: any);
     /**
      * Implements <mxGraphLayout.execute>.
@@ -7844,11 +7844,11 @@ declare module mxgraph {
    * });
    * (end)
    *
-   * Constructor: MxCompactTreeLayout
+   * Constructor: mxCompactTreeLayout
    *
    * Constructs a new fast organic layout for the specified graph.
    */
-  export class MxParallelEdgeLayout extends MxGraphLayout {
+  export class mxParallelEdgeLayout extends mxGraphLayout {
     constructor(graph: any);
     /**
      * Implements <mxGraphLayout.execute>.
@@ -7888,7 +7888,7 @@ declare module mxgraph {
    * layout.execute(graph.getDefaultParent());
    * (end)
    *
-   * Constructor: MxCompositeLayout
+   * Constructor: mxCompositeLayout
    *
    * Constructs a new layout using the given layouts. The graph instance is
    * required for creating the transaction that contains all layouts.
@@ -7900,7 +7900,7 @@ declare module mxgraph {
    * master - Optional layout that handles moves. If no layout is given then
    * the first layout of the above array is used to handle moves.
    */
-  export class MxCompositeLayout extends MxGraphLayout {
+  export class mxCompositeLayout extends mxGraphLayout {
     constructor(graph: any, layouts: any, master?: any);
     /**
      * Implements <mxGraphLayout.moveCell> by calling move on <master> or the first
@@ -7927,7 +7927,7 @@ declare module mxgraph {
    * layout.execute(graph.getDefaultParent());
    * (end)
    *
-   * Constructor: MxEdgeLabelLayout
+   * Constructor: mxEdgeLabelLayout
    *
    * Constructs a new edge label layout.
    *
@@ -7935,7 +7935,7 @@ declare module mxgraph {
    *
    * graph - <mxGraph> that contains the cells.
    */
-  export class MxEdgeLabelLayout extends MxGraphLayout {
+  export class mxEdgeLabelLayout extends mxGraphLayout {
     constructor(graph: any, radius: any);
     /**
      * Implements <mxGraphLayout.execute>.
@@ -8051,7 +8051,7 @@ declare module mxgraph {
    * 		'edit', edit, 'changes', changes));
    * (end)
    *
-   * Event: MxEvent.CHANGE
+   * Event: mxEvent.CHANGE
    *
    * Fires when an undoable edit is dispatched. The <code>edit</code> property
    * contains the <mxUndoableEdit>. The <code>changes</code> property contains
@@ -8082,56 +8082,56 @@ declare module mxgraph {
    * (end)
    *
    *
-   * Event: MxEvent.NOTIFY
+   * Event: mxEvent.NOTIFY
    *
    * Same as <mxEvent.CHANGE>, this event can be used for classes that need to
    * implement a sync mechanism between this model and, say, a remote model. In
    * such a setup, only local changes should trigger a notify event and all
    * changes should trigger a change event.
    *
-   * Event: MxEvent.EXECUTE
+   * Event: mxEvent.EXECUTE
    *
    * Fires between begin- and endUpdate and after an atomic change was executed
    * in the model. The <code>change</code> property contains the atomic change
    * that was executed.
    *
-   * Event: MxEvent.EXECUTED
+   * Event: mxEvent.EXECUTED
    *
    * Fires between START_EDIT and END_EDIT after an atomic change was executed.
    * The <code>change</code> property contains the change that was executed.
    *
-   * Event: MxEvent.BEGIN_UPDATE
+   * Event: mxEvent.BEGIN_UPDATE
    *
    * Fires after the <updateLevel> was incremented in <beginUpdate>. This event
    * contains no properties.
    *
-   * Event: MxEvent.START_EDIT
+   * Event: mxEvent.START_EDIT
    *
    * Fires after the <updateLevel> was changed from 0 to 1. This event
    * contains no properties.
    *
-   * Event: MxEvent.END_UPDATE
+   * Event: mxEvent.END_UPDATE
    *
    * Fires after the <updateLevel> was decreased in <endUpdate> but before any
    * notification or change dispatching. The <code>edit</code> property contains
    * the <currentEdit>.
    *
-   * Event: MxEvent.END_EDIT
+   * Event: mxEvent.END_EDIT
    *
    * Fires after the <updateLevel> was changed from 1 to 0. This event
    * contains no properties.
    *
-   * Event: MxEvent.BEFORE_UNDO
+   * Event: mxEvent.BEFORE_UNDO
    *
    * Fires before the change is dispatched after the update level has reached 0
    * in <endUpdate>. The <code>edit</code> property contains the <curreneEdit>.
    *
-   * Event: MxEvent.UNDO
+   * Event: mxEvent.UNDO
    *
    * Fires after the change was dispatched in <endUpdate>. The <code>edit</code>
    * property contains the <currentEdit>.
    *
-   * Constructor: MxGraphModel
+   * Constructor: mxGraphModel
    *
    * Constructs a new graph model. If no root is specified then a new root
    * <mxCell> with a default layer is created.
@@ -8140,7 +8140,7 @@ declare module mxgraph {
    *
    * root - <mxCell> that represents the root cell.
    */
-  export class MxGraphModel extends MxEventSource {
+  export class mxGraphModel extends mxEventSource {
     /**
      * Holds the root cell, which in turn contains the cells that represent the
      * layers of the diagram as child cells. That is, the actual elements of the
@@ -8211,25 +8211,25 @@ declare module mxgraph {
     /**
      * Creates a new root cell with a default layer (child 0).
      */
-    createRoot(): MxCell;
+    createRoot(): mxCell;
     /**
      * Returns the <mxCell> for the specified Id or null if no cell can be
      * found for the given Id.
      *
      * @param id - A string representing the Id of the cell.
      */
-    getCell(id: string): MxCell;
+    getCell(id: string): mxCell;
     /**
      * Returns the cells from the given array where the given filter function
      * returns true.
      */
-    filterCells(cells: MxCell[], filter: (cell: MxCell) => boolean): MxCell[];
+    filterCells(cells: mxCell[], filter: (cell: mxCell) => boolean): mxCell[];
     /**
      * Returns all descendants of the given cell and the cell itself in an array.
      *
      * @param parent - <mxCell> whose descendants should be returned.
      */
-    getDescendants(parent: MxCell): MxCell[];
+    getDescendants(parent: mxCell): mxCell[];
     /**
      * Visits all cells recursively and applies the specified filter function
      * to each cell. If the function returns true then the cell is added
@@ -8248,13 +8248,13 @@ declare module mxgraph {
      * and returns a boolean.
      * @param parent - Optional <mxCell> that is used as the root of the recursion.
      */
-    filterDescendants(filter: (cell: MxCell) => boolean, parent?: MxCell): MxCell[];
+    filterDescendants(filter: (cell: mxCell) => boolean, parent?: mxCell): mxCell[];
     /**
      * Returns the root of the model or the topmost parent of the given cell.
      *
      * @param cell - Optional <mxCell> that specifies the child.
      */
-    getRoot(cell?: MxCell): MxCell;
+    getRoot(cell?: mxCell): mxCell;
     /**
      * Sets the <root> of the model using <mxRootChange> and adds the change to
      * the current transaction. This resets all datastructures in the model and
@@ -8268,46 +8268,46 @@ declare module mxgraph {
      *
      * @param root - <mxCell> that specifies the new root.
      */
-    setRoot(root: MxCell): MxCell;
+    setRoot(root: mxCell): mxCell;
     /**
      * Inner callback to change the root of the model and update the internal
      * datastructures, such as <cells> and <nextId>. Returns the previous root.
      *
      * @param root - <mxCell> that specifies the new root.
      */
-    rootChanged(root: MxCell): MxCell;
+    rootChanged(root: mxCell): mxCell;
     /**
      * Returns true if the given cell is the root of the model and a non-null
      * value.
      *
      * @param cell - <mxCell> that represents the possible root.
      */
-    isRoot(cell: MxCell): boolean;
+    isRoot(cell: mxCell): boolean;
     /**
      * Returns true if <isRoot> returns true for the parent of the given cell.
      *
      * @param cell - <mxCell> that represents the possible layer.
      */
-    isLayer(cell: MxCell): boolean;
+    isLayer(cell: mxCell): boolean;
     /**
      * Returns true if the given parent is an ancestor of the given child.
      *
      * @param parent - <mxCell> that specifies the parent.
      * @param child - <mxCell> that specifies the child.
      */
-    isAncestor(parent: MxCell, child: MxCell): boolean;
+    isAncestor(parent: mxCell, child: mxCell): boolean;
     /**
      * Returns true if the model contains the given <mxCell>.
      *
      * @param cell - <mxCell> that specifies the cell.
      */
-    contains(cell: MxCell): boolean;
+    contains(cell: mxCell): boolean;
     /**
      * Returns the parent of the given cell.
      *
      * @param cell - <mxCell> whose parent should be returned.
      */
-    getParent(cell: MxCell): MxCell;
+    getParent(cell: mxCell): mxCell;
     /**
      * Adds the specified child to the parent at the given index using
      * <mxChildChange> and adds the change to the current transaction. If no
@@ -8318,7 +8318,7 @@ declare module mxgraph {
      * @param child - <mxCell> that specifies the child to be inserted.
      * @param index - Optional integer that specifies the index of the child.
      */
-    add(parent: MxCell, child: MxCell, index?: number): MxCell;
+    add(parent: mxCell, child: mxCell, index?: number): mxCell;
     /**
      * Inner callback to update <cells> when a cell has been added. This
      * implementation resolves collisions by creating new Ids. To change the
@@ -8337,7 +8337,7 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> that specifies the cell that has been added.
      */
-    cellAdded(cell: MxCell): void;
+    cellAdded(cell: mxCell): void;
     /**
      * Hook method to create an Id for the specified cell. This implementation
      * concatenates <prefix>, id and <postfix> to create the Id and increments
@@ -8346,24 +8346,24 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> to create the Id for.
      */
-    createId(cell: MxCell): string;
+    createId(cell: mxCell): string;
     /**
      * Updates the parent for all edges that are connected to cell or one of
      * its descendants using <updateEdgeParent>.
      */
-    updateEdgeParents(cell: MxCell, root?: MxCell): void;
+    updateEdgeParents(cell: mxCell, root?: mxCell): void;
     /**
      * Returns the absolute, accumulated origin for the children inside the
      * given parent as an <mxPoint>.
      */
-    getOrigin(cell: MxCell): MxPoint;
+    getOrigin(cell: mxCell): mxPoint;
     /**
      * Returns the nearest common ancestor for the specified cells.
      *
      * @param cell1 - <mxCell> that specifies the first cell in the tree.
      * @param cell2 - <mxCell> that specifies the second cell in the tree.
      */
-    getNearestCommonAncestor(cell1: MxCell, cell2: MxCell): MxCell;
+    getNearestCommonAncestor(cell1: mxCell, cell2: mxCell): mxCell;
     /**
      * Removes the specified cell from the model using <mxChildChange> and adds
      * the change to the current transaction. This operation will remove the
@@ -8371,13 +8371,13 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> that should be removed.
      */
-    remove(cell: MxCell): MxCell;
+    remove(cell: mxCell): mxCell;
     /**
      * Inner callback to update <cells> when a cell has been removed.
      *
      * @param cell - <mxCell> that specifies the cell that has been removed.
      */
-    cellRemoved(cell: MxCell): void;
+    cellRemoved(cell: mxCell): void;
     /**
      * Inner callback to update the parent of a cell using <mxCell.insert>
      * on the parent and return the previous parent.
@@ -8387,39 +8387,39 @@ declare module mxgraph {
      * @param index - Optional integer that defines the index of the child
      * in the parent's child array.
      */
-    parentForCellChanged(cell: MxCell, parent: MxCell, index?: number): MxCell;
+    parentForCellChanged(cell: mxCell, parent: mxCell, index?: number): mxCell;
     /**
      * Returns the number of children in the given cell.
      *
      * @param cell - <mxCell> whose number of children should be returned.
      */
-    getChildCount(cell: MxCell): number;
+    getChildCount(cell: mxCell): number;
     /**
      * Returns the child of the given <mxCell> at the given index.
      *
      * @param cell - <mxCell> that represents the parent.
      * @param index - Integer that specifies the index of the child to be returned.
      */
-    getChildAt(cell: MxCell, index: number): MxCell;
+    getChildAt(cell: mxCell, index: number): mxCell;
     /**
      * Returns all children of the given <mxCell> as an array of <mxCells>. The
      * return value should be only be read.
      *
      * @param cell - <mxCell> the represents the parent.
      */
-    getChildren(cell: MxCell): MxCell[];
+    getChildren(cell: mxCell): mxCell[];
     /**
      * Returns the child vertices of the given parent.
      *
      * @param cell - <mxCell> whose child vertices should be returned.
      */
-    getChildVertices(parent: MxCell): MxCell[];
+    getChildVertices(parent: mxCell): mxCell[];
     /**
      * Returns the child edges of the given parent.
      *
      * @param cell - <mxCell> whose child edges should be returned.
      */
-    getChildEdges(parent: MxCell): MxCell[];
+    getChildEdges(parent: mxCell): mxCell[];
     /**
      * Returns the children of the given cell that are vertices and/or edges
      * depending on the arguments.
@@ -8430,7 +8430,7 @@ declare module mxgraph {
      * @param edges - Boolean indicating if child edges should be returned.
      * Default is false.
      */
-    getChildCells(parent: MxCell, vertices?: boolean, edges?: boolean): MxCell[];
+    getChildCells(parent: mxCell, vertices?: boolean, edges?: boolean): mxCell[];
     /**
      * Returns the source or target <mxCell> of the given edge depending on the
      * value of the boolean parameter.
@@ -8438,7 +8438,7 @@ declare module mxgraph {
      * @param edge - <mxCell> that specifies the edge.
      * @param isSource - Boolean indicating which end of the edge should be returned.
      */
-    getTerminal(edge: MxCell, isSource: boolean): MxCell;
+    getTerminal(edge: mxCell, isSource: boolean): mxCell;
     /**
      * Sets the source or target terminal of the given <mxCell> using
      * <mxTerminalChange> and adds the change to the current transaction.
@@ -8450,7 +8450,7 @@ declare module mxgraph {
      * @param isSource - Boolean indicating if the terminal is the new source or
      * target terminal of the edge.
      */
-    setTerminal(edge: MxCell, terminal: MxCell, isSource: boolean): MxCell;
+    setTerminal(edge: mxCell, terminal: mxCell, isSource: boolean): mxCell;
     /**
      * Sets the source and target <mxCell> of the given <mxCell> in a single
      * transaction using <setTerminal> for each end of the edge.
@@ -8459,7 +8459,7 @@ declare module mxgraph {
      * @param source - <mxCell> that specifies the new source terminal.
      * @param target - <mxCell> that specifies the new target terminal.
      */
-    setTerminals(edge: MxCell, source: MxCell, target: MxCell): void;
+    setTerminals(edge: mxCell, source: mxCell, target: mxCell): void;
     /**
      * Inner helper function to update the terminal of the edge using
      * <mxCell.insertEdge> and return the previous terminal.
@@ -8469,13 +8469,13 @@ declare module mxgraph {
      * @param isSource - Boolean indicating if the terminal is the new source or
      * target terminal of the edge.
      */
-    terminalForCellChanged(edge: MxCell, terminal: MxCell, isSource: boolean): MxCell;
+    terminalForCellChanged(edge: mxCell, terminal: mxCell, isSource: boolean): mxCell;
     /**
      * Returns the number of distinct edges connected to the given cell.
      *
      * @param cell - <mxCell> that represents the vertex.
      */
-    getEdgeCount(cell: MxCell): number;
+    getEdgeCount(cell: mxCell): number;
     /**
      * Returns the edge of cell at the given index.
      *
@@ -8483,7 +8483,7 @@ declare module mxgraph {
      * @param index - Integer that specifies the index of the edge
      * to return.
      */
-    getEdgeAt(cell: MxCell, index: number): MxCell;
+    getEdgeAt(cell: mxCell, index: number): mxCell;
     /**
      * Returns the number of incoming or outgoing edges, ignoring the given
      * edge.
@@ -8493,25 +8493,25 @@ declare module mxgraph {
      * incoming edges should be returned.
      * @param ignoredEdge - <mxCell> that represents an edge to be ignored.
      */
-    getDirectedEdgeCount(cell: MxCell, outgoing: boolean, ignoredEdge?: MxCell): number;
+    getDirectedEdgeCount(cell: mxCell, outgoing: boolean, ignoredEdge?: mxCell): number;
     /**
      * Returns all edges of the given cell without loops.
      *
      * @param cell - <mxCell> whose edges should be returned.
      */
-    getConnections(cell: MxCell): MxCell[];
+    getConnections(cell: mxCell): mxCell[];
     /**
      * Returns the incoming edges of the given cell without loops.
      *
      * @param cell - <mxCell> whose incoming edges should be returned.
      */
-    getIncomingEdges(cell: MxCell): MxCell[];
+    getIncomingEdges(cell: mxCell): mxCell[];
     /**
      * Returns the outgoing edges of the given cell without loops.
      *
      * @param cell - <mxCell> whose outgoing edges should be returned.
      */
-    getOutgoingEdges(cell: MxCell): MxCell[];
+    getOutgoingEdges(cell: mxCell): mxCell[];
     /**
      * Returns all distinct edges connected to this cell as a new array of
      * <mxCells>. If at least one of incoming or outgoing is true, then loops
@@ -8526,7 +8526,7 @@ declare module mxgraph {
      * @param includeLoops - Optional boolean that specifies if loops should be returned.
      * Default is true.
      */
-    getEdges(cell: MxCell, incoming?: boolean, outgoing?: boolean, includeLoops?: boolean): MxCell[];
+    getEdges(cell: mxCell, incoming?: boolean, outgoing?: boolean, includeLoops?: boolean): mxCell[];
     /**
      * Returns all edges between the given source and target pair. If directed
      * is true, then only edges from the source to the target are returned,
@@ -8539,7 +8539,7 @@ declare module mxgraph {
      * @param directed - Optional boolean that specifies if the direction of the
      * edge should be taken into account. Default is false.
      */
-    getEdgesBetween(source: MxCell, target: MxCell, directed?: boolean): MxCell[];
+    getEdgesBetween(source: mxCell, target: mxCell, directed?: boolean): mxCell[];
     /**
      * Returns all opposite vertices wrt terminal for the given edges, only
      * returning sources and/or targets as specified. The result is returned
@@ -8552,7 +8552,7 @@ declare module mxgraph {
      * @param targets - Boolean that specifies if target terminals should be contained
      * in the result. Default is true.
      */
-    getOpposites(edges: MxCell[], terminal: MxCell, sources?: boolean, targets?: boolean): MxCell[];
+    getOpposites(edges: mxCell[], terminal: mxCell, sources?: boolean, targets?: boolean): mxCell[];
     /**
      * Returns the topmost cells of the hierarchy in an array that contains no
      * descendants for each <mxCell> that it contains. Duplicates should be
@@ -8560,19 +8560,19 @@ declare module mxgraph {
      *
      * @param cells - Array of <mxCells> whose topmost ancestors should be returned.
      */
-    getTopmostCells(cells: MxCell[]): MxCell[];
+    getTopmostCells(cells: mxCell[]): mxCell[];
     /**
      * Returns true if the given cell is a vertex.
      *
      * @param cell - <mxCell> that represents the possible vertex.
      */
-    isVertex(cell: MxCell): boolean;
+    isVertex(cell: mxCell): boolean;
     /**
      * Returns true if the given cell is an edge.
      *
      * @param cell - <mxCell> that represents the possible edge.
      */
-    isEdge(cell: MxCell): boolean;
+    isEdge(cell: mxCell): boolean;
     /**
      * Returns true if the given <mxCell> is connectable. If <edgesConnectable>
      * is false, then this function returns false for all edges else it returns
@@ -8580,13 +8580,13 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> whose connectable state should be returned.
      */
-    isConnectable(cell: MxCell): boolean;
+    isConnectable(cell: mxCell): boolean;
     /**
      * Returns the user object of the given <mxCell> using <mxCell.getValue>.
      *
      * @param cell - <mxCell> whose user object should be returned.
      */
-    getValue(cell: MxCell): Value;
+    getValue(cell: mxCell): Value;
     /**
      * Sets the user object of then given <mxCell> using <mxValueChange>
      * and adds the change to the current transaction.
@@ -8594,13 +8594,13 @@ declare module mxgraph {
      * @param cell - <mxCell> whose user object should be changed.
      * @param value - Object that defines the new user object.
      */
-    setValue(cell: MxCell, value: Record<string, any>): Record<string, any>;
+    setValue(cell: mxCell, value: Record<string, any>): Record<string, any>;
     /**
      * Returns the <mxGeometry> of the given <mxCell>.
      *
      * @param cell - <mxCell> whose geometry should be returned.
      */
-    getGeometry(cell: MxCell): MxGeometry;
+    getGeometry(cell: mxCell): mxGeometry;
     /**
      * Sets the <mxGeometry> of the given <mxCell>. The actual update
      * of the cell is carried out in <geometryForCellChanged>. The
@@ -8609,13 +8609,13 @@ declare module mxgraph {
      * @param cell - <mxCell> whose geometry should be changed.
      * @param geometry - <mxGeometry> that defines the new geometry.
      */
-    setGeometry(cell: MxCell, geometry: MxGeometry): MxGeometry;
+    setGeometry(cell: mxCell, geometry: mxGeometry): mxGeometry;
     /**
      * Returns the style of the given <mxCell>.
      *
      * @param cell - <mxCell> whose style should be returned.
      */
-    getStyle(cell: MxCell): string;
+    getStyle(cell: mxCell): string;
     /**
      * Sets the style of the given <mxCell> using <mxStyleChange> and
      * adds the change to the current transaction.
@@ -8624,7 +8624,7 @@ declare module mxgraph {
      * @param style - String of the form [stylename;|key=value;] to specify
      * the new cell style.
      */
-    setStyle(cell: MxCell, style: string): string;
+    setStyle(cell: mxCell, style: string): string;
     /**
      * Inner callback to update the style of the given <mxCell>
      * using <mxCell.setStyle> and return the previous style.
@@ -8633,13 +8633,13 @@ declare module mxgraph {
      * @param style - String of the form [stylename;|key=value;] to specify
      * the new cell style.
      */
-    styleForCellChanged(cell: MxCell, style: string): string;
+    styleForCellChanged(cell: mxCell, style: string): string;
     /**
      * Returns true if the given <mxCell> is collapsed.
      *
      * @param cell - <mxCell> whose collapsed state should be returned.
      */
-    isCollapsed(cell: MxCell): boolean;
+    isCollapsed(cell: mxCell): boolean;
     /**
      * Sets the collapsed state of the given <mxCell> using <mxCollapseChange>
      * and adds the change to the current transaction.
@@ -8647,7 +8647,7 @@ declare module mxgraph {
      * @param cell - <mxCell> whose collapsed state should be changed.
      * @param collapsed - Boolean that specifies the new collpased state.
      */
-    setCollapsed(cell: MxCell, collapsed: boolean): boolean;
+    setCollapsed(cell: mxCell, collapsed: boolean): boolean;
     /**
      * Inner callback to update the collapsed state of the
      * given <mxCell> using <mxCell.setCollapsed> and return
@@ -8656,13 +8656,13 @@ declare module mxgraph {
      * @param cell - <mxCell> that specifies the cell to be updated.
      * @param collapsed - Boolean that specifies the new collpased state.
      */
-    collapsedStateForCellChanged(cell: MxCell, collapsed: boolean): boolean;
+    collapsedStateForCellChanged(cell: mxCell, collapsed: boolean): boolean;
     /**
      * Returns true if the given <mxCell> is visible.
      *
      * @param cell - <mxCell> whose visible state should be returned.
      */
-    isVisible(cell: MxCell): boolean;
+    isVisible(cell: mxCell): boolean;
     /**
      * Sets the visible state of the given <mxCell> using <mxVisibleChange> and
      * adds the change to the current transaction.
@@ -8670,7 +8670,7 @@ declare module mxgraph {
      * @param cell - <mxCell> whose visible state should be changed.
      * @param visible - Boolean that specifies the new visible state.
      */
-    setVisible(cell: MxCell, visible: boolean): boolean;
+    setVisible(cell: mxCell, visible: boolean): boolean;
     /**
      * Inner callback to update the visible state of the
      * given <mxCell> using <mxCell.setCollapsed> and return
@@ -8679,7 +8679,7 @@ declare module mxgraph {
      * @param cell - <mxCell> that specifies the cell to be updated.
      * @param visible - Boolean that specifies the new visible state.
      */
-    visibleStateForCellChanged(cell: MxCell, visible: boolean): boolean;
+    visibleStateForCellChanged(cell: mxCell, visible: boolean): boolean;
     /**
      * Executes the given edit and fires events if required. The edit object
      * requires an execute function which is invoked. The edit is added to the
@@ -8750,7 +8750,7 @@ declare module mxgraph {
      * notify function to fire a <change> and <notify> event
      * through the <mxUndoableEdit>'s source.
      */
-    createUndoableEdit(): MxUndoableEdit;
+    createUndoableEdit(): mxUndoableEdit;
     /**
      * Merges the children of the given cell into the given target cell inside
      * this model. All cells are cloned unless there is a corresponding cell in
@@ -8800,7 +8800,7 @@ declare module mxgraph {
      * with all descendants.
      * mapping - Optional mapping for existing clones.
      */
-    cloneCells(cells: MxCell[], includeChildren: boolean, mapping?: any): any[];
+    cloneCells(cells: mxCell[], includeChildren: boolean, mapping?: any): any[];
     /**
      * Inner helper method for cloning cells recursively.
      */
@@ -8819,15 +8819,15 @@ declare module mxgraph {
   /**
    * Action to change the root in a model.
    *
-   * Constructor: MxRootChange
+   * Constructor: mxRootChange
    *
    * Constructs a change of the root in the
    * specified model.
    */
-  export class MxRootChange {
-    model: MxGraphModel;
+  export class mxRootChange {
+    model: mxGraphModel;
     root: any;
-    previous: MxCell;
+    previous: mxCell;
     constructor(model: any, root: any);
     /**
      * Carries out a change of the root using
@@ -8838,18 +8838,18 @@ declare module mxgraph {
   /**
    * Action to add or remove a child in a model.
    *
-   * Constructor: MxChildChange
+   * Constructor: mxChildChange
    *
    * Constructs a change of a child in the
    * specified model.
    */
-  export class MxChildChange {
+  export class mxChildChange {
     parent: any;
     previous: any;
-    child: MxCell;
+    child: mxCell;
     index: any;
     previousIndex: any;
-    constructor(model: any, parent: any, child: MxCell, index?: number);
+    constructor(model: any, parent: any, child: mxCell, index?: number);
     /**
      * Changes the parent of <child> using
      * <mxGraphModel.parentForCellChanged> and
@@ -8867,16 +8867,16 @@ declare module mxgraph {
   /**
    * Action to change a terminal in a model.
    *
-   * Constructor: MxTerminalChange
+   * Constructor: mxTerminalChange
    *
    * Constructs a change of a terminal in the
    * specified model.
    */
-  export class MxTerminalChange {
+  export class mxTerminalChange {
     model: any;
-    cell: MxCell;
+    cell: mxCell;
     terminal: any;
-    previous: MxCell;
+    previous: mxCell;
     source: any;
     constructor(model: any, cell: any, terminal: any, source: any);
     /**
@@ -8888,12 +8888,12 @@ declare module mxgraph {
   /**
    * Action to change a user object in a model.
    *
-   * Constructor: MxValueChange
+   * Constructor: mxValueChange
    *
    * Constructs a change of a user object in the
    * specified model.
    */
-  export class MxValueChange {
+  export class mxValueChange {
     model: any;
     cell: any;
     value: any;
@@ -8908,12 +8908,12 @@ declare module mxgraph {
   /**
    * Action to change a cell's style in a model.
    *
-   * Constructor: MxStyleChange
+   * Constructor: mxStyleChange
    *
    * Constructs a change of a style in the
    * specified model.
    */
-  export class MxStyleChange {
+  export class mxStyleChange {
     model: any;
     cell: any;
     style: any;
@@ -8928,12 +8928,12 @@ declare module mxgraph {
   /**
    * Action to change a cell's geometry in a model.
    *
-   * Constructor: MxGeometryChange
+   * Constructor: mxGeometryChange
    *
    * Constructs a change of a geometry in the
    * specified model.
    */
-  export class MxGeometryChange {
+  export class mxGeometryChange {
     model: any;
     cell: any;
     geometry: any;
@@ -8948,12 +8948,12 @@ declare module mxgraph {
   /**
    * Action to change a cell's collapsed state in a model.
    *
-   * Constructor: MxCollapseChange
+   * Constructor: mxCollapseChange
    *
    * Constructs a change of a collapsed state in the
    * specified model.
    */
-  export class MxCollapseChange {
+  export class mxCollapseChange {
     model: any;
     cell: any;
     collapsed: any;
@@ -8968,12 +8968,12 @@ declare module mxgraph {
   /**
    * Action to change a cell's visible state in a model.
    *
-   * Constructor: MxVisibleChange
+   * Constructor: mxVisibleChange
    *
    * Constructs a change of a visible state in the
    * specified model.
    */
-  export class MxVisibleChange {
+  export class mxVisibleChange {
     model: any;
     cell: any;
     visible: any;
@@ -9010,12 +9010,12 @@ declare module mxgraph {
    * }
    * (end)
    *
-   * Constructor: MxCellAttributeChange
+   * Constructor: mxCellAttributeChange
    *
    * Constructs a change of a attribute of the DOM node
    * stored as the value of the given <mxCell>.
    */
-  export class MxCellAttributeChange {
+  export class mxCellAttributeChange {
     cell: any;
     attribute: any;
     value: any;
@@ -9031,7 +9031,7 @@ declare module mxgraph {
   type Value = any;
 
   /**
-   * Class: MxCell
+   * Class: mxCell
    *
    * Cells are the elements of the graph model. They represent the state
    * of the groups, vertices and edges in a graph.
@@ -9081,7 +9081,7 @@ declare module mxgraph {
    *
    * Called from within the constructor.
    *
-   * Constructor: MxCell
+   * Constructor: mxCell
    *
    * Constructs a new cell to be used in a graph model.
    * This method invokes <onInit> upon completion.
@@ -9092,7 +9092,7 @@ declare module mxgraph {
    * geometry - Optional <mxGeometry> that specifies the geometry.
    * style - Optional formatted string that defines the style.
    */
-  export class MxCell {
+  export class mxCell {
     /**
      * Holds the Id. Default is null.
      */
@@ -9104,7 +9104,7 @@ declare module mxgraph {
     /**
      * Holds the <mxGeometry>. Default is null.
      */
-    geometry: MxGeometry;
+    geometry: mxGeometry;
     /**
      * Holds the style as a string of the form [(stylename|key=value);]. Default is
      * null.
@@ -9133,23 +9133,23 @@ declare module mxgraph {
     /**
      * Reference to the parent cell.
      */
-    parent: MxCell;
+    parent: mxCell;
     /**
      * Reference to the source terminal.
      */
-    source: MxCell;
+    source: mxCell;
     /**
      * Reference to the target terminal.
      */
-    target: MxCell;
+    target: mxCell;
     /**
      * Holds the child cells.
      */
-    children: MxCell[];
+    children: mxCell[];
     /**
      * Holds the edges.
      */
-    edges: MxCell[];
+    edges: mxCell[];
     /**
      * List of members that should not be cloned inside <clone>. This field is
      * passed to <mxUtils.clone> and is not made persistent in <mxCellCodec>.
@@ -9161,7 +9161,7 @@ declare module mxgraph {
     /**
      * Implicit variable declarations
      */
-    overlays: MxCellOverlay[];
+    overlays: mxCellOverlay[];
     /**
      * Constructs a new cell to be used in a graph model.
      * This method invokes <onInit> upon completion.
@@ -9170,7 +9170,7 @@ declare module mxgraph {
      * @param geometry - Optional <mxGeometry> that specifies the geometry.
      * @param style - Optional formatted string that defines the style.
      */
-    constructor(value?: any, geometry?: MxGeometry, style?: string);
+    constructor(value?: any, geometry?: mxGeometry, style?: string);
     /**
      * Returns the Id of the cell as a string.
      */
@@ -9199,11 +9199,11 @@ declare module mxgraph {
     /**
      * Returns the <mxGeometry> that describes the <geometry>.
      */
-    getGeometry(): MxGeometry;
+    getGeometry(): mxGeometry;
     /**
      * Sets the <mxGeometry> to be used as the <geometry>.
      */
-    setGeometry(geometry: MxGeometry): void;
+    setGeometry(geometry: mxGeometry): void;
     /**
      * Returns a string that describes the <style>.
      */
@@ -9267,20 +9267,20 @@ declare module mxgraph {
     /**
      * Returns the cell's parent.
      */
-    getParent(): MxCell;
+    getParent(): mxCell;
     /**
      * Sets the parent cell.
      *
      * @param parent - <mxCell> that represents the new parent.
      */
-    setParent(parent: MxCell): void;
+    setParent(parent: mxCell): void;
     /**
      * Returns the source or target terminal.
      *
      * @param source - Boolean that specifies if the source terminal should be
      * returned. (true:source, false:target)
      */
-    getTerminal(source: boolean): MxCell;
+    getTerminal(source: boolean): mxCell;
     /**
      * Sets the source or target terminal and returns the new terminal.
      *
@@ -9288,7 +9288,7 @@ declare module mxgraph {
      * @param isSource - Boolean that specifies if the source or target terminal
      * should be set.
      */
-    setTerminal(terminal: MxCell, isSource: boolean): MxCell;
+    setTerminal(terminal: mxCell, isSource: boolean): mxCell;
     /**
      * Returns the number of child cells.
      */
@@ -9298,13 +9298,13 @@ declare module mxgraph {
      *
      * @param child - Child whose index should be returned.
      */
-    getIndex(child: MxCell): any;
+    getIndex(child: mxCell): any;
     /**
      * Returns the child at the specified index.
      *
      * @param index - Integer that specifies the child to be returned.
      */
-    getChildAt(index: number): MxCell;
+    getChildAt(index: number): mxCell;
     /**
      * Inserts the specified child into the child array at the specified index
      * and updates the parent reference of the child. If not childIndex is
@@ -9315,7 +9315,7 @@ declare module mxgraph {
      * @param index - Optional integer that specifies the index at which the child
      * should be inserted into the child array.
      */
-    insert(child: MxCell, index?: number): MxCell;
+    insert(child: mxCell, index?: number): mxCell;
     /**
      * Removes the child at the specified index from the child array and
      * returns the child that was removed. Will remove the parent reference of
@@ -9338,13 +9338,13 @@ declare module mxgraph {
      *
      * @param edge - <mxCell> whose index in <edges> should be returned.
      */
-    getEdgeIndex(edge: MxCell): any;
+    getEdgeIndex(edge: mxCell): any;
     /**
      * Returns the edge at the specified index in <edges>.
      *
      * @param index - Integer that specifies the index of the edge to be returned.
      */
-    getEdgeAt(index: number): MxCell;
+    getEdgeAt(index: number): mxCell;
     /**
      * Inserts the specified edge into the edge array and returns the edge.
      * Will update the respective terminal reference of the edge.
@@ -9352,7 +9352,7 @@ declare module mxgraph {
      * @param edge - <mxCell> to be inserted into the edge array.
      * @param isOutgoing - Boolean that specifies if the edge is outgoing.
      */
-    insertEdge(edge: MxCell, isOutgoing: boolean): MxCell;
+    insertEdge(edge: mxCell, isOutgoing: boolean): mxCell;
     /**
      * Removes the specified edge from the edge array and returns the edge.
      * Will remove the respective terminal reference from the edge.
@@ -9360,7 +9360,7 @@ declare module mxgraph {
      * @param edge - <mxCell> to be removed from the edge array.
      * @param isOutgoing - Boolean that specifies if the edge is outgoing.
      */
-    removeEdge(edge: MxCell, isOutgoing: boolean): MxCell;
+    removeEdge(edge: mxCell, isOutgoing: boolean): mxCell;
     /**
      * Removes the edge from its source or target terminal.
      *
@@ -9464,7 +9464,7 @@ declare module mxgraph {
    * for the origin (top, left corner) of the vertex, otherwise the offset
    * defines the absolute offset for the label inside the vertex or group.
    */
-  export class MxGeometry extends MxRectangle {
+  export class mxGeometry extends mxRectangle {
     /**
      * Global switch to translate the points in translate. Default is true.
      */
@@ -9600,7 +9600,7 @@ declare module mxgraph {
     equals(obj: any): any;
   }
 
-  export let mxCellPath: {
+  export var mxCellPath: {
     PATH_SEPARATOR: string;
     create(cell: any): string;
     getParentPath(path: any): any;
@@ -9608,12 +9608,12 @@ declare module mxgraph {
     compare(p1: any, p2: any): number;
   };
 
-  export let mxPerimeter: {
-    RectanglePerimeter(bounds: any, vertex: any, next: any, orthogonal: any): MxPoint;
-    EllipsePerimeter(bounds: any, vertex: any, next: any, orthogonal: any): MxPoint;
+  export var mxPerimeter: {
+    RectanglePerimeter(bounds: any, vertex: any, next: any, orthogonal: any): mxPoint;
+    EllipsePerimeter(bounds: any, vertex: any, next: any, orthogonal: any): mxPoint;
     RhombusPerimeter(bounds: any, vertex: any, next: any, orthogonal: any): any;
     TrianglePerimeter(bounds: any, vertex: any, next: any, orthogonal: any): any;
-    HexagonPerimeter(bounds: any, vertex: any, next: any, orthogonal: any): MxPoint;
+    HexagonPerimeter(bounds: any, vertex: any, next: any, orthogonal: any): mxPoint;
   };
 
   /**
@@ -9760,7 +9760,7 @@ declare module mxgraph {
    * preview.open();
    * (end)
    *
-   * Constructor: MxPrintPreview
+   * Constructor: mxPrintPreview
    *
    * Constructs a new print preview for the given parameters.
    *
@@ -9784,7 +9784,7 @@ declare module mxgraph {
    * pageSelector - Optional boolean that specifies if the page selector
    * should appear in the window with the print preview. Default is true.
    */
-  export class MxPrintPreview {
+  export class mxPrintPreview {
     constructor(graph: any, scale: any, pageFormat: any, border: any, x0?: any, y0?: any, borderColor?: any, title?: any, pageSelector?: any);
     /**
      * Returns <wnd>.
@@ -9944,11 +9944,11 @@ declare module mxgraph {
    * <mxUtils.addStylename>, <mxUtils.removeStylename>,
    * <mxUtils.removeAllStylenames> and <mxUtils.setStyleFlag>.
    *
-   * Constructor: MxStylesheet
+   * Constructor: mxStylesheet
    *
    * Constructs a new stylesheet and assigns default styles.
    */
-  export class MxStylesheet {
+  export class mxStylesheet {
     constructor();
     /**
      * Creates and returns the default vertex style.
@@ -10038,15 +10038,15 @@ declare module mxgraph {
    * @example
    * var bbox = (state.text != null) ? state.text.boundingBox : null;
    */
-  export class MxCellState extends MxRectangle {
+  export class mxCellState extends mxRectangle {
     /**
      * Reference to the enclosing <mxGraphView>.
      */
-    view: MxGraphView;
+    view: mxGraphView;
     /**
      * Reference to the <mxCell> that is represented by this state.
      */
-    cell: MxCell;
+    cell: mxCell;
     /**
      * Contains an array of key, value pairs that represent the style of the
      * cell.
@@ -10060,18 +10060,18 @@ declare module mxgraph {
      * <mxPoint> that holds the origin for all child cells. Default is a new
      * empty <mxPoint>.
      */
-    origin: MxPoint;
+    origin: mxPoint;
     /**
      * Holds an array of <mxPoints> that represent the absolute points of an
      * edge.
      */
-    absolutePoints: MxPoint[];
+    absolutePoints: mxPoint[];
     /**
      * <mxPoint> that holds the absolute offset. For edges, this is the
      * absolute coordinates of the label position. For vertices, this is the
      * offset of the label relative to the top, left corner of the vertex.
      */
-    absoluteOffset: MxPoint;
+    absoluteOffset: mxPoint;
     /**
      * Caches the visible source terminal state.
      */
@@ -10096,12 +10096,12 @@ declare module mxgraph {
     /**
      * Holds the <mxShape> that represents the cell graphically.
      */
-    shape: MxShape;
+    shape: mxShape;
     /**
      * Holds the <mxText> that represents the label of the cell. Thi smay be
      * null if the cell has no label.
      */
-    text: MxText;
+    text: mxText;
     /**
      * Holds the unscaled width of the state.
      */
@@ -10109,8 +10109,8 @@ declare module mxgraph {
     /**
      * Implicit variable declarations
      */
-    cellBounds: MxRectangle;
-    paintBounds: MxRectangle;
+    cellBounds: mxRectangle;
+    paintBounds: mxRectangle;
     /**
      * Constructs a new object that represents the current state of the given
      * cell in the specified view.
@@ -10119,7 +10119,7 @@ declare module mxgraph {
      * @param cell - <mxCell> that this state represents.
      * @param style - Array of key, value pairs that constitute the style.
      */
-    constructor(view: MxGraphView, cell: MxCell, style: any[]);
+    constructor(view: mxGraphView, cell: mxCell, style: any[]);
     /**
      * Returns the <mxRectangle> that should be used as the perimeter of the
      * cell.
@@ -10127,7 +10127,7 @@ declare module mxgraph {
      * @param border - Optional border to be added around the perimeter bounds.
      * @param bounds - Optional <mxRectangle> to be used as the initial bounds.
      */
-    getPerimeterBounds(border?: number, bounds?: MxRectangle): MxRectangle;
+    getPerimeterBounds(border?: number, bounds?: mxRectangle): mxRectangle;
     /**
      * Sets the first or last point in <absolutePoints> depending on isSource.
      *
@@ -10135,7 +10135,7 @@ declare module mxgraph {
      * @param isSource - Boolean that specifies if the first or last point should
      * be assigned.
      */
-    setAbsoluteTerminalPoint(point: MxPoint, isSource: boolean): void;
+    setAbsoluteTerminalPoint(point: mxPoint, isSource: boolean): void;
     /**
      * Sets the given cursor on the shape and text shape.
      */
@@ -10160,17 +10160,17 @@ declare module mxgraph {
      * @param terminalState - <mxCellState> that represents the terminal.
      * @param source - Boolean that specifies if the source or target state should be set.
      */
-    setVisibleTerminalState(terminalState: MxCellState, source: boolean): void;
+    setVisibleTerminalState(terminalState: mxCellState, source: boolean): void;
     /**
      * Returns the unscaled, untranslated bounds.
      */
-    getCellBounds(): MxRectangle;
+    getCellBounds(): mxRectangle;
     /**
      * Returns the unscaled, untranslated paint bounds. This is the same as
      * <getCellBounds> but with a 90 degree rotation if the shape's
      * isPaintBoundsInverted returns true.
      */
-    getPaintBounds(): MxRectangle;
+    getPaintBounds(): mxRectangle;
     /**
      * Updates the cellBounds and paintBounds.
      */
@@ -10180,11 +10180,11 @@ declare module mxgraph {
      *
      * Copies all fields from the given state to this state.
      */
-    setState(state: MxCellState): void;
+    setState(state: mxCellState): void;
     /**
      * Returns a clone of this <mxCellState>.
      */
-    clone(): MxCellState;
+    clone(): mxCellState;
     /**
      * Destructor: destroy
      *
@@ -10209,20 +10209,20 @@ declare module mxgraph {
    * });
    * (end)
    *
-   * Event: MxEvent.UNDO
+   * Event: mxEvent.UNDO
    *
    * Fires after the selection was changed in <changeSelection>. The
    * <code>edit</code> property contains the <mxUndoableEdit> which contains the
    * <mxSelectionChange>.
    *
-   * Event: MxEvent.CHANGE
+   * Event: mxEvent.CHANGE
    *
    * Fires after the selection changes by executing an <mxSelectionChange>. The
    * <code>added</code> and <code>removed</code> properties contain arrays of
    * cells that have been added to or removed from the selection, respectively.
    * The names are inverted due to historic reasons. This cannot be changed.
    */
-  export class MxGraphSelectionModel extends MxEventSource {
+  export class mxGraphSelectionModel extends mxEventSource {
     /**
      * Specifies the resource key for the status message after a long operation.
      * If the resource for this key does not exist then the value is used as
@@ -10238,7 +10238,7 @@ declare module mxgraph {
     /**
      * Reference to the enclosing <mxGraph>.
      */
-    graph: MxGraph;
+    graph: mxGraph;
     /**
      * Specifies if only one selected item at a time is allowed.
      * Default is false.
@@ -10247,13 +10247,13 @@ declare module mxgraph {
     /**
      * Implicit variable declarations
      */
-    cells: MxCell[];
+    cells: mxCell[];
     /**
      * Constructs a new graph selection model for the given <mxGraph>.
      *
      * @param graph - Reference to the enclosing <mxGraph>.
      */
-    constructor(graph: MxGraph);
+    constructor(graph: mxGraph);
     /**
      * Returns <singleSelection> as a boolean.
      */
@@ -10268,7 +10268,7 @@ declare module mxgraph {
     /**
      * Returns true if the given <mxCell> is selected.
      */
-    isSelected(cell: MxCell): boolean;
+    isSelected(cell: mxCell): boolean;
     /**
      * Returns true if no cells are currently selected.
      */
@@ -10283,72 +10283,72 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> to be selected.
      */
-    setCell(cell: MxCell): void;
+    setCell(cell: mxCell): void;
     /**
      * Selects the given array of <mxCells> and fires a <change> event.
      *
      * @param cells - Array of <mxCells> to be selected.
      */
-    setCells(cells: MxCell[]): void;
+    setCells(cells: mxCell[]): void;
     /**
      * Returns the first selectable cell in the given array of cells.
      */
-    getFirstSelectableCell(cells: MxCell[]): MxCell;
+    getFirstSelectableCell(cells: mxCell[]): mxCell;
     /**
      * Adds the given <mxCell> to the selection and fires a <select> event.
      *
      * @param cell - <mxCell> to add to the selection.
      */
-    addCell(cell: MxCell): void;
+    addCell(cell: mxCell): void;
     /**
      * Adds the given array of <mxCells> to the selection and fires a <select>
      * event.
      *
      * @param cells - Array of <mxCells> to add to the selection.
      */
-    addCells(cells: MxCell[]): void;
+    addCells(cells: mxCell[]): void;
     /**
      * Removes the specified <mxCell> from the selection and fires a <select>
      * event for the remaining cells.
      *
      * @param cell - <mxCell> to remove from the selection.
      */
-    removeCell(cell: MxCell): void;
+    removeCell(cell: mxCell): void;
     /**
      * Function: removeCells
      */
-    removeCells(cells: MxCell[]): void;
+    removeCells(cells: mxCell[]): void;
     /**
      * Inner callback to add the specified <mxCell> to the selection. No event
      * is fired in this implementation.
      */
-    changeSelection(added: MxCell[], removed: MxCell[]): void;
+    changeSelection(added: mxCell[], removed: mxCell[]): void;
     /**
      * Inner callback to add the specified <mxCell> to the selection. No event
      * is fired in this implementation.
      *
      * @param cell - <mxCell> to add to the selection.
      */
-    cellAdded(cell: MxCell): void;
+    cellAdded(cell: mxCell): void;
     /**
      * Inner callback to remove the specified <mxCell> from the selection. No
      * event is fired in this implementation.
      *
      * @param cell - <mxCell> to remove from the selection.
      */
-    cellRemoved(cell: MxCell): void;
+    cellRemoved(cell: mxCell): void;
   }
   /**
    * Action to change the current root in a view.
    */
-  export class MxSelectionChange {
-    selectionModel: MxGraphSelectionModel;
-    added: MxCell[];
-    removed: MxCell[];
+  export class mxSelectionChange {
+    selectionModel: mxGraphSelectionModel;
+    added: mxCell[];
+    removed: mxCell[];
     /**
      * Constructs a change of the current root in the given view.
      */
-    constructor(selectionModel: MxGraphSelectionModel, added: MxCell[], removed: MxCell[]);
+    constructor(selectionModel: mxGraphSelectionModel, added: mxCell[], removed: mxCell[]);
     /**
      * Changes the current root of the view.
      */
@@ -10451,7 +10451,7 @@ declare module mxgraph {
    * };
    * (end)
    *
-   * Constructor: MxCellEditor
+   * Constructor: mxCellEditor
    *
    * Constructs a new in-place editor for the specified graph.
    *
@@ -10459,7 +10459,7 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing <mxGraph>.
    */
-  export class MxCellEditor {
+  export class mxCellEditor {
     constructor(graph: any);
     /**
      * Reference to the enclosing <mxGraph>.
@@ -10475,7 +10475,7 @@ declare module mxgraph {
     /**
      * Reference to the <mxCell> that is currently being edited.
      */
-    editingCell: MxCell;
+    editingCell: mxCell;
 
     /**
      * Reference to the event that was used to start editing.
@@ -10528,7 +10528,7 @@ declare module mxgraph {
     /**
      * Defines the minimum width and height to be used in <resize>. Default is 0x20px.
      */
-    minResize: MxRectangle;
+    minResize: mxRectangle;
 
     /**
      * Correction factor for word wrapping width. Default is 2 in quirks, 0 in IE
@@ -10626,11 +10626,11 @@ declare module mxgraph {
     /**
      * Returns the minimum width and height for editing the given state.
      */
-    getMinimumSize(state: any): MxRectangle;
+    getMinimumSize(state: any): mxRectangle;
     /**
      * Returns the <mxRectangle> that defines the bounds of the editor.
      */
-    getEditorBounds(state: any): MxRectangle;
+    getEditorBounds(state: any): mxRectangle;
     /**
      * Returns the initial label value to be used of the label of the given
      * cell is empty. This label is displayed and cleared on the first keystroke.
@@ -10675,13 +10675,13 @@ declare module mxgraph {
    * }
    * (end)
    *
-   * Constructor: MxCellRenderer
+   * Constructor: mxCellRenderer
    *
    * Constructs a new cell renderer with the following built-in shapes:
    * arrow, rectangle, ellipse, rhombus, image, line, label, cylinder,
    * swimlane, connector, actor and cloud.
    */
-  export class MxCellRenderer {
+  export class mxCellRenderer {
     /**
      * Static array that contains the globally registered shapes which are
      * known to all instances of this class. For adding new shapes you should
@@ -10903,7 +10903,7 @@ declare module mxgraph {
      *
      * state - <mxCellState> whose label bounds should be returned.
      */
-    getLabelBounds(state: any): MxRectangle;
+    getLabelBounds(state: any): mxRectangle;
     /**
      * Adds the shape rotation to the given label bounds and
      * applies the alignment and offsets.
@@ -10934,7 +10934,7 @@ declare module mxgraph {
      * Returns the bounds to be used to draw the control (folding icon) of the
      * given state.
      */
-    getControlBounds(state: any, w: any, h: any): MxRectangle;
+    getControlBounds(state: any, w: any, h: any): mxRectangle;
     /**
      * Inserts the given array of <mxShapes> after the given nodes in the DOM.
      *
@@ -10969,7 +10969,7 @@ declare module mxgraph {
      * be drawn into the DOM. If this is false then redraw and/or reconfigure
      * will not be called on the shape.
      */
-    redraw(state: MxCellState, force?: any, rendering?: any): void;
+    redraw(state: mxCellState, force?: any, rendering?: any): void;
     /**
      * Redraws the shape for the given cell state.
      *
@@ -10996,7 +10996,7 @@ declare module mxgraph {
     destroy(state: any): void;
   }
 
-  export let mxEdgeStyle: {
+  export var mxEdgeStyle: {
     EntityRelation(state: any, source: any, target: any, points: any, result: any): void;
     Loop(state: any, source: any, target: any, points: any, result: any): void;
     ElbowConnector(state: any, source: any, target: any, points: any, result: any): void;
@@ -11029,7 +11029,7 @@ declare module mxgraph {
     getRoutePattern(dir: any, quad: any, dx: any, dy: any): any;
   };
 
-  export let mxStyleRegistry: {
+  export var mxStyleRegistry: {
     values: any[];
     putValue(name: any, obj: any): void;
     getValue(name: any): any;
@@ -11044,31 +11044,31 @@ declare module mxgraph {
    * whenever the model or the view state (translate, scale) changes. The scale
    * and translate are honoured in the bounds.
    *
-   * Event: MxEvent.UNDO
+   * Event: mxEvent.UNDO
    *
    * Fires after the root was changed in <setCurrentRoot>. The <code>edit</code>
    * property contains the <mxUndoableEdit> which contains the
    * <mxCurrentRootChange>.
    *
-   * Event: MxEvent.SCALE_AND_TRANSLATE
+   * Event: mxEvent.SCALE_AND_TRANSLATE
    *
    * Fires after the scale and translate have been changed in <scaleAndTranslate>.
    * The <code>scale</code>, <code>previousScale</code>, <code>translate</code>
    * and <code>previousTranslate</code> properties contain the new and previous
    * scale and translate, respectively.
    *
-   * Event: MxEvent.SCALE
+   * Event: mxEvent.SCALE
    *
    * Fires after the scale was changed in <setScale>. The <code>scale</code> and
    * <code>previousScale</code> properties contain the new and previous scale.
    *
-   * Event: MxEvent.TRANSLATE
+   * Event: mxEvent.TRANSLATE
    *
    * Fires after the translate was changed in <setTranslate>. The
    * <code>translate</code> and <code>previousTranslate</code> properties contain
    * the new and previous value for translate.
    *
-   * Event: MxEvent.DOWN and mxEvent.UP
+   * Event: mxEvent.DOWN and mxEvent.UP
    *
    * Fire if the current root is changed by executing an <mxCurrentRootChange>.
    * The event name depends on the location of the root in the cell hierarchy
@@ -11076,11 +11076,11 @@ declare module mxgraph {
    * <code>previous</code> properties contain the new and previous root,
    * respectively.
    */
-  export class MxGraphView extends MxEventSource {
+  export class mxGraphView extends mxEventSource {
     /**
      *
      */
-    EMPTY_POINT: MxPoint;
+    EMPTY_POINT: mxPoint;
     /**
      * Specifies the resource key for the status message after a long operation.
      * If the resource for this key does not exist then the value is used as
@@ -11119,15 +11119,15 @@ declare module mxgraph {
     /**
      * Reference to the enclosing <mxGraph>.
      */
-    graph: MxGraph;
+    graph: mxGraph;
     /**
      * <mxCell> that acts as the root of the displayed cell hierarchy.
      */
-    currentRoot: MxCell;
+    currentRoot: mxCell;
     /**
      * <mxRectangle> that caches the scales, translated bounds of the current view.
      */
-    graphBounds: MxRectangle;
+    graphBounds: mxRectangle;
     /**
      * Specifies the scale. Default is 1 (100%).
      */
@@ -11136,11 +11136,11 @@ declare module mxgraph {
      * <mxPoint> that specifies the current translation. Default is a new
      * empty <mxPoint>.
      */
-    translate: MxPoint;
+    translate: mxPoint;
     /**
      * <mxDictionary> that maps from cell IDs to <mxCellStates>.
      */
-    states: MxDictionary;
+    states: mxDictionary;
     /**
      * Specifies if the style should be updated in each validation step. If this
      * is false then the style is only updated if the state is created or if the
@@ -11178,21 +11178,21 @@ declare module mxgraph {
      *
      * @param graph - Reference to the enclosing <mxGraph>.
      */
-    constructor(graph: MxGraph);
+    constructor(graph: mxGraph);
     /**
      * Returns <graphBounds>.
      */
-    getGraphBounds(): MxRectangle;
+    getGraphBounds(): mxRectangle;
     /**
      * Sets <graphBounds>.
      */
-    setGraphBounds(value: MxRectangle): void;
+    setGraphBounds(value: mxRectangle): void;
     /**
      * Returns the union of all <mxCellStates> for the given array of <mxCells>.
      *
      * @param cells - Array of <mxCells> whose bounds should be returned.
      */
-    getBounds(cells: MxCell[]): MxRectangle;
+    getBounds(cells: mxCell[]): mxRectangle;
     /**
      * Sets and returns the current root and fires an <undo> event before
      * calling <mxGraph.sizeDidChange>.
@@ -11223,7 +11223,7 @@ declare module mxgraph {
     /**
      * Returns the <translate>.
      */
-    getTranslate(): MxPoint;
+    getTranslate(): mxPoint;
     /**
      * Sets the translation and fires a <translate> event before calling
      * <revalidate> followed by <mxGraph.sizeDidChange>. The translation is the
@@ -11250,7 +11250,7 @@ declare module mxgraph {
      * @param force - Boolean indicating if the current root should be ignored for
      * recursion.
      */
-    clear(cell?: MxCell, force?: boolean, recurse?: boolean): void;
+    clear(cell?: mxCell, force?: boolean, recurse?: boolean): void;
     /**
      * Invalidates the state of the given cell, all its descendants and
      * connected edges.
@@ -11258,7 +11258,7 @@ declare module mxgraph {
      * @param cell - Optional <mxCell> to be invalidated. Default is the root of the
      * model.
      */
-    invalidate(cell?: MxCell, recurse?: boolean, includeEdges?: boolean): void;
+    invalidate(cell?: mxCell, recurse?: boolean, includeEdges?: boolean): void;
     /**
      * Calls <validateCell> and <validateCellState> and updates the <graphBounds>
      * using <getBoundingBox>. Finally the background is validated using
@@ -11267,12 +11267,12 @@ declare module mxgraph {
      * @param cell - Optional <mxCell> to be used as the root of the validation.
      * Default is <currentRoot> or the root of the model.
      */
-    validate(cell?: MxCell): void;
+    validate(cell?: mxCell): void;
     /**
      * Returns the bounds for an empty graph. This returns a rectangle at
      * <translate> with the size of 0 x 0.
      */
-    getEmptyBounds(): MxRectangle;
+    getEmptyBounds(): mxRectangle;
     /**
      * Returns the bounding box of the shape and the label for the given
      * <mxCellState> and its children if recurse is true.
@@ -11281,13 +11281,13 @@ declare module mxgraph {
      * @param recurse - Optional boolean indicating if the children should be included.
      * Default is true.
      */
-    getBoundingBox(state: MxCellState, recurse?: boolean): MxRectangle;
+    getBoundingBox(state: mxCellState, recurse?: boolean): mxRectangle;
     /**
      * Creates and returns the shape used as the background page.
      *
      * bounds - <mxRectangle> that represents the bounds of the shape.
      */
-    createBackgroundPageShape(bounds: any): MxRectangleShape;
+    createBackgroundPageShape(bounds: any): mxRectangleShape;
     /**
      * Calls <validateBackgroundImage> and <validateBackgroundPage>.
      */
@@ -11303,7 +11303,7 @@ declare module mxgraph {
     /**
      * Returns the bounds for the background page.
      */
-    getBackgroundPageBounds(): MxRectangle;
+    getBackgroundPageBounds(): mxRectangle;
     /**
      * Updates the bounds and redraws the background image.
      *
@@ -11337,7 +11337,7 @@ declare module mxgraph {
      * @param visible - Optional boolean indicating if the cell should be visible. Default
      * is true.
      */
-    validateCell(cell: MxCell, visible?: boolean): MxCell;
+    validateCell(cell: mxCell, visible?: boolean): mxCell;
     /**
      * Validates and repaints the <mxCellState> for the given <mxCell>.
      *
@@ -11345,13 +11345,13 @@ declare module mxgraph {
      * @param recurse - Optional boolean indicating if the children of the cell should be
      * validated. Default is true.
      */
-    validateCellState(cell: MxCell, recurse?: boolean): MxCellState;
+    validateCellState(cell: mxCell, recurse?: boolean): mxCellState;
     /**
      * Updates the given <mxCellState>.
      *
      * @param state - <mxCellState> to be updated.
      */
-    updateCellState(state: MxCellState): void;
+    updateCellState(state: mxCellState): void;
     /**
      * Returns true if the children of the given cell should not be visible in the
      * view. This implementation uses <mxGraph.isCellVisible> but it can be
@@ -11443,7 +11443,7 @@ declare module mxgraph {
      * @param state
      * @param pt
      */
-    transformControlPoint(state: any, pt: any): MxPoint;
+    transformControlPoint(state: any, pt: any): mxPoint;
     /**
      * Returns true if the given edge should be routed with <mxGraph.defaultLoopStyle>
      * or the <mxConstants.STYLE_LOOP> defined for the given edge. This implementation
@@ -11454,7 +11454,7 @@ declare module mxgraph {
      * @param source
      * @param target
      */
-    isLoopStyleEnabled(edge: MxCellState, points: any, source: any, target: any): boolean;
+    isLoopStyleEnabled(edge: mxCellState, points: any, source: any, target: any): boolean;
     /**
      * Returns the edge style function to be used to render the given edge state.
      *
@@ -11492,7 +11492,7 @@ declare module mxgraph {
      * @param end - <mxCellState> for the terminal on the other side of the edge.
      * @param source - Boolean indicating if start is the source terminal state.
      */
-    getFloatingTerminalPoint(edge: any, start: any, end: any, source: any): MxPoint;
+    getFloatingTerminalPoint(edge: any, start: any, end: any, source: any): mxPoint;
     /**
      * Returns an <mxCellState> that represents the source or target terminal or
      * port for the given edge.
@@ -11514,7 +11514,7 @@ declare module mxgraph {
      * returned.
      * @param border - Optional border between the perimeter and the shape.
      */
-    getPerimeterPoint(terminal: MxCellState, next: MxPoint, orthogonal: boolean, border?: number): MxPoint;
+    getPerimeterPoint(terminal: mxCellState, next: mxPoint, orthogonal: boolean, border?: number): mxPoint;
     /**
      * Returns the x-coordinate of the center point for automatic routing.
      */
@@ -11562,13 +11562,13 @@ declare module mxgraph {
      * @param terminal - <mxCellState> that represents the terminal.
      * @param border - Number that adds a border between the shape and the perimeter.
      */
-    getPerimeterBounds(terminal: MxCellState, border?: number): MxRectangle;
+    getPerimeterBounds(terminal: mxCellState, border?: number): mxRectangle;
     /**
      * Returns the perimeter function for the given state.
      *
      * @param state
      */
-    getPerimeterFunction(state: MxCellState): any;
+    getPerimeterFunction(state: mxCellState): any;
     /**
      * Returns the nearest point in the list of absolute points or the center
      * of the opposite terminal.
@@ -11588,7 +11588,7 @@ declare module mxgraph {
      * @param source - Boolean that specifies if the source or target terminal
      * should be returned.
      */
-    getVisibleTerminal(edge: any, source: any): MxCell;
+    getVisibleTerminal(edge: any, source: any): mxCell;
     /**
      * Updates the given state using the bounding box of t
      * he absolute points.
@@ -11606,7 +11606,7 @@ declare module mxgraph {
      * @param state - <mxCellState> that represents the state of the parent edge.
      * @param geometry - <mxGeometry> that represents the relative location.
      */
-    getPoint(state: any, geometry?: any): MxPoint;
+    getPoint(state: any, geometry?: any): mxPoint;
     /**
      * Gets the relative point that describes the given, absolute label
      * position for the given edge state.
@@ -11615,7 +11615,7 @@ declare module mxgraph {
      * @param x - Specifies the x-coordinate of the absolute label location.
      * @param y - Specifies the y-coordinate of the absolute label location.
      */
-    getRelativePoint(edgeState: any, x: any, y: any): MxPoint;
+    getRelativePoint(edgeState: any, x: any, y: any): mxPoint;
     /**
      * Updates <mxCellState.absoluteOffset> for the given state. The absolute
      * offset is normally used for the position of the edge label. Is is
@@ -11635,7 +11635,7 @@ declare module mxgraph {
      * @param create - Optional boolean indicating if a new state should be created
      * @param if it does not yet exist. Default is false.
      */
-    getState(cell: MxCell, create?: boolean): MxCellState;
+    getState(cell: mxCell, create?: boolean): mxCellState;
     /**
      * Returns <rendering>.
      */
@@ -11659,13 +11659,13 @@ declare module mxgraph {
     /**
      * Returns <states>.
      */
-    getStates(): MxDictionary;
+    getStates(): mxDictionary;
     /**
      * Sets <states>.
      *
      * @param value
      */
-    setStates(value: MxDictionary): void;
+    setStates(value: mxDictionary): void;
     /**
      * Returns the <mxCellStates> for the given array of <mxCells>. The array
      * contains all states that are not null, that is, the returned array may
@@ -11674,7 +11674,7 @@ declare module mxgraph {
      *
      * @param cells
      */
-    getCellStates(cells: MxCell[]): any[] | MxDictionary;
+    getCellStates(cells: mxCell[]): any[] | mxDictionary;
     /**
      * Removes and returns the <mxCellState> for the given cell.
      *
@@ -11687,7 +11687,7 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> for which a new <mxCellState> should be created.
      */
-    createState(cell: any): MxCellState;
+    createState(cell: any): mxCellState;
     /**
      * Returns the DOM node that contains the background-, draw- and
      * overlay- and decoratorpanes.
@@ -11764,11 +11764,11 @@ declare module mxgraph {
   /**
    * Action to change the current root in a view.
    *
-   * Constructor: MxCurrentRootChange
+   * Constructor: mxCurrentRootChange
    *
    * Constructs a change of the current root in the given view.
    */
-  export class MxCurrentRootChange {
+  export class mxCurrentRootChange {
     constructor(view: any, root: any);
     /**
      * Changes the current root of the view.
@@ -12176,202 +12176,202 @@ declare module mxgraph {
    *
    * Group: Events
    *
-   * Event: MxEvent.ROOT
+   * Event: mxEvent.ROOT
    *
    * Fires if the root in the model has changed. This event has no properties.
    *
-   * Event: MxEvent.ALIGN_CELLS
+   * Event: mxEvent.ALIGN_CELLS
    *
    * Fires between begin- and endUpdate in <alignCells>. The <code>cells</code>
    * and <code>align</code> properties contain the respective arguments that were
    * passed to <alignCells>.
    *
-   * Event: MxEvent.FLIP_EDGE
+   * Event: mxEvent.FLIP_EDGE
    *
    * Fires between begin- and endUpdate in <flipEdge>. The <code>edge</code>
    * property contains the edge passed to <flipEdge>.
    *
-   * Event: MxEvent.ORDER_CELLS
+   * Event: mxEvent.ORDER_CELLS
    *
    * Fires between begin- and endUpdate in <orderCells>. The <code>cells</code>
    * and <code>back</code> properties contain the respective arguments that were
    * passed to <orderCells>.
    *
-   * Event: MxEvent.CELLS_ORDERED
+   * Event: mxEvent.CELLS_ORDERED
    *
    * Fires between begin- and endUpdate in <cellsOrdered>. The <code>cells</code>
    * and <code>back</code> arguments contain the respective arguments that were
    * passed to <cellsOrdered>.
    *
-   * Event: MxEvent.GROUP_CELLS
+   * Event: mxEvent.GROUP_CELLS
    *
    * Fires between begin- and endUpdate in <groupCells>. The <code>group</code>,
    * <code>cells</code> and <code>border</code> arguments contain the respective
    * arguments that were passed to <groupCells>.
    *
-   * Event: MxEvent.UNGROUP_CELLS
+   * Event: mxEvent.UNGROUP_CELLS
    *
    * Fires between begin- and endUpdate in <ungroupCells>. The <code>cells</code>
    * property contains the array of cells that was passed to <ungroupCells>.
    *
-   * Event: MxEvent.REMOVE_CELLS_FROM_PARENT
+   * Event: mxEvent.REMOVE_CELLS_FROM_PARENT
    *
    * Fires between begin- and endUpdate in <removeCellsFromParent>. The
    * <code>cells</code> property contains the array of cells that was passed to
    * <removeCellsFromParent>.
    *
-   * Event: MxEvent.ADD_CELLS
+   * Event: mxEvent.ADD_CELLS
    *
    * Fires between begin- and endUpdate in <addCells>. The <code>cells</code>,
    * <code>parent</code>, <code>index</code>, <code>source</code> and
    * <code>target</code> properties contain the respective arguments that were
    * passed to <addCells>.
    *
-   * Event: MxEvent.CELLS_ADDED
+   * Event: mxEvent.CELLS_ADDED
    *
    * Fires between begin- and endUpdate in <cellsAdded>. The <code>cells</code>,
    * <code>parent</code>, <code>index</code>, <code>source</code>,
    * <code>target</code> and <code>absolute</code> properties contain the
    * respective arguments that were passed to <cellsAdded>.
    *
-   * Event: MxEvent.REMOVE_CELLS
+   * Event: mxEvent.REMOVE_CELLS
    *
    * Fires between begin- and endUpdate in <removeCells>. The <code>cells</code>
    * and <code>includeEdges</code> arguments contain the respective arguments
    * that were passed to <removeCells>.
    *
-   * Event: MxEvent.CELLS_REMOVED
+   * Event: mxEvent.CELLS_REMOVED
    *
    * Fires between begin- and endUpdate in <cellsRemoved>. The <code>cells</code>
    * argument contains the array of cells that was removed.
    *
-   * Event: MxEvent.SPLIT_EDGE
+   * Event: mxEvent.SPLIT_EDGE
    *
    * Fires between begin- and endUpdate in <splitEdge>. The <code>edge</code>
    * property contains the edge to be splitted, the <code>cells</code>,
    * <code>newEdge</code>, <code>dx</code> and <code>dy</code> properties contain
    * the respective arguments that were passed to <splitEdge>.
    *
-   * Event: MxEvent.TOGGLE_CELLS
+   * Event: mxEvent.TOGGLE_CELLS
    *
    * Fires between begin- and endUpdate in <toggleCells>. The <code>show</code>,
    * <code>cells</code> and <code>includeEdges</code> properties contain the
    * respective arguments that were passed to <toggleCells>.
    *
-   * Event: MxEvent.FOLD_CELLS
+   * Event: mxEvent.FOLD_CELLS
    *
    * Fires between begin- and endUpdate in <foldCells>. The
    * <code>collapse</code>, <code>cells</code> and <code>recurse</code>
    * properties contain the respective arguments that were passed to <foldCells>.
    *
-   * Event: MxEvent.CELLS_FOLDED
+   * Event: mxEvent.CELLS_FOLDED
    *
    * Fires between begin- and endUpdate in cellsFolded. The
    * <code>collapse</code>, <code>cells</code> and <code>recurse</code>
    * properties contain the respective arguments that were passed to
    * <cellsFolded>.
    *
-   * Event: MxEvent.UPDATE_CELL_SIZE
+   * Event: mxEvent.UPDATE_CELL_SIZE
    *
    * Fires between begin- and endUpdate in <updateCellSize>. The
    * <code>cell</code> and <code>ignoreChildren</code> properties contain the
    * respective arguments that were passed to <updateCellSize>.
    *
-   * Event: MxEvent.RESIZE_CELLS
+   * Event: mxEvent.RESIZE_CELLS
    *
    * Fires between begin- and endUpdate in <resizeCells>. The <code>cells</code>
    * and <code>bounds</code> properties contain the respective arguments that
    * were passed to <resizeCells>.
    *
-   * Event: MxEvent.CELLS_RESIZED
+   * Event: mxEvent.CELLS_RESIZED
    *
    * Fires between begin- and endUpdate in <cellsResized>. The <code>cells</code>
    * and <code>bounds</code> properties contain the respective arguments that
    * were passed to <cellsResized>.
    *
-   * Event: MxEvent.MOVE_CELLS
+   * Event: mxEvent.MOVE_CELLS
    *
    * Fires between begin- and endUpdate in <moveCells>. The <code>cells</code>,
    * <code>dx</code>, <code>dy</code>, <code>clone</code>, <code>target</code>
    * and <code>event</code> properties contain the respective arguments that
    * were passed to <moveCells>.
    *
-   * Event: MxEvent.CELLS_MOVED
+   * Event: mxEvent.CELLS_MOVED
    *
    * Fires between begin- and endUpdate in <cellsMoved>. The <code>cells</code>,
    * <code>dx</code>, <code>dy</code> and <code>disconnect</code> properties
    * contain the respective arguments that were passed to <cellsMoved>.
    *
-   * Event: MxEvent.CONNECT_CELL
+   * Event: mxEvent.CONNECT_CELL
    *
    * Fires between begin- and endUpdate in <connectCell>. The <code>edge</code>,
    * <code>terminal</code> and <code>source</code> properties contain the
    * respective arguments that were passed to <connectCell>.
    *
-   * Event: MxEvent.CELL_CONNECTED
+   * Event: mxEvent.CELL_CONNECTED
    *
    * Fires between begin- and endUpdate in <cellConnected>. The
    * <code>edge</code>, <code>terminal</code> and <code>source</code> properties
    * contain the respective arguments that were passed to <cellConnected>.
    *
-   * Event: MxEvent.REFRESH
+   * Event: mxEvent.REFRESH
    *
    * Fires after <refresh> was executed. This event has no properties.
    *
-   * Event: MxEvent.CLICK
+   * Event: mxEvent.CLICK
    *
    * Fires in <click> after a click event. The <code>event</code> property
    * contains the original mouse event and <code>cell</code> property contains
    * the cell under the mouse or null if the background was clicked.
    *
-   * Event: MxEvent.DOUBLE_CLICK
+   * Event: mxEvent.DOUBLE_CLICK
    *
    * Fires in <dblClick> after a double click. The <code>event</code> property
    * contains the original mouse event and the <code>cell</code> property
    * contains the cell under the mouse or null if the background was clicked.
    *
-   * Event: MxEvent.GESTURE
+   * Event: mxEvent.GESTURE
    *
    * Fires in <fireGestureEvent> after a touch gesture. The <code>event</code>
    * property contains the original gesture end event and the <code>cell</code>
    * property contains the optional cell associated with the gesture.
    *
-   * Event: MxEvent.TAP_AND_HOLD
+   * Event: mxEvent.TAP_AND_HOLD
    *
    * Fires in <tapAndHold> if a tap and hold event was detected. The <code>event</code>
    * property contains the initial touch event and the <code>cell</code> property
    * contains the cell under the mouse or null if the background was clicked.
    *
-   * Event: MxEvent.FIRE_MOUSE_EVENT
+   * Event: mxEvent.FIRE_MOUSE_EVENT
    *
    * Fires in <fireMouseEvent> before the mouse listeners are invoked. The
    * <code>eventName</code> property contains the event name and the
    * <code>event</code> property contains the <mxMouseEvent>.
    *
-   * Event: MxEvent.SIZE
+   * Event: mxEvent.SIZE
    *
    * Fires after <sizeDidChange> was executed. The <code>bounds</code> property
    * contains the new graph bounds.
    *
-   * Event: MxEvent.START_EDITING
+   * Event: mxEvent.START_EDITING
    *
    * Fires before the in-place editor starts in <startEditingAtCell>. The
    * <code>cell</code> property contains the cell that is being edited and the
    * <code>event</code> property contains the optional event argument that was
    * passed to <startEditingAtCell>.
    *
-   * Event: MxEvent.EDITING_STARTED
+   * Event: mxEvent.EDITING_STARTED
    *
    * Fires after the in-place editor starts in <startEditingAtCell>. The
    * <code>cell</code> property contains the cell that is being edited and the
    * <code>event</code> property contains the optional event argument that was
    * passed to <startEditingAtCell>.
    *
-   * Event: MxEvent.EDITING_STOPPED
+   * Event: mxEvent.EDITING_STOPPED
    *
    * Fires after the in-place editor stops in <stopEditing>.
    *
-   * Event: MxEvent.LABEL_CHANGED
+   * Event: mxEvent.LABEL_CHANGED
    *
    * Fires between begin- and endUpdate in <cellLabelChanged>. The
    * <code>cell</code> property contains the cell, the <code>value</code>
@@ -12379,20 +12379,20 @@ declare module mxgraph {
    * contains the old value and the optional <code>event</code> property contains
    * the mouse event that started the edit.
    *
-   * Event: MxEvent.ADD_OVERLAY
+   * Event: mxEvent.ADD_OVERLAY
    *
    * Fires after an overlay is added in <addCellOverlay>. The <code>cell</code>
    * property contains the cell and the <code>overlay</code> property contains
    * the <mxCellOverlay> that was added.
    *
-   * Event: MxEvent.REMOVE_OVERLAY
+   * Event: mxEvent.REMOVE_OVERLAY
    *
    * Fires after an overlay is removed in <removeCellOverlay> and
    * <removeCellOverlays>. The <code>cell</code> property contains the cell and
    * the <code>overlay</code> property contains the <mxCellOverlay> that was
    * removed.
    *
-   * Constructor: MxGraph
+   * Constructor: mxGraph
    *
    * Constructs a new mxGraph in the specified container. Model is an optional
    * mxGraphModel. If no model is provided, a new mxGraphModel instance is
@@ -12447,7 +12447,7 @@ declare module mxgraph {
    * performance. Default is mxConstants.DIALECT_MIXEDHTML (for IE).
    * stylesheet - Optional <mxStylesheet> to be used in the graph.
    */
-  export class MxGraph extends MxEventSource {
+  export class mxGraph extends mxEventSource {
     /**
      * Immutable empty array instance.
      */
@@ -12463,11 +12463,11 @@ declare module mxgraph {
     /**
      * Holds the <mxGraphModel> that contains the cells to be displayed.
      */
-    model: MxGraphModel;
+    model: mxGraphModel;
     /**
      * Holds the <mxGraphView> that caches the <mxCellStates> for the cells.
      */
-    view: MxGraphView;
+    view: mxGraphView;
     /**
      * Holds the <mxStylesheet> that defines the appearance of the cells.
      *
@@ -12483,24 +12483,24 @@ declare module mxgraph {
      * dec.decode(root, graph.stylesheet);
      * (end)
      */
-    stylesheet: MxStylesheet;
+    stylesheet: mxStylesheet;
     /**
      * Holds the <mxGraphSelectionModel> that models the current selection.
      */
-    selectionModel: MxGraphSelectionModel;
+    selectionModel: mxGraphSelectionModel;
     /**
      * Holds the <mxCellEditor> that is used as the in-place editing.
      */
-    cellEditor: MxCellEditor;
+    cellEditor: mxCellEditor;
     /**
      * Holds the <mxCellRenderer> for rendering the cells in the graph.
      */
-    cellRenderer: MxCellRenderer;
+    cellRenderer: mxCellRenderer;
     /**
      * An array of <mxMultiplicities> describing the allowed
      * connections in a graph.
      */
-    multiplicities: MxMultiplicity[];
+    multiplicities: mxMultiplicity[];
     /**
      * RenderHint as it was passed to the constructor.
      */
@@ -12615,7 +12615,7 @@ declare module mxgraph {
      * graph.view.validate();
      * (end)
      */
-    backgroundImage: MxImage;
+    backgroundImage: mxImage;
     /**
      * Specifies if the background page should be visible. Default is false.
      * Not yet implemented.
@@ -12652,7 +12652,7 @@ declare module mxgraph {
      * <mxPrintPreview> and for painting the background page if <pageVisible> is
      * true and the pagebreaks if <pageBreaksVisible> is true.
      */
-    pageFormat: MxRectangle;
+    pageFormat: mxRectangle;
     /**
      * Specifies the scale of the background page. Default is 1.5.
      * Not yet implemented.
@@ -13010,19 +13010,19 @@ declare module mxgraph {
      * Specifies the <mxImage> to indicate a collapsed state.
      * Default value is mxClient.imageBasePath + '/collapsed.gif'
      */
-    collapsedImage: MxImage;
+    collapsedImage: mxImage;
     /**
      * Specifies the <mxImage> to indicate a expanded state.
      * Default value is mxClient.imageBasePath + '/expanded.gif'
      */
-    expandedImage: MxImage;
+    expandedImage: mxImage;
     /**
      * Specifies the <mxImage> for the image to be used to display a warning
      * overlay. See <setCellWarning>. Default value is mxClient.imageBasePath +
      * '/warning'.  The extension for the image depends on the platform. It is
      * '.png' on the Mac and '.gif' on all other platforms.
      */
-    warningImage: MxImage;
+    warningImage: mxImage;
     /**
      * Specifies the resource key for the error message to be displayed in
      * non-multigraphs when two vertices are already connected. If the resource
@@ -13042,12 +13042,12 @@ declare module mxgraph {
      * If the resource for this key does not exist then the value is used as
      * the tooltip. Default is 'collapse-expand'.
      */
-    tooltipHandler: MxTooltipHandler;
-    selectionCellsHandler: MxSelectionCellsHandler;
-    connectionHandler: MxConnectionHandler;
-    graphHandler: MxGraphHandler;
-    panningHandler: MxPanningHandler;
-    popupMenuHandler: MxPopupMenuHandler;
+    tooltipHandler: mxTooltipHandler;
+    selectionCellsHandler: mxSelectionCellsHandler;
+    connectionHandler: mxConnectionHandler;
+    graphHandler: mxGraphHandler;
+    panningHandler: mxPanningHandler;
+    popupMenuHandler: mxPopupMenuHandler;
     graphModelChangeListener: any;
     panningManager: any;
     collapseExpandResource: string;
@@ -13072,7 +13072,7 @@ declare module mxgraph {
      * performance. Default is mxConstants.DIALECT_MIXEDHTML (for IE).
      * @param stylesheet - Optional <mxStylesheet> to be used in the graph.
      */
-    constructor(container?: Element, model?: MxGraphModel, renderHint?: renderingHint, stylesheet?: MxStylesheet);
+    constructor(container?: Element, model?: mxGraphModel, renderHint?: renderingHint, stylesheet?: mxStylesheet);
     /**
      * Initializes the <container> and creates the respective datastructures.
      *
@@ -13087,87 +13087,87 @@ declare module mxgraph {
     /**
      * Creates and returns a new <mxTooltipHandler> to be used in this graph.
      */
-    createTooltipHandler(): MxTooltipHandler;
+    createTooltipHandler(): mxTooltipHandler;
     /**
      * Creates and returns a new <mxTooltipHandler> to be used in this graph.
      */
-    createSelectionCellsHandler(): MxSelectionCellsHandler;
+    createSelectionCellsHandler(): mxSelectionCellsHandler;
     /**
      * Creates and returns a new <mxConnectionHandler> to be used in this graph.
      */
-    createConnectionHandler(): MxConnectionHandler;
+    createConnectionHandler(): mxConnectionHandler;
     /**
      * Hook method that creates the new edge for insertEdge.  This implementation does not set the source and target of the edge, these are set when the edge is added to the model.
      */
-    createEdge(parent: MxCell, id: string, value: any, source: MxCell, target: MxCell, style?: string): any;
+    createEdge(parent: mxCell, id: string, value: any, source: mxCell, target: mxCell, style?: string): any;
     /**
      * Creates and returns a new <mxGraphHandler> to be used in this graph.
      */
-    createGraphHandler(): MxGraphHandler;
+    createGraphHandler(): mxGraphHandler;
     /**
      * Creates and returns a new <mxPanningHandler> to be used in this graph.
      */
-    createPanningHandler(): MxPanningHandler;
+    createPanningHandler(): mxPanningHandler;
     /**
      * Creates and returns a new <mxPopupMenuHandler> to be used in this graph.
      */
-    createPopupMenuHandler(): MxPopupMenuHandler;
+    createPopupMenuHandler(): mxPopupMenuHandler;
     /**
      * Creates a new <mxGraphSelectionModel> to be used in this graph.
      */
-    createSelectionModel(): MxGraphSelectionModel;
+    createSelectionModel(): mxGraphSelectionModel;
     /**
      * Creates a new <mxGraphSelectionModel> to be used in this graph.
      */
-    createStylesheet(): MxStylesheet;
+    createStylesheet(): mxStylesheet;
     /**
      * Creates a new <mxGraphView> to be used in this graph.
      */
-    createGraphView(): MxGraphView;
+    createGraphView(): mxGraphView;
     /**
      * Creates a new <mxCellRenderer> to be used in this graph.
      */
-    createCellRenderer(): MxCellRenderer;
+    createCellRenderer(): mxCellRenderer;
     /**
      * Creates a new <mxCellEditor> to be used in this graph.
      */
-    createCellEditor(): MxCellEditor;
+    createCellEditor(): mxCellEditor;
     /**
      * Returns the <mxGraphModel> that contains the cells.
      */
-    getModel(): MxGraphModel;
+    getModel(): mxGraphModel;
     /**
      * Returns the <mxGraphView> that contains the <mxCellStates>.
      */
-    getView(): MxGraphView;
+    getView(): mxGraphView;
     /**
      * Returns the <mxStylesheet> that defines the style.
      */
-    getStylesheet(): MxStylesheet;
+    getStylesheet(): mxStylesheet;
     /**
      * Sets the <mxStylesheet> that defines the style.
      */
-    setStylesheet(stylesheet: MxStylesheet): void;
+    setStylesheet(stylesheet: mxStylesheet): void;
     /**
      * Returns the <mxGraphSelectionModel> that contains the selection.
      */
-    getSelectionModel(): MxGraphSelectionModel;
+    getSelectionModel(): mxGraphSelectionModel;
     /**
      * Sets the <mxGraphSelectionModel> that contains the selection.
      */
-    setSelectionModel(selectionModel: MxGraphSelectionModel): void;
+    setSelectionModel(selectionModel: mxGraphSelectionModel): void;
     /**
      * Returns the cells to be selected for the given array of changes.
      */
     getSelectionCellsForChanges(
       changes: (
-        | MxRootChange
-        | MxChildChange
+        | mxRootChange
+        | mxChildChange
         | {
-            cell: MxCell;
+            cell: mxCell;
           }
       )[],
-    ): MxCell[];
+    ): mxCell[];
     /**
      * Called when the graph model changes. Invokes <processChange> on each
      * item of the given array to update the view accordingly.
@@ -13178,7 +13178,7 @@ declare module mxgraph {
     /**
      * Returns the cells that have been removed from the model.
      */
-    getRemovedCellsForChanges(changes: any): MxCell[];
+    getRemovedCellsForChanges(changes: any): mxCell[];
     /**
      * Processes the given change and invalidates the respective cached data
      * in <view>. This fires a <root> event if the root has changed in the
@@ -13195,7 +13195,7 @@ declare module mxgraph {
      *
      * cell - <mxCell> that was removed from the model.
      */
-    removeStateForCell(cell: MxCell): void;
+    removeStateForCell(cell: mxCell): void;
     /**
      * Adds an <mxCellOverlay> for the specified cell. This method fires an
      * <addoverlay> event and returns the new <mxCellOverlay>.
@@ -13203,14 +13203,14 @@ declare module mxgraph {
      * cell - <mxCell> to add the overlay for.
      * overlay - <mxCellOverlay> to be added for the cell.
      */
-    addCellOverlay(cell: MxCell, overlay: MxCellOverlay): MxCellOverlay;
+    addCellOverlay(cell: mxCell, overlay: mxCellOverlay): mxCellOverlay;
     /**
      * Returns the array of <mxCellOverlays> for the given cell or null, if
      * no overlays are defined.
      *
      * cell - <mxCell> whose overlays should be returned.
      */
-    getCellOverlays(cell: MxCell): MxCellOverlay[];
+    getCellOverlays(cell: mxCell): mxCellOverlay[];
     /**
      * Removes and returns the given <mxCellOverlay> from the given cell. This
      * method fires a <removeoverlay> event. If no overlay is given, then all
@@ -13219,7 +13219,7 @@ declare module mxgraph {
      * cell - <mxCell> whose overlay should be removed.
      * overlay - Optional <mxCellOverlay> to be removed.
      */
-    removeCellOverlay(cell: MxCell, overlay?: MxCellOverlay): MxCellOverlay;
+    removeCellOverlay(cell: mxCell, overlay?: mxCellOverlay): mxCellOverlay;
     /**
      * Removes all <mxCellOverlays> from the given cell. This method
      * fires a <removeoverlay> event for each <mxCellOverlay> and returns
@@ -13227,7 +13227,7 @@ declare module mxgraph {
      *
      * cell - <mxCell> whose overlays should be removed
      */
-    removeCellOverlays(cell: MxCell): MxCellOverlay[];
+    removeCellOverlays(cell: mxCell): mxCellOverlay[];
     /**
      * Removes all <mxCellOverlays> in the graph for the given cell and all its
      * descendants. If no cell is specified then all overlays are removed from
@@ -13237,7 +13237,7 @@ declare module mxgraph {
      * cell - Optional <mxCell> that represents the root of the subtree to
      * remove the overlays from. Default is the root in the model.
      */
-    clearCellOverlays(cell?: MxCell): void;
+    clearCellOverlays(cell?: mxCell): void;
     /**
      * Creates an overlay for the given cell using the warning and image or
      * <warningImage> and returns the new <mxCellOverlay>. The warning is
@@ -13258,7 +13258,7 @@ declare module mxgraph {
      * isSelect - Optional boolean indicating if a click on the overlay
      * should select the corresponding cell. Default is false.
      */
-    setCellWarning(cell: MxCell, warning: string, img?: MxImage, isSelect?: boolean): MxCellOverlay;
+    setCellWarning(cell: mxCell, warning: string, img?: mxImage, isSelect?: boolean): mxCellOverlay;
     /**
      * Calls <startEditingAtCell> using the given cell or the first selection
      * cell.
@@ -13421,11 +13421,11 @@ declare module mxgraph {
      * container. The left, top, right and bottom borders are stored in the x, y,
      * width and height of the returned <mxRectangle>, respectively.
      */
-    getBorderSizes(): MxRectangle;
+    getBorderSizes(): mxRectangle;
     /**
      * Returns the preferred size of the background page if <preferPageSize> is true.
      */
-    getPreferredPageSize(bounds: any, width: any, height: any): MxRectangle;
+    getPreferredPageSize(bounds: any, width: any, height: any): mxRectangle;
     /**
      * Scales the graph such that the complete diagram fits into <container> and
      * returns the current scale in the view. To fit an initial graph prior to
@@ -13603,7 +13603,7 @@ declare module mxgraph {
      *       var elbow = mxUtils.getValue(style, mxConstants.STYLE_ELBOW,
      *           mxConstants.ELBOW_HORIZONTAL);
      *       var value = (elbow == mxConstants.ELBOW_HORIZONTAL) ?
-     *           mxConstants.ELBOW_VERTICAL : MxConstants.ELBOW_HORIZONTAL;
+     *           mxConstants.ELBOW_VERTICAL : mxConstants.ELBOW_HORIZONTAL;
      *       this.setCellStyles(mxConstants.STYLE_ELBOW, value, [edge]);
      *     }
      *   }
@@ -13667,7 +13667,7 @@ declare module mxgraph {
     /**
      * Returns the bounds to be used for the given group and children.
      */
-    getBoundsForGroup(group: any, children: any, border: any): MxRectangle;
+    getBoundsForGroup(group: any, children: any, border: any): mxRectangle;
     /**
      * Hook for creating the group cell to hold the given array of <mxCells> if
      * no group cell was given to the <group> function.
@@ -13684,7 +13684,7 @@ declare module mxgraph {
      *   return group;
      * };
      */
-    createGroupCell(cells: any): MxCell;
+    createGroupCell(cells: any): mxCell;
     /**
      * Ungroups the given cells by moving the children the children to their
      * parents parent and removing the empty groups. Returns the children that
@@ -13744,7 +13744,7 @@ declare module mxgraph {
      * @param keepPosition - Optional boolean indicating if the position of the cells should
      * be updated to reflect the lost parent cell. Default is false.
      */
-    cloneCells(cells: MxCell[], allowInvalidEdges?: boolean, mapping?: any, keepPosition?: any): any;
+    cloneCells(cells: mxCell[], allowInvalidEdges?: boolean, mapping?: any, keepPosition?: any): any;
     /**
      * Returns the clone for the given cell. Uses <cloneCells>.
      *
@@ -13757,7 +13757,7 @@ declare module mxgraph {
      * keepPosition - Optional boolean indicating if the position of the cells should
      * be updated to reflect the lost parent cell. Default is false.
      */
-    cloneCell(cell: MxCell, allowInvalidEdges?: boolean, mapping?: any, keepPosition?: any): any;
+    cloneCell(cell: mxCell, allowInvalidEdges?: boolean, mapping?: any, keepPosition?: any): any;
     /**
      * Adds a new vertex into the given parent {@link mxCell} using value as the user
      * object and the given coordinates as the {@link mxGeometry} of the new vertex.
@@ -13795,7 +13795,7 @@ declare module mxgraph {
      * @param {boolean} [relative] Optional boolean that specifies if the geometry is relative.
      * Default is false.
      */
-    insertVertex(parent: MxCell, id: string | null, value: Record<string, any>, x: number, y: number, width: number, height: number, style?: string, relative?: boolean): MxCell;
+    insertVertex(parent: mxCell, id: string | null, value: Record<string, any>, x: number, y: number, width: number, height: number, style?: string, relative?: boolean): mxCell;
     /**
      * Adds a new edge into the given parent {@link mxCell} using value as the user
      * object and the given source and target as the terminals of the new edge.
@@ -13809,7 +13809,7 @@ declare module mxgraph {
      * @param {mxCell} target Target of the edge.
      * @param {string} [style] Optional string that defines the cell style.
      */
-    insertEdge(parent: MxCell, id: string | null, value: Record<string, any>, source: MxCell, target: MxCell, style?: string): MxCell;
+    insertEdge(parent: mxCell, id: string | null, value: Record<string, any>, source: mxCell, target: mxCell, style?: string): mxCell;
     /**
      * Adds the edge to the parent and connects it to the given source and
      * target terminals. This is a shortcut method. Returns the edge that was
@@ -13822,7 +13822,7 @@ declare module mxgraph {
      * @param target - Optional <mxCell> that represents the target terminal.
      * @param index - Optional index to insert the cells at. Default is to append.
      */
-    addEdge(edge: MxCell, parent: MxCell, source?: MxCell, target?: MxCell, index?: number): MxCell;
+    addEdge(edge: mxCell, parent: mxCell, source?: mxCell, target?: mxCell, index?: number): mxCell;
     /**
      * Adds the cell to the parent and connects it to the given source and
      * target terminals. This is a shortcut method. Returns the cell that was
@@ -13835,7 +13835,7 @@ declare module mxgraph {
      * @param source - Optional <mxCell> that represents the source terminal.
      * @param target - Optional <mxCell> that represents the target terminal.
      */
-    addCell(cell: MxCell, parent?: MxCell, index?: number, source?: MxCell, target?: MxCell): MxCell;
+    addCell(cell: mxCell, parent?: mxCell, index?: number, source?: mxCell, target?: mxCell): mxCell;
     /**
      * Adds the cells to the parent at the given index, connecting each cell to
      * the optional source and target terminal. The change is carried out using
@@ -13849,7 +13849,7 @@ declare module mxgraph {
      * @param source - Optional source <mxCell> for all inserted cells.
      * @param target - Optional target <mxCell> for all inserted cells.
      */
-    addCells(cells: MxCell[], parent: MxCell, index?: number, source?: MxCell, target?: MxCell): MxCell[];
+    addCells(cells: mxCell[], parent: mxCell, index?: number, source?: mxCell, target?: mxCell): mxCell[];
     /**
      * Resizes the specified cell to just fit around the its label and/or children
      *
@@ -13857,7 +13857,7 @@ declare module mxgraph {
      * @param recurse - Optional boolean which specifies if all descendants should be
      * autosized. Default is true.
      */
-    autoSizeCell(cell: MxCell, recurse?: boolean): void;
+    autoSizeCell(cell: mxCell, recurse?: boolean): void;
     /**
      * Removes the given cells from the graph including all connected edges if
      * includeEdges is true. The change is carried out using <cellsRemoved>.
@@ -13925,7 +13925,7 @@ declare module mxgraph {
      * checked. Default is false.
      * @param evt - Optional native event that triggered the invocation.
      */
-    foldCells(collapse: boolean, recurse?: boolean, cells?: MxCell[], checkFoldable?: boolean, evt?: Event): MxCell[];
+    foldCells(collapse: boolean, recurse?: boolean, cells?: mxCell[], checkFoldable?: boolean, evt?: Event): mxCell[];
     /**
      * Sets the collapsed state of the specified cells. This method fires
      * <mxEvent.CELLS_FOLDED> while the transaction is in progress. Returns the
@@ -13938,7 +13938,7 @@ declare module mxgraph {
      * @param checkFoldable - Optional boolean indicating of isCellFoldable should be
      * checked. Default is false.
      */
-    cellsFolded(cells: MxCell[], collapse: boolean, recurse: boolean, checkFoldable?: boolean): void;
+    cellsFolded(cells: mxCell[], collapse: boolean, recurse: boolean, checkFoldable?: boolean): void;
     /**
      * Swaps the alternate and the actual bounds in the geometry of the given
      * cell invoking <updateAlternateBounds> before carrying out the swap.
@@ -13976,7 +13976,7 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> whose size should be updated.
      */
-    updateCellSize(cell: MxCell, ignoreChildren?: boolean): MxCell;
+    updateCellSize(cell: mxCell, ignoreChildren?: boolean): mxCell;
     /**
      * Updates the size of the given cell in the model using
      * <getPreferredSizeForCell> to get the new size.
@@ -14016,7 +14016,7 @@ declare module mxgraph {
      * @param bounds - <mxRectangle> that represents the new bounds.
      * @param recurse - Recursively resize children
      */
-    resizeCell(cell: MxCell, bounds: MxRectangle, recurse?: any): MxCell;
+    resizeCell(cell: mxCell, bounds: mxRectangle, recurse?: any): mxCell;
     /**
      * Sets the bounds of the given cells and fires a <mxEvent.RESIZE_CELLS>
      * event while the transaction is in progress. Returns the cells which
@@ -14026,7 +14026,7 @@ declare module mxgraph {
      * @param bounds - Array of <mxRectangles> that represent the new bounds.
      * @param recurse - Recursively resize children
      */
-    resizeCells(cells: MxCell[], bounds: MxRectangle[], recurse?: any): MxCell[];
+    resizeCells(cells: mxCell[], bounds: mxRectangle[], recurse?: any): mxCell[];
     /**
      * Sets the bounds of the given cells and fires a <mxEvent.CELLS_RESIZED>
      * event. If <extendParents> is true, then the parent is extended if a
@@ -14068,7 +14068,7 @@ declare module mxgraph {
      * @param bounds - Array of <mxRectangles> that represent the new bounds.
      * @param recurse - Optional boolean that specifies if the children should be resized.
      */
-    cellsResized(cells: MxCell[], bounds: MxRectangle[], recurse?: boolean): void;
+    cellsResized(cells: mxCell[], bounds: mxRectangle[], recurse?: boolean): void;
     /**
      * Resizes the parents recursively so that they contain the complete area
      * of the resized child cell.
@@ -14078,7 +14078,7 @@ declare module mxgraph {
      * @param ignoreRelative - Boolean that indicates if relative cells should be ignored.
      * @param recurse - Optional boolean that specifies if the children should be resized.
      */
-    cellResized(cell: MxCell, bounds: MxRectangle, ignoreRelative: boolean, recurse?: boolean): void;
+    cellResized(cell: mxCell, bounds: mxRectangle, ignoreRelative: boolean, recurse?: boolean): void;
     /**
      * Resizes the child cells of the given cell for the given new geometry with
      * respect to the current geometry of the cell.
@@ -14086,7 +14086,7 @@ declare module mxgraph {
      * @param cell - <mxCell> that has been resized.
      * @param newGeo - <mxGeometry> that represents the new bounds.
      */
-    resizeChildCells(cell: MxCell, newGeo: MxGeometry): void;
+    resizeChildCells(cell: mxCell, newGeo: mxGeometry): void;
     /**
      * Constrains the children of the given cell using <constrainChild>.
      *
@@ -14102,14 +14102,14 @@ declare module mxgraph {
      * @param dy - Vertical scaling factor.
      * @param recurse - Boolean indicating if the child cells should be scaled.
      */
-    scaleCell(cell: MxCell, dx: number, dy: number, recurse: boolean): void;
+    scaleCell(cell: mxCell, dx: number, dy: number, recurse: boolean): void;
     /**
      * Resizes the parents recursively so that they contain the complete area
      * of the resized child cell.
      *
      * @param cell - <mxCell> that has been resized.
      */
-    extendParent(cell: MxCell): void;
+    extendParent(cell: mxCell): void;
     /**
      * Clones and inserts the given cells into the graph using the move
      * method and returns the inserted cells. This shortcut is used if
@@ -14122,7 +14122,7 @@ declare module mxgraph {
      * @param evt - Mouseevent that triggered the invocation.
      * @param mapping - Optional mapping for existing clones.
      */
-    importCells(cells: MxCell[], dx: number, dy: number, target: MxCell, evt?: Event, mapping?: any): MxCell[];
+    importCells(cells: mxCell[], dx: number, dy: number, target: mxCell, evt?: Event, mapping?: any): mxCell[];
     /**
      * Moves or clones the specified cells and moves the cells or clones by the
      * given amount, adding them to the optional target cell. The evt is the
@@ -14142,13 +14142,13 @@ declare module mxgraph {
      * @param evt - Mouseevent that triggered the invocation.
      * @param mapping - Optional mapping for existing clones.
      */
-    moveCells(cells: MxCell[], dx?: number, dy?: number, clone?: boolean, target?: MxCell, evt?: Event, mapping?: any): MxCell[];
+    moveCells(cells: mxCell[], dx?: number, dy?: number, clone?: boolean, target?: mxCell, evt?: Event, mapping?: any): mxCell[];
     /**
      * Moves the specified cells by the given vector, disconnecting the cells
      * using disconnectGraph is disconnect is true. This method fires
      * <mxEvent.CELLS_MOVED> while the transaction is in progress.
      */
-    cellsMoved(cells: MxCell[], dx: number, dy: number, disconnect?: boolean, constrain?: boolean, extend?: boolean): void;
+    cellsMoved(cells: mxCell[], dx: number, dy: number, disconnect?: boolean, constrain?: boolean, extend?: boolean): void;
     /**
      * Translates the geometry of the given cell and stores the new,
      * translated geometry in the model as an atomic change.
@@ -14159,7 +14159,7 @@ declare module mxgraph {
      *
      * cell - <mxCell> for which the area should be returned.
      */
-    getCellContainmentArea(cell: any): MxRectangle;
+    getCellContainmentArea(cell: any): mxRectangle;
     /**
      * Returns the bounds inside which the diagram should be kept as an
      * <mxRectangle>.
@@ -14174,7 +14174,7 @@ declare module mxgraph {
      * cells - <mxCell> which should be constrained.
      * sizeFirst - Specifies if the size should be changed first. Default is true.
      */
-    constrainChild(cell: MxCell, sizeFirst?: boolean): void;
+    constrainChild(cell: mxCell, sizeFirst?: boolean): void;
     /**
      * Resets the control points of the edges that are connected to the given
      * cells if not both ends of the edge are in the given cells array.
@@ -14182,7 +14182,7 @@ declare module mxgraph {
      * cells - Array of <mxCells> for which the connected edges should be
      * reset.
      */
-    resetEdges(cells: MxCell[]): void;
+    resetEdges(cells: mxCell[]): void;
     /**
      * Resets the control points of the given edge.
      *
@@ -14192,7 +14192,7 @@ declare module mxgraph {
     /**
      * Returns the constraint used to connect to the outline of the given state.
      */
-    getOutlineConstraint(point: any, terminalState: any, me: any): MxConnectionConstraint;
+    getOutlineConstraint(point: any, terminalState: any, me: any): mxConnectionConstraint;
     /**
      * Returns an array of all <mxConnectionConstraints> for the given terminal. If
      * the shape of the given terminal is a <mxStencilShape> then the constraints
@@ -14210,7 +14210,7 @@ declare module mxgraph {
      * @param terminal - <mxCellState> that represents the terminal.
      * @param source - Boolean indicating if the terminal is the source or target.
      */
-    getConnectionConstraint(edge: MxCellState, terminal: MxCellState, source: boolean): MxConnectionConstraint;
+    getConnectionConstraint(edge: mxCellState, terminal: mxCellState, source: boolean): mxConnectionConstraint;
     /**
      * Sets the <mxConnectionConstraint> that describes the given connection point.
      * If no constraint is given then nothing is changed. To remove an existing
@@ -14222,7 +14222,7 @@ declare module mxgraph {
      * @param constraint - Optional <mxConnectionConstraint> to be used for this
      * connection.
      */
-    setConnectionConstraint(edge: MxCell, terminal: MxCell, source: boolean, constraint?: MxConnectionConstraint): void;
+    setConnectionConstraint(edge: mxCell, terminal: mxCell, source: boolean, constraint?: mxConnectionConstraint): void;
     /**
      * Returns the nearest point in the list of absolute points or the center
      * of the opposite terminal.
@@ -14231,7 +14231,7 @@ declare module mxgraph {
      * @param constraint - <mxConnectionConstraint> that represents the connection point
      * constraint as returned by <getConnectionConstraint>.
      */
-    getConnectionPoint(vertex: MxCellState, constraint: MxConnectionConstraint): MxPoint;
+    getConnectionPoint(vertex: mxCellState, constraint: mxConnectionConstraint): mxPoint;
     /**
      * Connects the specified end of the given edge to the given terminal
      * using <cellConnected> and fires <mxEvent.CONNECT_CELL> while the
@@ -14243,7 +14243,7 @@ declare module mxgraph {
      * @param constraint - Optional <mxConnectionConstraint> to be used for this
      * connection.
      */
-    connectCell(edge: MxCell, terminal: MxCell, source: boolean, constraint?: MxConnectionConstraint): MxCell;
+    connectCell(edge: mxCell, terminal: mxCell, source: boolean, constraint?: mxConnectionConstraint): mxCell;
     /**
      * Sets the new terminal for the given edge and resets the edge points if
      * <resetEdgesOnConnect> is true. This method fires
@@ -14254,19 +14254,19 @@ declare module mxgraph {
      * @param source - Boolean indicating if the new terminal is the source or target.
      * @param constraint - <mxConnectionConstraint> to be used for this connection.
      */
-    cellConnected(edge: MxCell, terminal: MxCell, source: boolean, constraint?: MxConnectionConstraint): void;
+    cellConnected(edge: mxCell, terminal: mxCell, source: boolean, constraint?: mxConnectionConstraint): void;
     /**
      * Disconnects the given edges from the terminals which are not in the
      * given array.
      *
      * @param cells - Array of <mxCells> to be disconnected.
      */
-    disconnectGraph(cells: MxCell[]): void;
+    disconnectGraph(cells: mxCell[]): void;
     /**
      * Returns the current root of the displayed cell hierarchy. This is a
      * shortcut to <mxGraphView.currentRoot> in <view>.
      */
-    getCurrentRoot(): MxCell;
+    getCurrentRoot(): mxCell;
     /**
      * Returns the translation to be used if the given cell is the root cell as
      * an <mxPoint>. This implementation returns null.
@@ -14297,7 +14297,7 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> that represents the root.
      */
-    getTranslateForRoot(cell: MxCell): any;
+    getTranslateForRoot(cell: mxCell): any;
     /**
      * Returns true if the given cell is a "port", that is, when connecting to
      * it, the cell returned by getTerminalForPort should be used as the
@@ -14319,7 +14319,7 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> that represents the port.
      */
-    isPort(cell: MxCell): boolean;
+    isPort(cell: mxCell): boolean;
     /**
      * Returns the terminal to be used for a given port. This implementation
      * always returns the parent cell.
@@ -14327,7 +14327,7 @@ declare module mxgraph {
      * @param cell - <mxCell> that represents the port.
      * @param source - If the cell is the source or target port.
      */
-    getTerminalForPort(cell: MxCell, source: any): MxCell;
+    getTerminalForPort(cell: mxCell, source: any): mxCell;
     /**
      * Returns the offset to be used for the cells inside the given cell. The
      * root and layer cells may be identified using <mxGraphModel.isRoot> and
@@ -14338,7 +14338,7 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> whose offset should be returned.
      */
-    getChildOffsetForCell(cell: MxCell): any;
+    getChildOffsetForCell(cell: mxCell): any;
     /**
      * Uses the given cell as the root of the displayed cell hierarchy. If no
      * cell is specified then the selection cell is used. The cell is only used
@@ -14347,7 +14347,7 @@ declare module mxgraph {
      * @param cell - Optional <mxCell> to be used as the new root. Default is the
      * selection cell.
      */
-    enterGroup(cell?: MxCell): void;
+    enterGroup(cell?: mxCell): void;
     /**
      * Changes the current root to the next valid root in the displayed cell
      * hierarchy.
@@ -14369,7 +14369,7 @@ declare module mxgraph {
      * Returns the bounds of the visible graph. Shortcut to
      * <mxGraphView.getGraphBounds>. See also: <getBoundingBoxFromGeometry>.
      */
-    getGraphBounds(): MxRectangle;
+    getGraphBounds(): mxRectangle;
     /**
      * Returns the scaled, translated bounds for the given cell. See
      * <mxGraphView.getBounds> for arrays.
@@ -14380,7 +14380,7 @@ declare module mxgraph {
      * @param includeDescendants - Optional boolean that specifies if the bounds
      * of all descendants should be included. Default is false.
      */
-    getCellBounds(cell: MxCell, includeEdges?: boolean, includeDescendants?: boolean): MxRectangle;
+    getCellBounds(cell: mxCell, includeEdges?: boolean, includeDescendants?: boolean): mxRectangle;
     /**
      * Returns the bounding box for the geometries of the vertices in the
      * given array of cells. This can be used to find the graph bounds during
@@ -14413,7 +14413,7 @@ declare module mxgraph {
      * @param includeEdges - Specifies if edge bounds should be included by computing
      * the bounding box for all points in geometry. Default is false.
      */
-    getBoundingBoxFromGeometry(cells: MxCell[], includeEdges?: boolean): MxRectangle;
+    getBoundingBoxFromGeometry(cells: mxCell[], includeEdges?: boolean): mxRectangle;
     /**
      * Clears all cell states or the states for the hierarchy starting at the
      * given cell and validates the graph. This fires a refresh event as the
@@ -14421,7 +14421,7 @@ declare module mxgraph {
      *
      * @param cell - Optional <mxCell> for which the cell states should be cleared.
      */
-    refresh(cell?: MxCell): void;
+    refresh(cell?: mxCell): void;
     /**
      * Snaps the given numeric value to the grid if <gridEnabled> is true.
      *
@@ -14512,7 +14512,7 @@ declare module mxgraph {
      *
      * cell - <mxCell> whose geometry should be returned.
      */
-    getCellGeometry(cell: any): MxGeometry;
+    getCellGeometry(cell: any): mxGeometry;
     /**
      * Returns true if the given cell is visible in this graph. This
      * implementation uses <mxGraphModel.isVisible>. Subclassers can override
@@ -14552,7 +14552,7 @@ declare module mxgraph {
      *
      * edge - <mxCellState> that represents the edge.
      */
-    isOrthogonal(edge: MxCellState): any;
+    isOrthogonal(edge: mxCellState): any;
     /**
      * Returns true if the given cell state is a loop.
      *
@@ -14685,7 +14685,7 @@ declare module mxgraph {
     /**
      * Returns the <backgroundImage> as an <mxImage>.
      */
-    getBackgroundImage(): MxImage;
+    getBackgroundImage(): mxImage;
     /**
      * Sets the new <backgroundImage>.
      *
@@ -14696,7 +14696,7 @@ declare module mxgraph {
      * Returns the <mxImage> used to display the collapsed state of
      * the specified cell state. This returns null for all edges.
      */
-    getFoldingImage(state: any): MxImage;
+    getFoldingImage(state: any): mxImage;
     /**
      * Returns the textual representation for the given cell. This
      * implementation returns the nodename or string-representation of the user
@@ -14909,7 +14909,7 @@ declare module mxgraph {
      *
      * swimlane - <mxCell> whose start size should be returned.
      */
-    getStartSize(swimlane: any): MxRectangle;
+    getStartSize(swimlane: any): mxRectangle;
     /**
      * Returns the image URL for the given cell state. This implementation
      * returns the value stored under <mxConstants.STYLE_IMAGE> in the cell
@@ -15052,7 +15052,7 @@ declare module mxgraph {
     /**
      * Returns the cells which may be exported in the given array of cells.
      */
-    getCloneableCells(cells: any): MxCell[];
+    getCloneableCells(cells: any): mxCell[];
     /**
      * Returns true if the given cell is cloneable. This implementation returns
      * <isCellsCloneable> for all cells unless a cell style specifies
@@ -15077,7 +15077,7 @@ declare module mxgraph {
     /**
      * Returns the cells which may be exported in the given array of cells.
      */
-    getExportableCells(cells: any): MxCell[];
+    getExportableCells(cells: any): mxCell[];
     /**
      * Returns true if the given cell may be exported to the clipboard. This
      * implementation returns <exportEnabled> for all cells.
@@ -15088,7 +15088,7 @@ declare module mxgraph {
     /**
      * Returns the cells which may be imported in the given array of cells.
      */
-    getImportableCells(cells: any): MxCell[];
+    getImportableCells(cells: any): mxCell[];
     /**
      * Returns true if the given cell may be imported from the clipboard.
      * This implementation returns <importEnabled> for all cells.
@@ -15132,7 +15132,7 @@ declare module mxgraph {
     /**
      * Returns the cells which may be exported in the given array of cells.
      */
-    getDeletableCells(cells: any): MxCell[];
+    getDeletableCells(cells: any): mxCell[];
     /**
      * Returns true if the given cell is moveable. This returns
      * <cellsDeletable> for all given cells if a cells style does not specify
@@ -15169,7 +15169,7 @@ declare module mxgraph {
     /**
      * Returns the cells which are movable in the given array of cells.
      */
-    getMovableCells(cells: any): MxCell[];
+    getMovableCells(cells: any): mxCell[];
     /**
      * Returns true if the given cell is moveable. This returns <cellsMovable>
      * for all given cells if <isCellLocked> does not return true for the given
@@ -15504,7 +15504,7 @@ declare module mxgraph {
      *
      * @param cell - <mxCell> that should be checked.
      */
-    isEditing(cell?: MxCell): boolean;
+    isEditing(cell?: mxCell): boolean;
     /**
      * Returns true if the size of the given cell should automatically be
      * updated after a change of the label. This implementation returns
@@ -15571,7 +15571,7 @@ declare module mxgraph {
      *
      * state - <mxCellState> that is being resized.
      */
-    isRecursiveResize(state?: MxCellState): boolean;
+    isRecursiveResize(state?: mxCellState): boolean;
     /**
      * Sets <recursiveResize>.
      *
@@ -15632,7 +15632,7 @@ declare module mxgraph {
     /**
      * Returns the cells which are movable in the given array of cells.
      */
-    getFoldableCells(cells: any, collapse: any): MxCell[];
+    getFoldableCells(cells: any, collapse: any): mxCell[];
     /**
      * Returns true if the given cell is foldable. This implementation
      * returns true if the cell has at least one child and its style
@@ -15682,7 +15682,7 @@ declare module mxgraph {
      * this function should be used as the parent for new cells (aka default
      * layer).
      */
-    getDefaultParent(): MxCell;
+    getDefaultParent(): mxCell;
     /**
      * Sets the <defaultParent> to the given cell. Set this to null to return
      * the first child of the root in getDefaultParent.
@@ -15704,7 +15704,7 @@ declare module mxgraph {
      * parent - <mxCell> that should be used as the root of the recursion.
      * Default is <defaultParent>.
      */
-    getSwimlaneAt(x: number, y: number, parent?: MxCell): any;
+    getSwimlaneAt(x: number, y: number, parent?: mxCell): any;
     /**
      * Returns the bottom-most cell that intersects the given point (x, y) in
      * the cell hierarchy starting at the given parent. This will also return
@@ -15724,7 +15724,7 @@ declare module mxgraph {
      * @param ignoreFn - Optional function that returns true if cell should be ignored.
      * The function is passed the cell state and the x and y parameter.
      */
-    getCellAt(x: number, y: number, parent?: MxCell, vertices?: boolean, edges?: boolean, ignoreFn?: (cell: MxCellState, x: number, y: number) => boolean): any;
+    getCellAt(x: number, y: number, parent?: mxCell, vertices?: boolean, edges?: boolean, ignoreFn?: (cell: mxCellState, x: number, y: number) => boolean): any;
     /**
      * Returns the bottom-most cell that intersects the given point (x, y) in
      * the cell hierarchy that starts at the given parent.
@@ -15748,13 +15748,13 @@ declare module mxgraph {
      *
      * parent - <mxCell> whose children should be returned.
      */
-    getChildVertices(parent: any): MxCell[];
+    getChildVertices(parent: any): mxCell[];
     /**
      * Returns the visible child edges of the given parent.
      *
      * @param parent - <mxCell> whose child vertices should be returned.
      */
-    getChildEdges(parent: MxCell): MxCell[];
+    getChildEdges(parent: mxCell): mxCell[];
     /**
      * Returns the visible child vertices or edges in the given parent. If
      * vertices and edges is false, then all children are returned.
@@ -15765,7 +15765,7 @@ declare module mxgraph {
      * @param edges - Optional boolean that specifies if child edges should
      * be returned. Default is false.
      */
-    getChildCells(parent: MxCell, vertices?: boolean, edges?: boolean): MxCell[];
+    getChildCells(parent: mxCell, vertices?: boolean, edges?: boolean): mxCell[];
     /**
      * Returns all visible edges connected to the given cell without loops.
      *
@@ -15773,7 +15773,7 @@ declare module mxgraph {
      * @param parent - Optional parent of the opposite end for a connection to be
      * returned.
      */
-    getConnections(cell: MxCell, parent?: MxCell): any[];
+    getConnections(cell: mxCell, parent?: mxCell): any[];
     /**
      * Returns the visible incoming edges for the given cell. If the optional
      * parent argument is specified, then only child edges of the given parent
@@ -15783,7 +15783,7 @@ declare module mxgraph {
      * @param parent - Optional parent of the opposite end for an edge to be
      * returned.
      */
-    getIncomingEdges(cell: MxCell, parent?: MxCell): any[];
+    getIncomingEdges(cell: mxCell, parent?: mxCell): any[];
     /**
      * Returns the visible outgoing edges for the given cell. If the optional
      * parent argument is specified, then only child edges of the given parent
@@ -15793,7 +15793,7 @@ declare module mxgraph {
      * @param parent - Optional parent of the opposite end for an edge to be
      * returned.
      */
-    getOutgoingEdges(cell: MxCell, parent?: MxCell): any[];
+    getOutgoingEdges(cell: mxCell, parent?: mxCell): any[];
     /**
      * Returns the incoming and/or outgoing edges for the given cell.
      * If the optional parent argument is specified, then only edges are returned
@@ -15814,7 +15814,7 @@ declare module mxgraph {
      * need be an ancestral parent, true, or the direct parent, false.
      * Default is false
      */
-    getEdges(cell: MxCell, parent?: MxCell, incoming?: boolean, outgoing?: boolean, includeLoops?: boolean, recurse?: boolean): any[];
+    getEdges(cell: mxCell, parent?: mxCell, incoming?: boolean, outgoing?: boolean, includeLoops?: boolean, recurse?: boolean): any[];
     /**
      * Returns whether or not the specified parent is a valid
      * ancestor of the specified cell, either direct or indirectly
@@ -15872,7 +15872,7 @@ declare module mxgraph {
      * Default is current root of the view or the root of the model.
      * @param result - Optional array to store the result in.
      */
-    getCells(x: number, y: number, width: number, height: number, parent?: MxCell, result?: MxCell[]): MxCell[];
+    getCells(x: number, y: number, width: number, height: number, parent?: mxCell, result?: mxCell[]): mxCell[];
     /**
      * Returns the children of the given parent that are contained in the
      * halfpane from the given point (x0, y0) rightwards or downwards
@@ -15953,11 +15953,11 @@ declare module mxgraph {
     /**
      * Returns the first cell from the array of selected <mxCells>.
      */
-    getSelectionCell(): MxCell;
+    getSelectionCell(): mxCell;
     /**
      * Returns the array of selected <mxCells>.
      */
-    getSelectionCells(): MxCell[];
+    getSelectionCells(): mxCell[];
     /**
      * Sets the selection cell.
      *
@@ -16001,7 +16001,7 @@ declare module mxgraph {
      * @param rect - <mxRectangle> that represents the region to be selected.
      * @param evt - Mouseevent that triggered the selection.
      */
-    selectRegion(rect: MxRectangle, evt: MouseEvent): MxCell[];
+    selectRegion(rect: mxRectangle, evt: MouseEvent): mxCell[];
     /**
      * Selects the next cell.
      */
@@ -16089,7 +16089,7 @@ declare module mxgraph {
      *
      * state - <mxCellState> to create the handler for.
      */
-    createVertexHandler(state: any): MxVertexHandler;
+    createVertexHandler(state: any): mxVertexHandler;
     /**
      * Hooks to create a new <mxEdgeHandler> for the given <mxCellState>.
      *
@@ -16101,13 +16101,13 @@ declare module mxgraph {
      *
      * state - <mxCellState> to create the handler for.
      */
-    createEdgeSegmentHandler(state: any): MxEdgeSegmentHandler;
+    createEdgeSegmentHandler(state: any): mxEdgeSegmentHandler;
     /**
      * Hooks to create a new <mxElbowEdgeHandler> for the given <mxCellState>.
      *
      * state - <mxCellState> to create the handler for.
      */
-    createElbowEdgeHandler(state: any): MxElbowEdgeHandler;
+    createElbowEdgeHandler(state: any): mxElbowEdgeHandler;
     /**
      * Adds a listener to the graph event dispatch loop. The listener
      * must implement the mouseDown, mouseMove and mouseUp methods
@@ -16133,7 +16133,7 @@ declare module mxgraph {
     /**
      * Returns the state for the given touch event.
      */
-    getStateForTouchEvent(evt: any): MxCellState;
+    getStateForTouchEvent(evt: any): mxCellState;
     /**
      * Returns true if the event should be ignored in <fireMouseEvent>.
      */
@@ -16242,14 +16242,14 @@ declare module mxgraph {
    *
    * For cell overlays to be printed use <mxPrintPreview.printOverlays>.
    *
-   * Event: MxEvent.CLICK
+   * Event: mxEvent.CLICK
    *
    * Fires when the user clicks on the overlay. The <code>event</code> property
    * contains the corresponding mouse event and the <code>cell</code> property
    * contains the cell. For touch devices this is fired if the element receives
    * a touchend event.
    */
-  export class MxCellOverlay extends MxEventSource {
+  export class mxCellOverlay extends mxEventSource {
     /**
      * Holds the <mxImage> to be used as the icon.
      */
@@ -16298,7 +16298,7 @@ declare module mxgraph {
      * @param offset ?
      * @param cursor ?
      */
-    constructor(image: MxImage, tooltip?: string, align?: any, verticalAlign?: any, offset?: MxPoint, cursor?: string);
+    constructor(image: mxImage, tooltip?: string, align?: any, verticalAlign?: any, offset?: mxPoint, cursor?: string);
     /**
      * Returns the bounds of the overlay for the given <mxCellState> as an
      * <mxRectangle>. This should be overridden when using multiple overlays
@@ -16330,7 +16330,7 @@ declare module mxgraph {
      * state - <mxCellState> that represents the current state of the
      * associated cell.
      */
-    getBounds(state: any): MxRectangle;
+    getBounds(state: any): mxRectangle;
     /**
      * Returns the textual representation of the overlay to be used as the
      * tooltip. This implementation returns <tooltip>.
@@ -16378,7 +16378,7 @@ declare module mxgraph {
    * }
    * (end)
    *
-   * Constructor: MxOutline
+   * Constructor: mxOutline
    *
    * Constructs a new outline for the specified graph inside the given
    * container.
@@ -16388,7 +16388,7 @@ declare module mxgraph {
    * source - <mxGraph> to create the outline for.
    * container - DOM node that will contain the outline.
    */
-  export class MxOutline {
+  export class mxOutline {
     constructor(source: any, container: any);
 
     /**
@@ -16446,7 +16446,7 @@ declare module mxgraph {
     /**
      * Optional <mxImage> to be used for the sizer. Default is null.
      */
-    sizerImage: MxImage;
+    sizerImage: mxImage;
 
     /**
      * Minimum scale to be used. Default is 0.0001.
@@ -16480,7 +16480,7 @@ declare module mxgraph {
     /**
      * Creates the <mxGraph> used in the outline.
      */
-    createGraph(container: any): MxGraph;
+    createGraph(container: any): mxGraph;
     /**
      * Initializes the outline inside the given container.
      */
@@ -16519,7 +16519,7 @@ declare module mxgraph {
     /**
      * Returns the size of the source container.
      */
-    getSourceContainerSize(): MxRectangle;
+    getSourceContainerSize(): mxRectangle;
     /**
      * Returns the offset for drawing the outline graph.
      */
@@ -16561,7 +16561,7 @@ declare module mxgraph {
      * };
      * (end)
      */
-    getTranslateForEvent(me: any): MxPoint;
+    getTranslateForEvent(me: any): mxPoint;
     /**
      * Handles the event by applying the translation or zoom to <graph>.
      */
@@ -16589,7 +16589,7 @@ declare module mxgraph {
    * Defines a rule where each rectangle must be connected to no more than 2
    * circles and no other types of targets are allowed.
    */
-  export class MxMultiplicity {
+  export class mxMultiplicity {
     /**
      * Defines the type of the source or target terminal. The type is a string
      * passed to <mxUtils.isNode> together with the source or target vertex
@@ -16644,7 +16644,7 @@ declare module mxgraph {
      */
     typeError: any;
     /**
-     * Instantiate class MxMultiplicity in order to describe allowed
+     * Instantiate class mxMultiplicity in order to describe allowed
      * connections in a graph. Not all constraints can be enforced while
      * editing, some must be checked at validation time. The <countError> and
      * <typeError> are treated as resource keys in <mxResources>.
@@ -16719,13 +16719,13 @@ declare module mxgraph {
    * };
    * (end)
    *
-   * Event: MxEvent.LAYOUT_CELLS
+   * Event: mxEvent.LAYOUT_CELLS
    *
    * Fires between begin- and endUpdate after all cells have been layouted in
    * <layoutCells>. The <code>cells</code> property contains all cells that have
    * been passed to <layoutCells>.
    *
-   * Constructor: MxLayoutManager
+   * Constructor: mxLayoutManager
    *
    * Constructs a new automatic layout for the given graph.
    *
@@ -16733,7 +16733,7 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing graph.
    */
-  export class MxLayoutManager extends MxEventSource {
+  export class mxLayoutManager extends mxEventSource {
     constructor(graph: any);
     /**
      * Returns true if events are handled. This implementation
@@ -16823,7 +16823,7 @@ declare module mxgraph {
    * swimlane to its siblings, if <siblings> is true, and its ancestors, if
    * <bubbling> is true.
    *
-   * Constructor: MxSwimlaneManager
+   * Constructor: mxSwimlaneManager
    *
    * Constructs a new swimlane manager for the given graph.
    *
@@ -16831,8 +16831,8 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing graph.
    */
-  export class MxSwimlaneManager extends MxEventSource {
-    constructor(graph: any, horizontal?: any, addEnabled?: any, resizeEnabled?: any);
+  export class mxSwimlaneManager extends mxEventSource {
+    constructor(graph: any, horizontal: any, addEnabled: any, resizeEnabled: any);
     /**
      * Returns true if events are handled. This implementation
      * returns <enabled>.
@@ -16933,7 +16933,7 @@ declare module mxgraph {
   /**
    * Creates a temporary set of cell states.
    */
-  export class MxTemporaryCellStates {
+  export class mxTemporaryCellStates {
     constructor(view: any, scale: any, cells: any, isCellVisibleFn: any, getLinkForCellState: any);
     /**
      * Returns the top, left corner as a new <mxPoint>.
@@ -16945,7 +16945,7 @@ declare module mxgraph {
    *
    * Implements a live preview for moving cells.
    *
-   * Constructor: MxCellStatePreview
+   * Constructor: mxCellStatePreview
    *
    * Constructs a move preview for the given graph.
    *
@@ -16953,14 +16953,14 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing <mxGraph>.
    */
-  export class MxCellStatePreview {
+  export class mxCellStatePreview {
     constructor(graph: any);
     /**
      * Returns true if this contains no entries.
      */
     isEmpty(): boolean;
     /**
-     * Function: MoveState
+     * Function: moveState
      */
     moveState(state: any, dx: any, dy: any, add: any, includeEdges: any): any;
     /**
@@ -16985,7 +16985,7 @@ declare module mxgraph {
    * Defines an object that contains the constraints about how to connect one
    * side of an edge to its terminal.
    */
-  export class MxConnectionConstraint {
+  export class mxConnectionConstraint {
     /**
      * <mxPoint> that specifies the fixed location of the connection point.
      */
@@ -17017,7 +17017,7 @@ declare module mxgraph {
      * @param perimeter - Optional boolean that specifies if the fixed point should be
      * projected onto the perimeter of the terminal. Default is true.
      */
-    constructor(point?: MxPoint, perimeter?: boolean, name?: string, dx?: number, dy?: number);
+    constructor(point?: mxPoint, perimeter?: boolean, name?: string, dx?: number, dy?: number);
   }
 
   /**
@@ -17029,7 +17029,7 @@ declare module mxgraph {
    * To avoid the container to scroll a moved cell into view, set
    * <scrollAfterMove> to false.
    *
-   * Constructor: MxGraphHandler
+   * Constructor: mxGraphHandler
    *
    * Constructs an event handler that creates handles for the
    * selection cells.
@@ -17038,7 +17038,7 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing <mxGraph>.
    */
-  export class MxGraphHandler {
+  export class mxGraphHandler {
     constructor(graph: any);
     /**
      * Reference to the enclosing <mxGraph>.
@@ -17078,7 +17078,7 @@ declare module mxgraph {
     /**
      * Holds the <mxGuide> instance that is used for alignment.
      */
-    guide: MxGuide;
+    guide: mxGuide;
 
     /**
      * Stores the x-coordinate of the current mouse move.
@@ -17140,7 +17140,7 @@ declare module mxgraph {
     /**
      * Reference to the <mxShape> that represents the preview.
      */
-    shape: MxShape;
+    shape: mxShape;
 
     /**
      * Specifies if the bounding box should allow for rotation. Default is true.
@@ -17281,7 +17281,7 @@ declare module mxgraph {
     /**
      * Creates the shape used to draw the preview for the given bounds.
      */
-    createPreviewShape(bounds: any): MxRectangleShape;
+    createPreviewShape(bounds: any): mxRectangleShape;
     /**
      * Starts the handling of the mouse gesture.
      */
@@ -17299,7 +17299,7 @@ declare module mxgraph {
      * Returns an <mxPoint> that represents the vector for moving the cells
      * for the given <mxMouseEvent>.
      */
-    getDelta(me: any): MxPoint;
+    getDelta(me: any): mxPoint;
     /**
      * Hook for subclassers do show details while the handler is active.
      */
@@ -17367,26 +17367,26 @@ declare module mxgraph {
    * steps while panning, use <useGrid>. This handler is built-into
    * <mxGraph.panningHandler> and enabled using <mxGraph.setPanning>.
    *
-   * Event: MxEvent.PAN_START
+   * Event: mxEvent.PAN_START
    *
    * Fires when the panning handler changes its <active> state to true. The
    * <code>event</code> property contains the corresponding <mxMouseEvent>.
    *
-   * Event: MxEvent.PAN
+   * Event: mxEvent.PAN
    *
    * Fires while handle is processing events. The <code>event</code> property contains
    * the corresponding <mxMouseEvent>.
    *
-   * Event: MxEvent.PAN_END
+   * Event: mxEvent.PAN_END
    *
    * Fires when the panning handler changes its <active> state to false. The
    * <code>event</code> property contains the corresponding <mxMouseEvent>.
    */
-  export class MxPanningHandler extends MxEventSource {
+  export class mxPanningHandler extends mxEventSource {
     /**
      * Reference to the enclosing <mxGraph>.
      */
-    graph: MxGraph;
+    graph: mxGraph;
     /**
      * Specifies if panning should be active for the left mouse button.
      * Setting this to true may conflict with <mxRubberband>. Default is false.
@@ -17459,7 +17459,7 @@ declare module mxgraph {
      * and pans the graph.
      * @param graph
      */
-    constructor(graph: MxGraph);
+    constructor(graph: mxGraph);
     /**
      * Returns true if the handler is currently active.
      */
@@ -17550,11 +17550,11 @@ declare module mxgraph {
   /**
    * Event handler that creates popupmenus.
    *
-   * Constructor: MxPopupMenuHandler
+   * Constructor: mxPopupMenuHandler
    *
    * Constructs an event handler that creates a <mxPopupMenu>.
    */
-  export class MxPopupMenuHandler extends MxPopupMenu {
+  export class mxPopupMenuHandler extends mxPopupMenu {
     constructor(graph?: any, factoryMethod?: any);
     /**
      * Initializes the shapes required for this vertex handler.
@@ -17607,12 +17607,12 @@ declare module mxgraph {
    * });
    * (end)
    *
-   * Event: MxEvent.MARK
+   * Event: mxEvent.MARK
    *
    * Fires after a cell has been marked or unmarked. The <code>state</code>
    * property contains the marked <mxCellState> or null if no state is marked.
    *
-   * Constructor: MxCellMarker
+   * Constructor: mxCellMarker
    *
    * Constructs a new cell marker.
    *
@@ -17627,7 +17627,7 @@ declare module mxgraph {
    * given coordinate pair. A value of 0 means always highlight. Default is
    * <mxConstants.DEFAULT_HOTSPOT>.
    */
-  export class MxCellMarker extends MxEventSource {
+  export class mxCellMarker extends mxEventSource {
     constructor(graph: any, validColor: any, invalidColor: any, hotspot: any);
     /**
      * Enables or disables event handling. This implementation
@@ -17744,12 +17744,12 @@ declare module mxgraph {
    *
    * Group: Events
    *
-   * Event: MxEvent.ADD
+   * Event: mxEvent.ADD
    *
    * Fires if a cell has been added to the selection. The <code>state</code>
    * property contains the <mxCellState> that has been added.
    *
-   * Event: MxEvent.REMOVE
+   * Event: mxEvent.REMOVE
    *
    * Fires if a cell has been remove from the selection. The <code>state</code>
    * property contains the <mxCellState> that has been removed.
@@ -17758,7 +17758,7 @@ declare module mxgraph {
    *
    * graph - Reference to the enclosing <mxGraph>.
    */
-  export class MxSelectionCellsHandler extends MxEventSource {
+  export class mxSelectionCellsHandler extends mxEventSource {
     constructor(graph: any);
     /**
      * Returns <enabled>.
@@ -17903,12 +17903,12 @@ declare module mxgraph {
    *
    * Group: Events
    *
-   * Event: MxEvent.START
+   * Event: mxEvent.START
    *
    * Fires when a new connection is being created by the user. The <code>state</code>
    * property contains the state of the source cell.
    *
-   * Event: MxEvent.CONNECT
+   * Event: mxEvent.CONNECT
    *
    * Fires between begin- and endUpdate in <connect>. The <code>cell</code>
    * property contains the inserted edge, the <code>event</code> and <code>target</code>
@@ -17940,11 +17940,11 @@ declare module mxgraph {
    * });
    * (end)
    *
-   * Event: MxEvent.RESET
+   * Event: mxEvent.RESET
    *
    * Fires when the <reset> method is invoked.
    */
-  export class MxConnectionHandler extends MxEventSource {
+  export class mxConnectionHandler extends mxEventSource {
     /**
      * Reference to the enclosing <mxGraph>.
      */
@@ -18024,7 +18024,7 @@ declare module mxgraph {
      * Note that placing the icon under the mouse pointer with an
      * offset of (0,0) will affect hit detection.
      */
-    connectIconOffset: MxPoint;
+    connectIconOffset: mxPoint;
     /**
      * Optional <mxCellState> that represents the preview edge while the
      * handler is active. This is created in <createEdgeState>.
@@ -18093,7 +18093,7 @@ declare module mxgraph {
      * source and target <mxCell> as the first and second argument and returns
      * a new <mxCell> that represents the edge. This is used in <createEdge>.
      */
-    factoryMethod(): MxCell;
+    factoryMethod(): mxCell;
     /**
      * Returns true if events are handled. This implementation
      * returns <enabled>.
@@ -18115,7 +18115,7 @@ declare module mxgraph {
      *
      * cell - <mxCell>
      */
-    isCellEnabled(cell: MxCell): boolean;
+    isCellEnabled(cell: mxCell): boolean;
     /**
      * Returns <insertBeforeSource> for non-loops and false for loops.
      *
@@ -18241,7 +18241,7 @@ declare module mxgraph {
      *
      * icons - Optional array of <mxImageShapes> to be redrawn.
      */
-    getIconPosition(icon: any, state: any): MxPoint;
+    getIconPosition(icon: any, state: any): mxPoint;
     /**
      * Destroys the connect icons and resets the respective state.
      */
@@ -18459,7 +18459,7 @@ declare module mxgraph {
    * showing fixed points when the mouse is over a vertex and handles constraints
    * to establish new connections.
    *
-   * Constructor: MxConstraintHandler
+   * Constructor: mxConstraintHandler
    *
    * Constructs an new constraint handler.
    *
@@ -18470,12 +18470,12 @@ declare module mxgraph {
    * the source and target <mxCell> as the first and second argument and
    * returns the <mxCell> that represents the new edge.
    */
-  export class MxConstraintHandler {
+  export class mxConstraintHandler {
     constructor(graph: any);
     /**
      * <mxImage> to be used as the image for fixed connection points.
      */
-    pointImage: MxImage;
+    pointImage: mxImage;
 
     /**
      * Reference to the enclosing <mxGraph>.
@@ -18571,7 +18571,7 @@ declare module mxgraph {
      *
      * Returns true if the given icon intersects the given point.
      */
-    createHighlightShape(): MxRectangleShape;
+    createHighlightShape(): mxRectangleShape;
     /**
      * Returns true if the given icon intersects the given rectangle.
      */
@@ -18592,12 +18592,12 @@ declare module mxgraph {
    * var rubberband = new mxRubberband(graph);
    * (end)
    *
-   * Constructor: MxRubberband
+   * Constructor: mxRubberband
    *
    * Constructs an event handler that selects rectangular regions in the graph
    * using rubberband selection.
    */
-  export class MxRubberband {
+  export class mxRubberband {
     constructor(graph: any);
     /**
      * Specifies the default opacity to be used for the rubberband div. Default
@@ -18708,7 +18708,7 @@ declare module mxgraph {
   /**
    * Implements a single custom handle for vertices.
    *
-   * Constructor: MxHandle
+   * Constructor: mxHandle
    *
    * Constructs a new handle for the given state.
    *
@@ -18716,7 +18716,7 @@ declare module mxgraph {
    *
    * state - <mxCellState> of the cell to be handled.
    */
-  export class MxHandle {
+  export class mxHandle {
     constructor(state: any, cursor: any, image: any);
     /**
      * Hook for subclassers to return the current position of the handle.
@@ -18759,7 +18759,7 @@ declare module mxgraph {
     /**
      * Creates and returns the shape for this handle.
      */
-    createShape(html: any): MxRectangleShape;
+    createShape(html: any): mxRectangleShape;
     /**
      * Initializes <shape> and sets its cursor.
      */
@@ -18804,7 +18804,7 @@ declare module mxgraph {
    * Event handler for resizing cells. This handler is automatically created in
    * <mxGraph.createHandler>.
    *
-   * Constructor: MxVertexHandler
+   * Constructor: mxVertexHandler
    *
    * Constructs an event handler that allows to resize vertices
    * and groups.
@@ -18813,16 +18813,16 @@ declare module mxgraph {
    *
    * state - <mxCellState> of the cell to be resized.
    */
-  export class MxVertexHandler {
+  export class mxVertexHandler {
     constructor(state: any);
     /**
      * Reference to the enclosing mxGraph.
      */
-    graph: MxGraph;
+    graph: mxGraph;
     /**
      * Reference to the mxCellState being modified.
      */
-    state: MxCellState;
+    state: mxCellState;
     /**
      * Specifies if only one sizer handle at the bottom, right corner should be
      * used. Default is false.
@@ -18843,7 +18843,7 @@ declare module mxgraph {
     /**
      * Optional <mxImage> to be used as handles. Default is null.
      */
-    handleImage: MxImage;
+    handleImage: mxImage;
 
     /**
      * Optional tolerance for hit-detection in <getHandleForEvent>. Default is 0.
@@ -18934,15 +18934,15 @@ declare module mxgraph {
      * Returns the mxRectangle that defines the bounds of the selection
      * border.
      */
-    getSelectionBounds(state: any): MxRectangle;
+    getSelectionBounds(state: any): mxRectangle;
     /**
      * Creates the shape used to draw the selection border.
      */
-    createParentHighlightShape(bounds: any): MxRectangleShape;
+    createParentHighlightShape(bounds: any): mxRectangleShape;
     /**
      * Creates the shape used to draw the selection border.
      */
-    createSelectionShape(bounds: any): MxRectangleShape;
+    createSelectionShape(bounds: any): mxRectangleShape;
     /**
      * Returns <mxConstants.VERTEX_SELECTION_COLOR>.
      */
@@ -19139,7 +19139,7 @@ declare module mxgraph {
      * };
      * (end)
      */
-    union(bounds: any, dx: any, dy: any, index: any, gridEnabled: any, scale: any, tr: any, constrained: any, centered: any): MxRectangle;
+    union(bounds: any, dx: any, dy: any, index: any, gridEnabled: any, scale: any, tr: any, constrained: any, centered: any): mxRectangle;
     /**
      * Redraws the handles and the preview.
      */
@@ -19147,7 +19147,7 @@ declare module mxgraph {
     /**
      * Returns the padding to be used for drawing handles for the current <bounds>.
      */
-    getHandlePadding(): MxPoint;
+    getHandlePadding(): mxPoint;
     /**
      * Redraws the handles. To hide certain handles the following code can be used.
      *
@@ -19194,7 +19194,7 @@ declare module mxgraph {
    *
    * Note: This experimental feature is not recommended for production use.
    *
-   * Constructor: MxEdgeHandler
+   * Constructor: mxEdgeHandler
    *
    * Constructs an edge handler for the specified <mxCellState>.
    *
@@ -19202,7 +19202,7 @@ declare module mxgraph {
    *
    * state - <mxCellState> of the cell to be handled.
    */
-  export class MxEdgeHandler {
+  export class mxEdgeHandler {
     constructor(state: any);
     /**
      * Reference to the enclosing <mxGraph>.
@@ -19223,7 +19223,7 @@ declare module mxgraph {
      * Holds the <mxConstraintHandler> used for drawing and highlighting
      * constraints.
      */
-    constraintHandler: MxConstraintHandler;
+    constraintHandler: mxConstraintHandler;
 
     /**
      * Holds the current validation error while a connection is being changed.
@@ -19233,7 +19233,7 @@ declare module mxgraph {
     /**
      * Holds the <mxShape> that represents the preview edge.
      */
-    shape: MxShape;
+    shape: mxShape;
 
     /**
      * Holds the <mxShapes> that represent the points.
@@ -19243,7 +19243,7 @@ declare module mxgraph {
     /**
      * Holds the <mxShape> that represents the label position.
      */
-    labelShape: MxShape;
+    labelShape: mxShape;
 
     /**
      * Specifies if cloning by control-drag is enabled. Default is true.
@@ -19321,7 +19321,7 @@ declare module mxgraph {
     /**
      * Optional <mxImage> to be used as handles. Default is null.
      */
-    handleImage: MxImage;
+    handleImage: mxImage;
 
     /**
      * Optional tolerance for hit-detection in <getHandleForEvent>. Default is 0.
@@ -19371,7 +19371,7 @@ declare module mxgraph {
     /**
      * Creates the shape used to draw the selection border.
      */
-    createParentHighlightShape(bounds: any): MxRectangleShape;
+    createParentHighlightShape(bounds: any): mxRectangleShape;
     /**
      * Creates the shape used to draw the selection border.
      */
@@ -19504,7 +19504,7 @@ declare module mxgraph {
     /**
      * Returns the point for the given event.
      */
-    getPointForEvent(me: any): MxPoint;
+    getPointForEvent(me: any): mxPoint;
     /**
      * Updates the given preview state taking into account the state of the constraint handler.
      */
@@ -19656,7 +19656,7 @@ declare module mxgraph {
    * highlighting new source and target vertices. This handler is automatically
    * created in <mxGraph.createHandler>. It extends <mxEdgeHandler>.
    *
-   * Constructor: MxEdgeHandler
+   * Constructor: mxEdgeHandler
    *
    * Constructs an edge handler for the specified <mxCellState>.
    *
@@ -19664,7 +19664,7 @@ declare module mxgraph {
    *
    * state - <mxCellState> of the cell to be modified.
    */
-  export class MxElbowEdgeHandler extends MxEdgeHandler {
+  export class mxElbowEdgeHandler extends mxEdgeHandler {
     constructor(state: any);
     /**
      * Overrides <mxEdgeHandler.createBends> to create custom bends.
@@ -19704,7 +19704,7 @@ declare module mxgraph {
     redrawInnerBends(p0: any, pe: any): void;
   }
 
-  export class MxEdgeSegmentHandler extends MxElbowEdgeHandler {
+  export class mxEdgeSegmentHandler extends mxElbowEdgeHandler {
     constructor(state: any);
     /**
      * Returns the current absolute points.
@@ -19791,7 +19791,7 @@ declare module mxgraph {
    * };
    * (end)
    *
-   * Constructor: MxKeyHandler
+   * Constructor: mxKeyHandler
    *
    * Constructs an event handler that executes functions bound to specific
    * keystrokes.
@@ -19803,7 +19803,7 @@ declare module mxgraph {
    * element is used as the event target, that is, the object where the key
    * event listener is installed.
    */
-  export class MxKeyHandler {
+  export class mxKeyHandler {
     constructor(graph: any, target?: any);
     /**
      * Returns true if events are handled. This implementation returns
@@ -19948,7 +19948,7 @@ declare module mxgraph {
    * new mxTooltipHandler(graph);
    * (end)
    *
-   * Constructor: MxTooltipHandler
+   * Constructor: mxTooltipHandler
    *
    * Constructs an event handler that displays tooltips with the specified
    * delay (in milliseconds). If no delay is specified then a default delay
@@ -19959,7 +19959,7 @@ declare module mxgraph {
    * graph - Reference to the enclosing <mxGraph>.
    * delay - Optional delay in milliseconds.
    */
-  export class MxTooltipHandler {
+  export class mxTooltipHandler {
     constructor(graph: any, delay?: number);
     /**
      * Delay to show the tooltip in milliseconds.  Default is 500.
@@ -20094,7 +20094,7 @@ declare module mxgraph {
    * });
    * (end)
    *
-   * Constructor: MxCellTracker
+   * Constructor: mxCellTracker
    *
    * Constructs an event handler that highlights cells.
    *
@@ -20105,7 +20105,7 @@ declare module mxgraph {
    * funct - Optional JavaScript function that is used to override
    * <mxCellMarker.getCell>.
    */
-  export class MxCellTracker extends MxCellMarker {
+  export class mxCellTracker extends mxCellMarker {
     constructor(graph: any, color: any, funct: any);
     /**
      * Ignores the event. The event is not consumed.
@@ -20136,11 +20136,11 @@ declare module mxgraph {
    * highlight.highlight(graph.view.getState(cell)));
    * (end)
    *
-   * Constructor: MxCellHighlight
+   * Constructor: mxCellHighlight
    *
    * Constructs a cell highlight.
    */
-  export class MxCellHighlight {
+  export class mxCellHighlight {
     constructor(graph: any, highlightColor: any, strokeWidth: any, dashed?: any);
     /**
      * Specifies if the highlights should appear on top of everything
@@ -20240,7 +20240,7 @@ declare module mxgraph {
    * An <mxEvent.ESCAPE> event is fired via the editor if the escape key is
    * pressed.
    *
-   * Constructor: MxDefaultKeyHandler
+   * Constructor: mxDefaultKeyHandler
    *
    * Constructs a new default key handler for the <mxEditor.graph> in the
    * given <mxEditor>. (The editor may be null if a prototypical instance for
@@ -20250,7 +20250,7 @@ declare module mxgraph {
    *
    * editor - Reference to the enclosing <mxEditor>.
    */
-  export class MxDefaultKeyHandler {
+  export class mxDefaultKeyHandler {
     constructor(editor: any);
     /**
      * Binds the specified keycode to the given action in <editor>. The
@@ -20291,7 +20291,7 @@ declare module mxgraph {
    * by this class during program execution, so the format is described
    * below.
    *
-   * Constructor: MxDefaultPopupMenu
+   * Constructor: mxDefaultPopupMenu
    *
    * Constructs a new popupmenu-factory based on given configuration.
    *
@@ -20299,7 +20299,7 @@ declare module mxgraph {
    *
    * config - XML node that contains the configuration data.
    */
-  export class MxDefaultPopupMenu {
+  export class mxDefaultPopupMenu {
     constructor(config: any);
     /**
      * This function is called from <mxEditor> to add items to the
@@ -20464,7 +20464,7 @@ declare module mxgraph {
    * data into an existing instance. See <mxDefaultToolbarCodec> for a
    * description of the configuration format.
    *
-   * Constructor: MxDefaultToolbar
+   * Constructor: mxDefaultToolbar
    *
    * Constructs a new toolbar for the given container and editor. The
    * container and editor may be null if a prototypical instance for a
@@ -20475,7 +20475,7 @@ declare module mxgraph {
    * container - DOM node that contains the toolbar.
    * editor - Reference to the enclosing <mxEditor>.
    */
-  export class MxDefaultToolbar {
+  export class mxDefaultToolbar {
     constructor(container: any, editor: any);
     /**
      * Constructs the <toolbar> for the given container and installs a listener
@@ -20889,47 +20889,47 @@ declare module mxgraph {
    * Called from within the constructor. In the callback,
    * "this" refers to the editor instance.
    *
-   * Cookie: Mxgraph=seen
+   * Cookie: mxgraph=seen
    *
    * Set when the editor is started. Never expires. Use
    * <resetFirstTime> to reset this cookie. This cookie
    * only exists if <onInit> is implemented.
    *
-   * Event: MxEvent.OPEN
+   * Event: mxEvent.OPEN
    *
    * Fires after a file was opened in <open>. The <code>filename</code> property
    * contains the filename that was used. The same value is also available in
    * <filename>.
    *
-   * Event: MxEvent.SAVE
+   * Event: mxEvent.SAVE
    *
    * Fires after the current file was saved in <save>. The <code>url</code>
    * property contains the URL that was used for saving.
    *
-   * Event: MxEvent.POST
+   * Event: mxEvent.POST
    *
    * Fires if a successful response was received in <postDiagram>. The
    * <code>request</code> property contains the <mxXmlRequest>, the
    * <code>url</code> and <code>data</code> properties contain the URL and the
    * data that were used in the post request.
    *
-   * Event: MxEvent.ROOT
+   * Event: mxEvent.ROOT
    *
    * Fires when the current root has changed, or when the title of the current
    * root has changed. This event has no properties.
    *
-   * Event: MxEvent.BEFORE_ADD_VERTEX
+   * Event: mxEvent.BEFORE_ADD_VERTEX
    *
    * Fires before a vertex is added in <addVertex>. The <code>vertex</code>
    * property contains the new vertex and the <code>parent</code> property
    * contains its parent.
    *
-   * Event: MxEvent.ADD_VERTEX
+   * Event: mxEvent.ADD_VERTEX
    *
    * Fires between begin- and endUpdate in <addVertex>. The <code>vertex</code>
    * property contains the vertex that is being inserted.
    *
-   * Event: MxEvent.AFTER_ADD_VERTEX
+   * Event: mxEvent.AFTER_ADD_VERTEX
    *
    * Fires after a vertex was inserted and selected in <addVertex>. The
    * <code>vertex</code> property contains the new vertex.
@@ -20951,12 +20951,12 @@ declare module mxgraph {
    * });
    * (end)
    *
-   * Event: MxEvent.ESCAPE
+   * Event: mxEvent.ESCAPE
    *
    * Fires when the escape key is pressed. The <code>event</code> property
    * contains the key event.
    *
-   * Constructor: MxEditor
+   * Constructor: mxEditor
    *
    * Constructs a new editor. This function invokes the <onInit> callback
    * upon completion.
@@ -20972,7 +20972,7 @@ declare module mxgraph {
    *
    * config - Optional XML node that contains the configuration.
    */
-  export class MxEditor extends MxEventSource {
+  export class mxEditor extends mxEventSource {
     constructor(config?: any);
 
     /*
@@ -21115,7 +21115,7 @@ declare module mxgraph {
     getTemplate(name: any): any;
     /**
      * Creates the <graph> for the editor. The graph is created with no
-     * container and is initialized from <mxGraph>.
+     * container and is initialized from <setGraphContainer>.
      */
     createGraph(): any;
     /**
@@ -21126,7 +21126,7 @@ declare module mxgraph {
      * Creates a layout manager for the swimlane and diagram layouts, that
      * is, the locally defined inter- and intraswimlane layouts.
      */
-    createLayoutManager(graph: any): MxLayoutManager;
+    createLayoutManager(graph: any): mxLayoutManager;
     /**
      * Sets the graph's container using <mxGraph.init>.
      */
@@ -21168,7 +21168,7 @@ declare module mxgraph {
     /**
      * Creates the <toolbar> with no container.
      */
-    createToolbar(): MxDefaultToolbar;
+    createToolbar(): mxDefaultToolbar;
     /**
      * Initializes the toolbar for the given container.
      */
@@ -21468,7 +21468,7 @@ declare module mxgraph {
     destroy(): void;
   }
 
-  export let mxCodecRegistry: {
+  export var mxCodecRegistry: {
     codecs: any[];
     aliases: any[];
     register(codec: any): any;
@@ -21572,7 +21572,7 @@ declare module mxgraph {
    * };
    * (end)
    *
-   * Constructor: MxCodec
+   * Constructor: mxCodec
    *
    * Constructs an XML encoder/decoder for the specified
    * owner document.
@@ -21583,7 +21583,7 @@ declare module mxgraph {
    * If no document is specified then a new document is created
    * using <mxUtils.createXmlDocument>.
    */
-  export class MxCodec {
+  export class mxCodec {
     constructor(document?: any);
 
     /*
@@ -21937,7 +21937,7 @@ declare module mxgraph {
    *
    * Expressions are only evaluated if <allowEval> is true.
    *
-   * Constructor: MxObjectCodec
+   * Constructor: mxObjectCodec
    *
    * Constructs a new codec for the specified template object.
    * The variables in the optional exclude array are ignored by
@@ -21960,7 +21960,7 @@ declare module mxgraph {
    * references.
    * mapping - Optional mapping from field- to attributenames.
    */
-  export class MxObjectCodec {
+  export class mxObjectCodec {
     constructor(template: any, exclude?: any, idrefs?: any, mapping?: any);
     /**
      * Returns the name used for the nodenames and lookup of the codec when
@@ -22345,7 +22345,7 @@ declare module mxgraph {
   /**
    * A hierarchical layout algorithm.
    *
-   * Constructor: MxHierarchicalLayout
+   * Constructor: mxHierarchicalLayout
    *
    * Constructs a new hierarchical layout algorithm.
    *
@@ -22357,7 +22357,7 @@ declare module mxgraph {
    * deterministic - Optional boolean that specifies if this layout should be
    * deterministic. Default is true.
    */
-  export class MxHierarchicalLayout extends MxGraphLayout {
+  export class mxHierarchicalLayout extends mxGraphLayout {
     constructor(graph: any, orientation?: string, deterministic?: boolean);
 
     /**
@@ -22576,7 +22576,7 @@ declare module mxgraph {
      */
     placementStage(initialX: any, parent: any): any;
   }
-  export let mxHierarchicalEdgeStyle: {
+  export var mxHierarchicalEdgeStyle: {
     ORTHOGONAL: number;
     POLYLINE: number;
     STRAIGHT: number;
@@ -22586,7 +22586,7 @@ declare module mxgraph {
   /**
    * A hierarchical layout algorithm.
    *
-   * Constructor: MxSwimlaneLayout
+   * Constructor: mxSwimlaneLayout
    *
    * Constructs a new hierarchical layout algorithm.
    *
@@ -22598,7 +22598,7 @@ declare module mxgraph {
    * deterministic - Optional boolean that specifies if this layout should be
    * deterministic. Default is true.
    */
-  export class MxSwimlaneLayout extends MxGraphLayout {
+  export class mxSwimlaneLayout extends mxGraphLayout {
     constructor(graph: any, orientation?: any, deterministic?: any);
     /**
      * Returns the internal <mxSwimlaneModel> for this layout algorithm.
@@ -22721,11 +22721,11 @@ declare module mxgraph {
    * <code>run</code> method with a parameter for the hierarchical layout model
    * that is shared between the layout stages.
    *
-   * Constructor: MxHierarchicalLayoutStage
+   * Constructor: mxHierarchicalLayoutStage
    *
    * Constructs a new hierarchical layout stage.
    */
-  export class MxHierarchicalLayoutStage {
+  export class mxHierarchicalLayoutStage {
     /**
      * Takes the graph detail and configuration information within the facade
      * and creates the resulting laid out graph within that facade for further
@@ -22739,7 +22739,7 @@ declare module mxgraph {
    * Uses median down and up weighings as well heuristic to straighten edges as
    * far as possible.
    *
-   * Constructor: MxMedianHybridCrossingReduction
+   * Constructor: mxMedianHybridCrossingReduction
    *
    * Creates a coordinate assignment.
    *
@@ -22750,7 +22750,7 @@ declare module mxgraph {
    * orientation - the position of the root node(s) relative to the graph
    * initialX - the leftmost coordinate node placement starts at
    */
-  export class MxMedianHybridCrossingReduction extends MxHierarchicalLayoutStage {
+  export class mxMedianHybridCrossingReduction extends mxHierarchicalLayoutStage {
     constructor(layout: any);
     /**
      * Performs a vertex ordering within ranks as described by Gansner et al
@@ -22840,11 +22840,11 @@ declare module mxgraph {
    * An implementation of the first stage of the Sugiyama layout. Straightforward
    * longest path calculation of layer assignment
    *
-   * Constructor: MxMinimumCycleRemover
+   * Constructor: mxMinimumCycleRemover
    *
    * Creates a cycle remover for the given internal model.
    */
-  export class MxMinimumCycleRemover extends MxHierarchicalLayoutStage {
+  export class mxMinimumCycleRemover extends mxHierarchicalLayoutStage {
     constructor(layout: any);
     /**
      * Takes the graph detail and configuration information within the facade
@@ -22859,7 +22859,7 @@ declare module mxgraph {
    * Uses median down and up weighings as well as heuristics to straighten edges as
    * far as possible.
    *
-   * Constructor: MxCoordinateAssignment
+   * Constructor: mxCoordinateAssignment
    *
    * Creates a coordinate assignment.
    *
@@ -22870,7 +22870,7 @@ declare module mxgraph {
    * orientation - the position of the root node(s) relative to the graph
    * initialX - the leftmost coordinate node placement starts at
    */
-  export class MxCoordinateAssignment extends MxHierarchicalLayoutStage {
+  export class mxCoordinateAssignment extends mxHierarchicalLayoutStage {
     constructor(layout: any, intraCellSpacing: any, interRankCellSpacing: any, orientation: any, initialX: any, parallelEdgeSpacing: any);
     /**
      * Utility method to display current positions
@@ -23025,11 +23025,11 @@ declare module mxgraph {
    * An implementation of the first stage of the Sugiyama layout. Straightforward
    * longest path calculation of layer assignment
    *
-   * Constructor: MxSwimlaneOrdering
+   * Constructor: mxSwimlaneOrdering
    *
    * Creates a cycle remover for the given internal model.
    */
-  export class MxSwimlaneOrdering extends MxHierarchicalLayoutStage {
+  export class mxSwimlaneOrdering extends mxHierarchicalLayoutStage {
     constructor(layout: any);
     /**
      * Takes the graph detail and configuration information within the facade
@@ -23042,7 +23042,7 @@ declare module mxgraph {
   /**
    * An abstraction of an internal hierarchy node or edge
    *
-   * Constructor: MxGraphAbstractHierarchyCell
+   * Constructor: mxGraphAbstractHierarchyCell
    *
    * Constructs a new hierarchical layout algorithm.
    *
@@ -23052,7 +23052,7 @@ declare module mxgraph {
    * deterministic - Optional boolean that specifies if this layout should be
    * deterministic. Default is true.
    */
-  export class MxGraphAbstractHierarchyCell {
+  export class mxGraphAbstractHierarchyCell {
     constructor(graph: any, deterministic?: boolean);
     /**
      * Returns the cells this cell connects to on the next layer up
@@ -23095,7 +23095,7 @@ declare module mxgraph {
   /**
    * An abstraction of a hierarchical edge for the hierarchy layout
    *
-   * Constructor: MxGraphHierarchyNode
+   * Constructor: mxGraphHierarchyNode
    *
    * Constructs an internal node to represent the specified real graph cell
    *
@@ -23103,7 +23103,7 @@ declare module mxgraph {
    *
    * cell - the real graph cell this node represents
    */
-  export class MxGraphHierarchyNode extends MxGraphAbstractHierarchyCell {
+  export class mxGraphHierarchyNode extends mxGraphAbstractHierarchyCell {
     constructor(cell: any);
     /**
      * Returns the integer value of the layer that this node resides in
@@ -23142,7 +23142,7 @@ declare module mxgraph {
   /**
    * An abstraction of a hierarchical edge for the hierarchy layout
    *
-   * Constructor: MxGraphHierarchyEdge
+   * Constructor: mxGraphHierarchyEdge
    *
    * Constructs a hierarchy edge
    *
@@ -23150,7 +23150,7 @@ declare module mxgraph {
    *
    * edges - a list of real graph edges this abstraction represents
    */
-  export class MxGraphHierarchyEdge extends MxGraphAbstractHierarchyCell {
+  export class mxGraphHierarchyEdge extends mxGraphAbstractHierarchyCell {
     constructor(edges: any);
     /**
      * Inverts the direction of this internal edge(s)
@@ -23189,7 +23189,7 @@ declare module mxgraph {
    * The internal model also reverses edge direction were appropriate , ignores
    * self-loop and groups parallels together under one edge object.
    *
-   * Constructor: MxGraphHierarchyModel
+   * Constructor: mxGraphHierarchyModel
    *
    * Creates an internal ordered graph model using the vertices passed in. If
    * there are any, leftward edge need to be inverted in the internal model
@@ -23204,7 +23204,7 @@ declare module mxgraph {
    * scanRanksFromSinks - Whether rank assignment is from the sinks or sources.
    * usage
    */
-  export class MxGraphHierarchyModel {
+  export class mxGraphHierarchyModel {
     constructor(layout: any, vertices: any, roots: any, parent: any, tightenToSource: any);
     /**
      * Creates all edges in the internal model
@@ -23282,7 +23282,7 @@ declare module mxgraph {
    * The internal model also reverses edge direction were appropriate , ignores
    * self-loop and groups parallels together under one edge object.
    *
-   * Constructor: MxSwimlaneModel
+   * Constructor: mxSwimlaneModel
    *
    * Creates an internal ordered graph model using the vertices passed in. If
    * there are any, leftward edge need to be inverted in the internal model
@@ -23297,7 +23297,7 @@ declare module mxgraph {
    * scanRanksFromSinks - Whether rank assignment is from the sinks or sources.
    * usage
    */
-  export class MxSwimlaneModel {
+  export class mxSwimlaneModel {
     constructor(layout: any, vertices: any, roots: any, parent: any, tightenToSource: any);
     /**
      * Creates all edges in the internal model
