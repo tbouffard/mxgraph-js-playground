@@ -65,35 +65,28 @@ function createCondition(graph: mxgraph.mxGraph, lane: mxgraph.mxCell, name: str
   return graph.insertVertex(lane, null, name, x, y, TASK_HEIGHT, TASK_HEIGHT, 'condition') as mxgraph.mxCell;
 }
 
-function createDefaultTransition(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): mxgraph.mxEdge {
-  return graph.insertEdge(parent, null, name, source, target, style) as mxgraph.mxEdge;
+function createDefaultTransition(graph: mxgraph.mxGraph, source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): mxgraph.mxEdge {
+  return graph.insertEdge(graph.getDefaultParent(), null, name, source, target, style) as mxgraph.mxEdge;
 }
 
-function createDefaultTransitionWithPoint(
-  graph: mxgraph.mxGraph,
-  parent: mxgraph.mxCell,
-  source: mxgraph.mxCell,
-  target: mxgraph.mxCell,
-  name = null,
-  style?: string,
-): mxgraph.mxEdge {
-  const transition = createDefaultTransition(graph, parent, source, target, name, style);
+function createDefaultTransitionWithPoint(graph: mxgraph.mxGraph, source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): mxgraph.mxEdge {
+  const transition = createDefaultTransition(graph, source, target, name, style);
   transition.geometry.points = [new mxPoint(source.geometry.x + source.geometry.width / 2, target.geometry.y + target.geometry.height / 2)];
   return transition as mxgraph.mxEdge;
 }
 
-function createCrossoverTransition(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
-  return graph.insertEdge(parent, null, null, source, target, 'crossover');
+function createCrossoverTransition(graph: mxgraph.mxGraph, source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
+  return graph.insertEdge(graph.getDefaultParent(), null, null, source, target, 'crossover');
 }
 
-function createCrossoverTransitionWithPoint(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
-  const transition = createCrossoverTransition(graph, parent, source, target);
+function createCrossoverTransitionWithPoint(graph: mxgraph.mxGraph, source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
+  const transition = createCrossoverTransition(graph, source, target);
   transition.geometry.points = [new mxPoint(target.geometry.x + target.geometry.width / 2 + 20, source.geometry.y + (source.geometry.height * 4) / 5)];
   return transition as mxgraph.mxEdge;
 }
 
-function createAnimatedTransition(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell) {
-  return graph.insertEdge(parent, null, null, source, target, 'animated');
+function createAnimatedTransition(graph: mxgraph.mxGraph, source: mxgraph.mxCell, target: mxgraph.mxCell) {
+  return graph.insertEdge(graph.getDefaultParent(), null, null, source, target, 'animated');
 }
 
 mxGraph.prototype.edgeLabelsMovable = false;
@@ -313,12 +306,12 @@ export class BpmnJs {
       const { task11, task111, task1Out, task3, task33, edgesWithTransition } = this.createPool1();
       const { task2In, task22, task4, task44 } = this.createPool2();
 
-      createDefaultTransition(this.graph, parent, task22, task3);
-      createDefaultTransition(this.graph, parent, task44, task111, 'Yes', 'verticalAlign=bottom;horizontal=0;');
-      createCrossoverTransition(this.graph, parent, task1Out, task2In);
-      createCrossoverTransition(this.graph, parent, task3, task11);
-      createCrossoverTransitionWithPoint(this.graph, parent, task11, task33);
-      createDefaultTransition(this.graph, parent, task33, task4);
+      createDefaultTransition(this.graph, task22, task3);
+      createDefaultTransition(this.graph, task44, task111, 'Yes', 'verticalAlign=bottom;horizontal=0;');
+      createCrossoverTransition(this.graph, task1Out, task2In);
+      createCrossoverTransition(this.graph, task3, task11);
+      createCrossoverTransitionWithPoint(this.graph, task11, task33);
+      createDefaultTransition(this.graph, task33, task4);
 
       return edgesWithTransition;
     } finally {
@@ -348,10 +341,10 @@ export class BpmnJs {
     const task111 = createTask(this.graph, lane, 'Receive and\nAcknowledge', 920);
 
     const edgesWithTransition = [];
-    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, start1, task1));
-    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, task1, task11));
-    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, task11, task111));
-    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, task111, end1));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, start1, task1));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, task1, task11));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, task11, task111));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, task111, end1));
 
     return { start1, end1, task1, task1Out, task11, task111, edgesWithTransition };
   }
@@ -362,7 +355,7 @@ export class BpmnJs {
     const task3 = createTask(this.graph, lane, 'Request 1st-\nGate\nInformation', 400, TASK_Y_LITTLE);
     const task33 = createTask(this.graph, lane, 'Receive 1st-\nGate\nInformation', 650, TASK_Y_LITTLE);
 
-    createDefaultTransition(this.graph, lane, task3, task33);
+    createDefaultTransition(this.graph, task3, task33);
 
     return { task3, task33 };
   }
@@ -387,10 +380,10 @@ export class BpmnJs {
     const end2 = createEndEvent(this.graph, lane, 'B', TASK_Y_LARGE - EVENT_WIDTH);
     const end3 = createEndEvent(this.graph, lane, 'C', TASK_Y_LARGE + TASK_HEIGHT);
 
-    createDefaultTransition(this.graph, lane, task4, task44);
-    createDefaultTransition(this.graph, lane, task44, task444, 'No', 'verticalAlign=bottom');
-    createDefaultTransitionWithPoint(this.graph, lane, task444, end2, 'Yes', 'verticalAlign=bottom');
-    createDefaultTransitionWithPoint(this.graph, lane, task444, end3, 'No', 'verticalAlign=top');
+    createDefaultTransition(this.graph, task4, task44);
+    createDefaultTransition(this.graph, task44, task444, 'No', 'verticalAlign=bottom');
+    createDefaultTransitionWithPoint(this.graph, task444, end2, 'Yes', 'verticalAlign=bottom');
+    createDefaultTransitionWithPoint(this.graph, task444, end3, 'No', 'verticalAlign=top');
 
     return { task4, task44, task444, end2, end3 };
   }
@@ -404,8 +397,8 @@ export class BpmnJs {
     const task2In = createBoundaryEvent(this.graph, task2, 'In', 0.5, -0.5);
     const task22 = createTask(this.graph, lane, 'Refer to Tap\nSystems\nCoordinator', 400, TASK_Y_LITTLE);
 
-    createDefaultTransition(this.graph, lane, start2, task2);
-    createDefaultTransition(this.graph, lane, task2, task22);
+    createDefaultTransition(this.graph, start2, task2);
+    createDefaultTransition(this.graph, task2, task22);
 
     return { start2, task2, task2In, task22 };
   }
