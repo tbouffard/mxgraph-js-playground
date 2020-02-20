@@ -1,4 +1,4 @@
-import { MxCell, MxGraph } from 'mxgraph';
+import { mxgraph } from 'mxgraph';
 import { mxgraphFactory } from '../../components/mxgraph-factory';
 const { mxEvent, mxClient, mxUtils, mxConstants, mxGraph, mxEdgeStyle, mxGraphModel, mxPerimeter, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
@@ -18,8 +18,100 @@ const TASK_HEIGHT = 75;
 const TASK_Y_LARGE = EVENT_Y_LARGE - 22;
 const TASK_Y_LITTLE = EVENT_Y_LITTLE - 22;
 
+const TASK_KIND_CA = 'CallActivity';
+
+function createPool(graph: mxgraph.mxGraph, name: string, y = 0): mxgraph.mxCell {
+  const pool = graph.insertVertex(graph.getDefaultParent(), null, name, 0, y, LANE_WIDTH, 0, 'poolLane');
+  pool.setConnectable(false);
+  return pool as mxgraph.mxCell;
+}
+
+function createLane(graph: mxgraph.mxGraph, pool: mxgraph.mxCell, name: string, y = 0, height = LANE_HEIGHT_LARGE): mxgraph.mxCell {
+  const lane = graph.insertVertex(pool, null, name, 0, y, LANE_WIDTH, height, 'poolLane');
+  lane.setConnectable(false);
+  return lane as mxgraph.mxCell;
+}
+
+function createStartEvent(graph: mxgraph.mxGraph, lane: mxgraph.mxCell, y = EVENT_Y_LARGE): mxgraph.mxCell {
+  return graph.insertVertex(lane, null, null, 60, y, EVENT_WIDTH, EVENT_WIDTH, 'start') as mxgraph.mxCell;
+}
+
+function createEndEvent(graph: mxgraph.mxGraph, lane: mxgraph.mxCell, name: string, y = EVENT_Y_LARGE): mxgraph.mxCell {
+  return graph.insertVertex(lane, null, name, LANE_WIDTH - 100, y, EVENT_WIDTH, EVENT_WIDTH, 'end') as mxgraph.mxCell;
+}
+
+function createTask(graph: mxgraph.mxGraph, lane: mxgraph.mxCell, name: string, x: number, y = TASK_Y_LARGE): mxgraph.mxCell {
+  return graph.insertVertex(lane, null, name, x, y, TASK_WIDTH, TASK_HEIGHT, 'task') as mxgraph.mxCell;
+}
+function createBoundaryEvent(graph: mxgraph.mxGraph, task: mxgraph.mxCell, name: string, x: number, y: number): mxgraph.mxCell {
+  const boundaryEvent = graph.insertVertex(task, null, name, x, y, 30, 25, 'boundary');
+  boundaryEvent.geometry.offset = new mxPoint(-15, -10);
+  boundaryEvent.geometry.relative = true;
+  return boundaryEvent as mxgraph.mxCell;
+}
+
+function createCallActivity(graph: mxgraph.mxGraph, lane: mxgraph.mxCell, name: string, href?: string): mxgraph.mxCell {
+  // Note that these XML nodes will be enclosing the mxCell nodes for the model cells in the output
+  const doc = mxUtils.createXmlDocument();
+
+  const callActivity = doc.createElement(TASK_KIND_CA);
+  callActivity.setAttribute('name', name);
+  callActivity.setAttribute('href', href);
+
+  return createTask(graph, lane, callActivity, 650) as mxgraph.mxCell;
+}
+
+function createCondition(graph: mxgraph.mxGraph, lane: mxgraph.mxCell, name: string, x: number, y = TASK_Y_LARGE): mxgraph.mxCell {
+  return graph.insertVertex(lane, null, name, x, y, TASK_HEIGHT, TASK_HEIGHT, 'condition') as mxgraph.mxCell;
+}
+
+function createDefaultTransition(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): mxgraph.mxEdge {
+  return graph.insertEdge(parent, null, name, source, target, style) as mxgraph.mxEdge;
+}
+
+function createDefaultTransitionWithPoint(
+  graph: mxgraph.mxGraph,
+  parent: mxgraph.mxCell,
+  source: mxgraph.mxCell,
+  target: mxgraph.mxCell,
+  name = null,
+  style?: string,
+): mxgraph.mxEdge {
+  const transition = createDefaultTransition(graph, parent, source, target, name, style);
+  transition.geometry.points = [new mxPoint(source.geometry.x + source.geometry.width / 2, target.geometry.y + target.geometry.height / 2)];
+  return transition as mxgraph.mxEdge;
+}
+
+function createCrossoverTransition(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
+  return graph.insertEdge(parent, null, null, source, target, 'crossover');
+}
+
+function createCrossoverTransitionWithPoint(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
+  const transition = createCrossoverTransition(graph, parent, source, target);
+  transition.geometry.points = [new mxPoint(target.geometry.x + target.geometry.width / 2 + 20, source.geometry.y + (source.geometry.height * 4) / 5)];
+  return transition as mxgraph.mxEdge;
+}
+
+function createAnimatedTransition(graph: mxgraph.mxGraph, parent: mxgraph.mxCell, source: mxgraph.mxCell, target: mxgraph.mxCell) {
+  return graph.insertEdge(parent, null, null, source, target, 'animated');
+}
+
+mxGraph.prototype.edgeLabelsMovable = false;
+mxGraph.prototype.cellsLocked = true;
+
+// Overrides method to provide a cell label in the display
+mxGraph.prototype.convertValueToString = function(cell) {
+  if (mxUtils.isNode(cell.value)) {
+    if (cell.value.nodeName != undefined && cell.value.nodeName == TASK_KIND_CA) {
+      return cell.getAttribute('name');
+    }
+  }
+
+  return cell.value;
+};
+
 export class BpmnJs {
-  private readonly graph: MxGraph;
+  private readonly graph: mxgraph.mxGraph;
 
   constructor(container: Element) {
     try {
@@ -32,45 +124,29 @@ export class BpmnJs {
       const model = new mxGraphModel();
       this.graph = new mxGraph(container, model);
 
-      const graph = this.graph;
-
-      mxGraph.prototype.edgeLabelsMovable = false;
-      mxGraph.prototype.cellsLocked = true;
-
-      // Overrides method to provide a cell label in the display
-      graph.convertValueToString = function(cell) {
-        if (mxUtils.isNode(cell.value)) {
-          if (cell.value.nodeName != undefined && cell.value.nodeName.toLowerCase() == 'task') {
-            return cell.getAttribute('name');
-          }
-        }
-
-        return cell.value;
-      };
-
-      graph.addListener(mxEvent.CLICK, function(sender, evt) {
+      this.graph.addListener(mxEvent.CLICK, function(sender, evt) {
         const cell = evt.getProperty('cell'); // cell may be null
 
         if (cell != null) {
           if (cell.vertex != null && cell.vertex == 1) {
-            if (cell.value.nodeName != undefined && cell.value.nodeName.toLowerCase() == 'task') {
+            if (cell.value.nodeName != undefined && cell.value.nodeName == TASK_KIND_CA) {
               // Do something useful with cell and consume the event
               evt.consume();
 
               const href = cell.getAttribute('href');
               if (href != null && href.length > 0) {
                 window.open(href);
-              } else {
+                /*              } else {
                 mxUtils.alert('No URL defined');
-                console.log('No URL defined');
+                console.log('No URL defined');*/
               }
             }
           }
         }
       });
 
-      this.autoResizeContainer(graph);
-      this.setVertexStyle(graph);
+      this.autoResizeContainer();
+      this.configureStyles();
 
       /*// Animation on all transitions
       graph.addListener('size', function() {
@@ -91,141 +167,158 @@ export class BpmnJs {
     }
   }
 
-  private setVertexStyle(graph: MxGraph = this.graph) {
-    let style = graph.getStylesheet().getDefaultVertexStyle();
-    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
-    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
-    style[mxConstants.STYLE_FILLCOLOR] = '#d3d2d1';
-    style[mxConstants.STYLE_FONTSIZE] = 20;
-    style[mxConstants.STYLE_STARTSIZE] = 30;
-    style[mxConstants.STYLE_HORIZONTAL] = false;
+  private configureStyles() {
+    this.configureDefaultVertexStyle();
+    this.configurePollLaneStyle();
+    this.configureTaskStyle();
+    this.configureConditionStyle();
+    this.configureStartStyle();
+    this.configureEndStyle();
+    this.configureBoundaryEventStyle();
+    this.configureDefaultTransitionStyle();
+    this.configureAnimatedTransitionStyle();
+    this.configureCrossoverTransitionStyle();
+
+    // Installs double click on middle control point and changes style of edges between empty and this value
+    this.graph.alternateEdgeStyle = 'elbow=vertical';
+  }
+
+  private configureDefaultVertexStyle() {
+    const style = this.graph.getStylesheet().getDefaultVertexStyle();
+    style[mxConstants.STYLE_HORIZONTAL] = true;
+    style[mxConstants.STYLE_FONTSIZE] = 15;
+    style[mxConstants.STYLE_FILLCOLOR] = 'white';
     style[mxConstants.STYLE_FONTCOLOR] = 'black';
     style[mxConstants.STYLE_STROKECOLOR] = 'black';
-
-    // Task style
-    style = mxUtils.clone(style);
-    delete style[mxConstants.STYLE_STARTSIZE];
-    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
-    style[mxConstants.STYLE_FONTSIZE] = 15;
-    style[mxConstants.STYLE_ROUNDED] = true;
-    style[mxConstants.STYLE_HORIZONTAL] = true;
-    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
     style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = 'none';
+    style[mxConstants.STYLE_GRADIENT_DIRECTION] = 'east';
+  }
+
+  private configurePollLaneStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultVertexStyle());
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
+    style[mxConstants.STYLE_HORIZONTAL] = false;
+    style[mxConstants.STYLE_FONTSIZE] = 20;
+    style[mxConstants.STYLE_FILLCOLOR] = '#d3d2d1';
+
+    style[mxConstants.STYLE_STARTSIZE] = 30;
+    this.graph.getStylesheet().putCellStyle('poolLane', style);
+  }
+
+  private configureTaskStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultVertexStyle());
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
     style[mxConstants.STYLE_STROKECOLOR] = '#2C6DA3';
     style[mxConstants.STYLE_STROKEWIDTH] = 2;
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
-    style[mxConstants.STYLE_GRADIENTCOLOR] = '#B8B9DA';
-    style[mxConstants.STYLE_GRADIENT_DIRECTION] = 'east';
-    graph.getStylesheet().putCellStyle('task', style);
 
-    // Condition style
-    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_ROUNDED] = true;
+    style[mxConstants.STYLE_GRADIENTCOLOR] = '#B8B9DA';
+    this.graph.getStylesheet().putCellStyle('task', style);
+  }
+
+  private configureConditionStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultVertexStyle());
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RHOMBUS;
     style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RhombusPerimeter;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = 'top';
-    style[mxConstants.STYLE_SPACING_TOP] = 55;
-    style[mxConstants.STYLE_SPACING_RIGHT] = 110;
     style[mxConstants.STYLE_STROKECOLOR] = '#96A826';
     style[mxConstants.STYLE_STROKEWIDTH] = 1.7;
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
-    style[mxConstants.STYLE_GRADIENTCOLOR] = '#E9ECB1';
-    style[mxConstants.STYLE_GRADIENT_DIRECTION] = 'east';
-    delete style[mxConstants.STYLE_ROUNDED];
-    graph.getStylesheet().putCellStyle('condition', style);
 
-    // Start style
-    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_SPACING_TOP] = 55;
+    style[mxConstants.STYLE_SPACING_RIGHT] = 110;
+    style[mxConstants.STYLE_GRADIENTCOLOR] = '#E9ECB1';
+    this.graph.getStylesheet().putCellStyle('condition', style);
+  }
+
+  private configureStartStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultVertexStyle());
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
     style[mxConstants.STYLE_PERIMETER] = mxPerimeter.EllipsePerimeter;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'top';
     style[mxConstants.STYLE_STROKECOLOR] = '#62A928';
     style[mxConstants.STYLE_STROKEWIDTH] = 1.7;
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
-    style[mxConstants.STYLE_GRADIENTCOLOR] = '#E9ECB1';
-    style[mxConstants.STYLE_GRADIENT_DIRECTION] = 'east';
-    graph.getStylesheet().putCellStyle('start', style);
 
-    // End style
-    style = mxUtils.clone(style);
-    delete style[mxConstants.STYLE_GRADIENTCOLOR];
-    delete style[mxConstants.STYLE_SPACING_RIGHT];
+    style[mxConstants.STYLE_GRADIENTCOLOR] = '#E9ECB1';
+    this.graph.getStylesheet().putCellStyle('start', style);
+  }
+
+  private configureEndStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultVertexStyle());
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_DOUBLE_ELLIPSE;
     style[mxConstants.STYLE_PERIMETER] = mxPerimeter.EllipsePerimeter;
-    style[mxConstants.STYLE_SPACING_TOP] = 28;
-    style[mxConstants.STYLE_FONTSIZE] = 15;
-    style[mxConstants.STYLE_FONTSTYLE] = 2;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'top';
     style[mxConstants.STYLE_STROKECOLOR] = '#8A151A';
     style[mxConstants.STYLE_STROKEWIDTH] = 2.7;
-    graph.getStylesheet().putCellStyle('end', style);
 
-    // Boundary event style
-    style = mxUtils.clone(graph.getStylesheet().getDefaultVertexStyle());
+    style[mxConstants.STYLE_SPACING_TOP] = 28;
+    style[mxConstants.STYLE_FONTSTYLE] = 2;
+    this.graph.getStylesheet().putCellStyle('end', style);
+  }
+
+  private configureBoundaryEventStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultVertexStyle());
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
     style[mxConstants.STYLE_PERIMETER] = mxPerimeter.EllipsePerimeter;
     style[mxConstants.STYLE_FONTSIZE] = 12;
-    style[mxConstants.STYLE_HORIZONTAL] = true;
-    style[mxConstants.STYLE_RESIZABLE] = false;
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
     style[mxConstants.STYLE_STROKECOLOR] = '#2C6DA3';
     style[mxConstants.STYLE_STROKEWIDTH] = 1.7;
-    graph.getStylesheet().putCellStyle('boundary', style);
+    
+    style[mxConstants.STYLE_RESIZABLE] = false;
+    this.graph.getStylesheet().putCellStyle('boundary', style);
+  }
 
-    // Transitions style
-    style = graph.getStylesheet().getDefaultEdgeStyle();
+  private configureDefaultTransitionStyle() {
+    const style = this.graph.getStylesheet().getDefaultEdgeStyle();
     style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
     style[mxConstants.STYLE_ENDARROW] = mxConstants.ARROW_BLOCK;
     style[mxConstants.STYLE_ROUNDED] = true;
     style[mxConstants.STYLE_FONTSIZE] = 13;
     style[mxConstants.STYLE_FONTCOLOR] = 'black';
     style[mxConstants.STYLE_STROKECOLOR] = 'black';
-
-    style = mxUtils.clone(style);
-    style[mxConstants.STYLE_STROKEWIDTH] = 6;
-    graph.getStylesheet().putCellStyle('animated', style);
-
-    style = mxUtils.clone(graph.getStylesheet().getDefaultEdgeStyle());
+  }
+  private configureCrossoverTransitionStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultEdgeStyle());
     style[mxConstants.STYLE_DASHED] = true;
     style[mxConstants.STYLE_ENDARROW] = mxConstants.ARROW_OPEN;
-    graph.getStylesheet().putCellStyle('crossover', style);
-
-    // Installs double click on middle control point and
-    // changes style of edges between empty and this value
-    graph.alternateEdgeStyle = 'elbow=vertical';
+    this.graph.getStylesheet().putCellStyle('crossover', style);
   }
 
-  private autoResizeContainer(graph: MxGraph = this.graph) {
+  private configureAnimatedTransitionStyle() {
+    const style = mxUtils.clone(this.graph.getStylesheet().getDefaultEdgeStyle());
+    style[mxConstants.STYLE_STROKEWIDTH] = 6;
+    this.graph.getStylesheet().putCellStyle('animated', style);
+  }
+
+  private autoResizeContainer() {
     // Auto-resizes the container
-    graph.border = 40;
-    graph.getView().translate = new mxPoint(this.graph.border / 2, this.graph.border / 2);
-    graph.setResizeContainer(true);
-    graph.graphHandler.setRemoveCellsFromParent(false);
+    this.graph.border = 40;
+    this.graph.getView().translate = new mxPoint(this.graph.border / 2, this.graph.border / 2);
+    this.graph.setResizeContainer(true);
+    this.graph.graphHandler.setRemoveCellsFromParent(false);
   }
 
   public loadGraph(): void {
-    const graph = this.graph;
-
-    const edgesWithTransition = this.updateModel(graph);
-    this.addAnimation(graph, edgesWithTransition);
+    const edgesWithTransition = this.updateModel();
+    this.addAnimation(edgesWithTransition);
   }
 
-  private updateModel(graph: MxGraph) {
+  private updateModel() {
     const model = this.graph.getModel();
-    // Gets the default parent for inserting new cells. This is normally the first child of the root (ie. layer 0).
-    const parent = this.graph.getDefaultParent();
 
-    // Adds cells to the model in a single step
+    // Adds cells to the model in a single task
     model.beginUpdate();
     try {
-      const { step11, step111, step1Out, step3, step33, edgesWithTransition } = this.createPool1(graph, parent);
-      const { step2In, step22, step4, step44 } = this.createPool2(graph, parent);
+      const { task11, task111, task1Out, task3, task33, edgesWithTransition } = this.createPool1();
+      const { task2In, task22, task4, task44 } = this.createPool2();
 
-      graph.insertEdge(parent, null, null, step22, step3);
-      graph.insertEdge(parent, null, 'Yes', step44, step111, 'verticalAlign=bottom;horizontal=0;');
-
-      graph.insertEdge(parent, null, null, step1Out, step2In, 'crossover');
-      graph.insertEdge(parent, null, null, step3, step11, 'crossover');
-      const e = graph.insertEdge(parent, null, null, step11, step33, 'crossover');
-      e.geometry.points = [new mxPoint(step33.geometry.x + step33.geometry.width / 2 + 20, step11.geometry.y + (step11.geometry.height * 4) / 5)];
-      graph.insertEdge(parent, null, null, step33, step4);
+      createDefaultTransition(this.graph, parent, task22, task3);
+      createDefaultTransition(this.graph, parent, task44, task111, 'Yes', 'verticalAlign=bottom;horizontal=0;');
+      createCrossoverTransition(this.graph, parent, task1Out, task2In);
+      createCrossoverTransition(this.graph, parent, task3, task11);
+      createCrossoverTransitionWithPoint(this.graph, parent, task11, task33);
+      createDefaultTransition(this.graph, parent, task33, task4);
 
       return edgesWithTransition;
     } finally {
@@ -234,111 +327,94 @@ export class BpmnJs {
     }
   }
 
-  private createPool1(graph: MxGraph, parent) {
-    const pool1 = graph.insertVertex(parent, null, 'Pool 1', 0, 0, LANE_WIDTH, 0);
-    pool1.setConnectable(false);
+  private createPool1() {
+    const pool = createPool(this.graph, 'Pool 1');
 
-    const { step1Out, step11, step111, edgesWithTransition } = this.createLane1A(graph, pool1);
-    const { step3, step33 } = this.createLane1B(graph, pool1);
+    const { task1Out, task11, task111, edgesWithTransition } = this.createLane1A(pool);
+    const { task3, task33 } = this.createLane1B(pool);
 
-    return { step11, step111, step1Out, step3, step33, edgesWithTransition };
+    return { task11, task111, task1Out, task3, task33, edgesWithTransition };
   }
 
-  private createLane1A(graph: MxGraph, pool: MxCell) {
-    const lane1a = graph.insertVertex(pool, null, 'Lane A', 0, 0, LANE_WIDTH, LANE_HEIGHT_LARGE);
-    lane1a.setConnectable(false);
+  private createLane1A(pool: mxgraph.mxCell) {
+    const lane = createLane(this.graph, pool, 'Lane A');
 
-    const start1 = graph.insertVertex(lane1a, null, null, 60, EVENT_Y_LARGE, EVENT_WIDTH, EVENT_WIDTH, 'start');
-    const end1 = graph.insertVertex(lane1a, null, 'A', LANE_WIDTH - 100, EVENT_Y_LARGE, EVENT_WIDTH, EVENT_WIDTH, 'end');
+    const start1 = createStartEvent(this.graph, lane);
+    const end1 = createEndEvent(this.graph, lane, 'A');
 
-    const step1 = graph.insertVertex(lane1a, null, 'Contact\nProvider', 150, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
-    const step1Out = graph.insertVertex(step1, null, 'Out', 0.5, 1, 30, 25, 'boundary');
-    step1Out.geometry.offset = new mxPoint(-15, -10);
-    step1Out.geometry.relative = true;
-    const step11 = graph.insertVertex(lane1a, null, 'Complete\nAppropriate\nRequest', 400, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
-    const step111 = graph.insertVertex(lane1a, null, 'Receive and\nAcknowledge', 920, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
+    const task1 = createTask(this.graph, lane, 'Contact\nProvider', 150);
+    const task1Out = createBoundaryEvent(this.graph, task1, 'Out', 0.5, 1);
+    const task11 = createTask(this.graph, lane, 'Complete\nAppropriate\nRequest', 400);
+    const task111 = createTask(this.graph, lane, 'Receive and\nAcknowledge', 920);
 
     const edgesWithTransition = [];
-    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, start1, step1, 'animated'));
-    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, step1, step11, 'animated'));
-    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, step11, step111, 'animated'));
-    edgesWithTransition.push(graph.insertEdge(lane1a, null, null, step111, end1, 'animated'));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, start1, task1));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, task1, task11));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, task11, task111));
+    edgesWithTransition.push(createAnimatedTransition(this.graph, lane, task111, end1));
 
-    return { start1, end1, step1, step1Out, step11, step111, edgesWithTransition };
+    return { start1, end1, task1, task1Out, task11, task111, edgesWithTransition };
   }
 
-  private createLane1B(graph: MxGraph, pool: MxCell) {
-    const lane1b = graph.insertVertex(pool, null, 'Lane B', 0, 220, LANE_WIDTH, LANE_HEIGHT_LITTLE);
-    lane1b.setConnectable(false);
+  private createLane1B(pool: mxgraph.mxCell) {
+    const lane = createLane(this.graph, pool, 'Lane B', 220, LANE_HEIGHT_LITTLE);
 
-    const step3 = graph.insertVertex(lane1b, null, 'Request 1st-\nGate\nInformation', 400, TASK_Y_LITTLE, TASK_WIDTH, TASK_HEIGHT, 'task');
-    const step33 = graph.insertVertex(lane1b, null, 'Receive 1st-\nGate\nInformation', 650, TASK_Y_LITTLE, TASK_WIDTH, TASK_HEIGHT, 'task');
+    const task3 = createTask(this.graph, lane, 'Request 1st-\nGate\nInformation', 400, TASK_Y_LITTLE);
+    const task33 = createTask(this.graph, lane, 'Receive 1st-\nGate\nInformation', 650, TASK_Y_LITTLE);
 
-    graph.insertEdge(lane1b, null, null, step3, step33);
+    createDefaultTransition(this.graph, lane, task3, task33);
 
-    return { step3, step33 };
+    return { task3, task33 };
   }
 
-  private createPool2(graph: MxGraph, parent) {
-    const pool2 = graph.insertVertex(parent, null, 'Pool 2', 0, 400, LANE_WIDTH, 0);
-    pool2.setConnectable(false);
+  private createPool2() {
+    const pool = createPool(this.graph, 'Pool 2', 400);
 
-    const { step4, step44 } = this.createLane2A(graph, pool2);
-    const { step2In, step22 } = this.createLane2B(graph, pool2);
+    const { task4, task44 } = this.createLane2A(pool);
+    const { task2In, task22 } = this.createLane2B(pool);
 
-    return { step2In, step22, step4, step44 };
+    return { task2In, task22, task4, task44 };
   }
 
-  private createLane2A(graph: MxGraph, pool: MxCell) {
-    const lane2a = graph.insertVertex(pool, null, 'Lane A', 0, 0, LANE_WIDTH, LANE_HEIGHT_LARGE);
-    lane2a.setConnectable(false);
+  private createLane2A(pool: mxgraph.mxCell) {
+    const lane = createLane(this.graph, pool, 'Lane A');
 
-    // Note that these XML nodes will be enclosing the mxCell nodes for the model cells in the output
-    const doc = mxUtils.createXmlDocument();
-    const task4 = doc.createElement('Task');
-    task4.setAttribute('name', 'Receive and\nAcknowledge');
-    task4.setAttribute('href', 'https://jgraph.github.io/mxgraph/docs/js-api/files/model/mxCell-js.html#mxCell');
-    const step4 = graph.insertVertex(lane2a, null, task4, 650, TASK_Y_LARGE, TASK_WIDTH, TASK_HEIGHT, 'task');
+    const task4 = createCallActivity(this.graph, lane, 'Receive and\nAcknowledge', 'https://jgraph.github.io/mxgraph/docs/js-api/files/model/mxCell-js.html#mxCell');
 
-    const step44 = graph.insertVertex(lane2a, null, 'Contract\nConstraints?', 950, TASK_Y_LARGE, TASK_HEIGHT, TASK_HEIGHT, 'condition');
-    const step444 = graph.insertVertex(lane2a, null, 'Tap for gas\ndelivery?', LANE_WIDTH - 300, TASK_Y_LARGE, TASK_HEIGHT, TASK_HEIGHT, 'condition');
+    const task44 = createCondition(this.graph, lane, 'Contract\nConstraints?', 950);
+    const task444 = createCondition(this.graph, lane, 'Tap for gas\ndelivery?', LANE_WIDTH - 300);
 
-    const end2 = graph.insertVertex(lane2a, null, 'B', LANE_WIDTH - 100, TASK_Y_LARGE - EVENT_WIDTH, EVENT_WIDTH, EVENT_WIDTH, 'end');
-    const end3 = graph.insertVertex(lane2a, null, 'C', LANE_WIDTH - 100, TASK_Y_LARGE + TASK_HEIGHT, EVENT_WIDTH, EVENT_WIDTH, 'end');
+    const end2 = createEndEvent(this.graph, lane, 'B', TASK_Y_LARGE - EVENT_WIDTH);
+    const end3 = createEndEvent(this.graph, lane, 'C', TASK_Y_LARGE + TASK_HEIGHT);
 
-    graph.insertEdge(lane2a, null, null, step4, step44);
-    graph.insertEdge(lane2a, null, 'No', step44, step444, 'verticalAlign=bottom');
-    let e = graph.insertEdge(lane2a, null, 'Yes', step444, end2, 'verticalAlign=bottom');
-    e.geometry.points = [new mxPoint(step444.geometry.x + step444.geometry.width / 2, end2.geometry.y + end2.geometry.height / 2)];
-    e = graph.insertEdge(lane2a, null, 'No', step444, end3, 'verticalAlign=top');
-    e.geometry.points = [new mxPoint(step444.geometry.x + step444.geometry.width / 2, end3.geometry.y + end3.geometry.height / 2)];
+    createDefaultTransition(this.graph, lane, task4, task44);
+    createDefaultTransition(this.graph, lane, task44, task444, 'No', 'verticalAlign=bottom');
+    createDefaultTransitionWithPoint(this.graph, lane, task444, end2, 'Yes', 'verticalAlign=bottom');
+    createDefaultTransitionWithPoint(this.graph, lane, task444, end3, 'No', 'verticalAlign=top');
 
-    return { step4, step44, step444, end2, end3 };
+    return { task4, task44, task444, end2, end3 };
   }
 
-  private createLane2B(graph: MxGraph, pool: MxCell) {
-    const lane2b = graph.insertVertex(pool, null, 'Lane B', 0, 220, LANE_WIDTH, LANE_HEIGHT_LITTLE);
-    lane2b.setConnectable(false);
+  private createLane2B(pool: mxgraph.mxCell) {
+    const lane = createLane(this.graph, pool, 'Lane B', 220, LANE_HEIGHT_LITTLE);
 
-    const start2 = graph.insertVertex(lane2b, null, null, 60, EVENT_Y_LITTLE, EVENT_WIDTH, EVENT_WIDTH, 'start');
+    const start2 = createStartEvent(this.graph, lane, EVENT_Y_LITTLE);
 
-    const step2 = graph.insertVertex(lane2b, null, 'Receive\nRequest', 150, TASK_Y_LITTLE, TASK_WIDTH, TASK_HEIGHT, 'task');
-    const step2In = graph.insertVertex(step2, null, 'In', 0.5, -0.5, 30, 25, 'boundary');
-    step2In.geometry.offset = new mxPoint(-15, -10);
-    step2In.geometry.relative = true;
-    const step22 = graph.insertVertex(lane2b, null, 'Refer to Tap\nSystems\nCoordinator', 400, TASK_Y_LITTLE, TASK_WIDTH, TASK_HEIGHT, 'task');
+    const task2 = createTask(this.graph, lane, 'Receive\nRequest', 150, TASK_Y_LITTLE);
+    const task2In = createBoundaryEvent(this.graph, task2, 'In', 0.5, -0.5);
+    const task22 = createTask(this.graph, lane, 'Refer to Tap\nSystems\nCoordinator', 400, TASK_Y_LITTLE);
 
-    graph.insertEdge(lane2b, null, null, start2, step2);
-    graph.insertEdge(lane2b, null, null, step2, step22);
+    createDefaultTransition(this.graph, lane, start2, task2);
+    createDefaultTransition(this.graph, lane, task2, task22);
 
-    return { start2, step2, step2In, step22 };
+    return { start2, task2, task2In, task22 };
   }
 
-  private addAnimation(graph, edgesWithTransition: MxCell[]) {
+  private addAnimation(edgesWithTransition: mxgraph.mxCell[]) {
     // Adds animation to edge shape and makes "pipe" visible
-    graph.orderCells(true, edgesWithTransition);
+    this.graph.orderCells(true, edgesWithTransition);
     edgesWithTransition.forEach(edge => {
-      const state = graph.view.getState(edge);
+      const state = this.graph.view.getState(edge);
       state.shape.node.getElementsByTagName('path')[0].removeAttribute('visibility');
       state.shape.node.getElementsByTagName('path')[0].setAttribute('stroke-width', '6');
       state.shape.node.getElementsByTagName('path')[0].setAttribute('stroke', 'pink');
