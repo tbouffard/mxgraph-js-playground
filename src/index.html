@@ -10,10 +10,24 @@
 </head>
 
 <body>
-  <bpmn-visu containerId="graphContainer">
-    <div slot="graphContainer" id="graphContainer" class="base" style="position:absolute;overflow:hidden;top:20px;left:20px;width:1500px;height:800px;border: gray dotted 1px;cursor:default;"></div>
-  </bpmn-visu>
-</body>
+<bpmn-visu containerId="graphContainer" modalContainerId="modalGraphContainer" subContainerId="subGraphContainer">
+  <div slot="graphContainer">
+    <div id="graphContainer"></div>
+  </div>
 
+  <!-- The Modal -->
+  <div slot="modalGraphContainer" id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="closeModal">&times;</span>
+      <div id="modalGraphContainer" style="left:10px;top:25px;"></div>
+    </div>
+  </div>
+
+  <!-- The Sub process -->
+  <div slot="subGraphContainer" id="subProcess">
+    <div id="subGraphContainer"></div>
+  </div>
+</bpmn-visu>
+</body>
 
 </html>

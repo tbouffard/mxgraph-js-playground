@@ -1,8 +1,10 @@
 import { css, CSSResult, customElement, html, LitElement, property } from 'lit-element';
 import { TemplateResult } from 'lit-html/lib/template-result';
 
-import { BpmnJs } from '../../libs/bpmn-js/bpmn-js';
 import getStyle from './style';
+import ModalGraph from '../../libs/bpmn-js/ModalGraph';
+import SubGraph from '../../libs/bpmn-js/SubGraph';
+import MainGraph from '../../libs/bpmn-js/MainGraph';
 
 @customElement('bpmn-visu')
 export class BpmnVisu extends LitElement {
@@ -15,7 +17,11 @@ export class BpmnVisu extends LitElement {
   @property({ type: String })
   private containerId = '';
 
-  private bpmnJs: BpmnJs;
+  @property({ type: String })
+  private modalContainerId = '';
+
+  @property({ type: String })
+  private subContainerId = '';
 
   constructor() {
     super();
@@ -25,12 +31,20 @@ export class BpmnVisu extends LitElement {
     return html`
       <div id="${BpmnVisu.containerIdCss}">
         <slot id="graphContainerSlot" name="graphContainer"></slot>
+        <slot id="modalGraphContainerSlot" name="modalGraphContainer"></slot>
+        <slot id="subGraphContainerSlot" name="subGraphContainer"></slot>
       </div>
     `;
   }
 
   protected firstUpdated(): void {
-    this.bpmnJs = new BpmnJs(document.getElementById(this.containerId));
-    this.bpmnJs.loadGraph();
+    const mainGraph = new MainGraph(document.getElementById(this.containerId));
+    mainGraph.loadGraph();
+
+    const modalGraph = new ModalGraph(document.getElementById(this.modalContainerId));
+    modalGraph.loadGraph();
+
+    const subGraph = new SubGraph(document.getElementById(this.subContainerId));
+    subGraph.loadGraph();
   }
 }
