@@ -1,5 +1,5 @@
 import { mxgraph } from 'mxgraph';
-import { mxgraphFactory } from '../../components/mxgraph-factory';
+import { mxgraphFactory } from '../../../components/mxgraph-factory';
 import { MxGraphBpmnStyles } from './MxGraphBpmnStyles';
 
 const { mxUtils, mxConstants, mxEdgeStyle, mxPerimeter } = mxgraphFactory({
@@ -86,7 +86,7 @@ export default class MxGraphConfigurator {
 
     style[mxConstants.STYLE_ROUNDED] = true;
     style[mxConstants.STYLE_GRADIENTCOLOR] = 'Thistle';
-    this.graph.getStylesheet().putCellStyle(TASK_CA, style);
+    this.graph.getStylesheet().putCellStyle(MxGraphBpmnStyles.TASK_CA, style);
   }
 
   private configureConditionStyle(): void {
