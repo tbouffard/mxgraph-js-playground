@@ -8,11 +8,7 @@ const { mxUtils, mxConstants, mxEdgeStyle, mxPerimeter } = mxgraphFactory({
 });
 
 export default class MxGraphConfigurator {
-  private readonly graph: mxgraph.mxGraph;
-
-  constructor(graph: mxgraph.mxGraph) {
-    this.graph = graph;
-  }
+  constructor(readonly graph: mxgraph.mxGraph) {}
 
   public configureStyles(): void {
     this.configureDefaultVertexStyle();
