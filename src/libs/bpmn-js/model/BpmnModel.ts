@@ -60,7 +60,7 @@ export class BpmnEdge {
   // <model:sequenceFlow id="_RLk_pXH_Eei9Z4IY4QeFuA" name="" sourceRef="_RLk-oHH_Eei9Z4IY4QeFuA" targetRef="_RLk_AXH_Eei9Z4IY4QeFuA"/>
   private readonly _wayPoints = new Set<BpmnWayPoint>();
 
-  constructor(readonly label: string, readonly sourceRefId: string, readonly targetRefId: string) {}
+  constructor(readonly id: string, readonly label: string, readonly sourceRefId: string, readonly targetRefId: string) {}
 
   addWayPoint(wayPoint: BpmnWayPoint) {
     this._wayPoints.add(wayPoint);

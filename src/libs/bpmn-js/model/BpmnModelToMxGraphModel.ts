@@ -24,17 +24,23 @@ export default class ModelConvertor {
     if (bpmnLane != null) {
       console.debug('found bpmn lane');
       console.debug(bpmnLane);
-      const lane = this.mxGraphModelUpdater.createLane(pool, bpmnLane.label, bpmnLane.y, bpmnLane.height, bpmnLane.width);
+      const laneId = bpmnLane.id;
+      this.mxGraphModelUpdater.createLaneWithId(pool, bpmnLane);
       console.debug('Build elements of the lane');
       bpmnLane.elements.forEach(element => {
         console.log(element);
         if (element instanceof BpmnStartEvent) {
-          this.mxGraphModelUpdater.createStartEvent(lane, element.y, element.x, element.label);
+          this.mxGraphModelUpdater.createStartEventWithId(laneId, element);
         } else if (element instanceof BpmnTerminateEndEvent) {
-          this.mxGraphModelUpdater.createEndTerminateEvent(lane, element.label, element.y, element.x);
+          this.mxGraphModelUpdater.createEndTerminateEventWithId(laneId, element);
         } else if (element instanceof BpmnHumanTask) {
-          this.mxGraphModelUpdater.createTask(lane, element.label, element.x, element.y, element.width, element.height);
+          this.mxGraphModelUpdater.createHumanTask(laneId, element);
         }
+      });
+      console.debug('Build edges of the lane');
+      bpmnLane.edges.forEach(edge => {
+        console.debug(edge);
+        this.mxGraphModelUpdater.createSimpleTransition(laneId, edge);
       });
     }
   }

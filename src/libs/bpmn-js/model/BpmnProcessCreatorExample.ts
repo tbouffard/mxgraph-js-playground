@@ -11,8 +11,8 @@ export default class BpmnProcessCreatorExampleCodeOnly {
     lane.add(new BpmnHumanTask('HumanTask_1', 'Human', 220, 50, 50, 100));
     lane.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End', 50, 600));
 
-    const edgeStartHuman = new BpmnEdge('Edge 1', 'Start_1', 'HumanTask_1');
-    const edgeHumanEnd = new BpmnEdge('Edge 2', 'HumanTask_1', 'TerminateEnd_1');
+    const edgeStartHuman = new BpmnEdge('Edge_1', 'Edge 1', 'Start_1', 'HumanTask_1');
+    const edgeHumanEnd = new BpmnEdge('Edge_2', 'Edge 2', 'HumanTask_1', 'TerminateEnd_1');
     lane.addEdge(edgeStartHuman);
     lane.addEdge(edgeHumanEnd);
     // TODO way points

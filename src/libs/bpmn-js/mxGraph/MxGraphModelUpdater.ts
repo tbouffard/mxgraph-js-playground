@@ -1,6 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import { MxGraphBpmnStyles } from './MxGraphBpmnStyles';
 import { mxgraphFactory } from '../../../components/mxgraph-factory';
+import {BpmnEdge, BpmnHumanTask, BpmnLane, BpmnStartEvent, BpmnTerminateEndEvent} from '../model/BpmnModel';
 
 const { mxUtils, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
@@ -29,18 +30,50 @@ export default class MxGraphModelUpdater {
     return pool as mxgraph.mxCell;
   }
 
+  // ===================================================================================================================
+  // usage with custom bpmn model
+  // ===================================================================================================================
+
+  public createLaneWithId(pool: mxgraph.mxCell, lane: BpmnLane): void {
+    const mxLane = this.graph.insertVertex(pool, lane.id, lane.label, 0, lane.y, lane.width, lane.height, MxGraphBpmnStyles.POLL_LANE);
+    mxLane.setConnectable(false);
+  }
+
+  public createHumanTask(laneId: string, task: BpmnHumanTask): void {
+    this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK);
+  }
+
+  public createStartEventWithId(laneId: string, event: BpmnStartEvent): void {
+    this.graph.insertVertex(this.getCell(laneId), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START);
+  }
+
+  public createEndTerminateEventWithId(laneId: string, event: BpmnTerminateEndEvent): void {
+    this.graph.insertVertex(this.getCell(laneId), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_END_TERMINATE);
+  }
+
+  public createSimpleTransition(parentId: string, edge: BpmnEdge): void {
+    this.graph.insertEdge(this.getCell(parentId), edge.id, edge.label, this.getCell(edge.sourceRefId), this.getCell(edge.targetRefId), null);
+  }
+
+  private getCell(id: string): mxgraph.mxCell {
+    console.debug('Get cell from id: ' + id);
+    const cell = this.graph.getModel().getCell(id);
+    console.debug(cell);
+    return cell;
+  }
+
+  // ===================================================================================================================
+  // usage with direct mxgraph code
+  // ===================================================================================================================
+
   public createLane(pool: mxgraph.mxCell, name: string, y = 0, height: number = LANE_HEIGHT_LARGE, width: number = LANE_WIDTH): mxgraph.mxCell {
     const lane = this.graph.insertVertex(pool, null, name, 0, y, width, height, MxGraphBpmnStyles.POLL_LANE);
     lane.setConnectable(false);
     return lane as mxgraph.mxCell;
   }
-  //
-  // public createStartEvent(lane: mxgraph.mxCell, y: number = EVENT_Y_LARGE, x = 60): mxgraph.mxCell {
-  //   return this.graph.insertVertex(lane, null, null, x, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START) as mxgraph.mxCell;
-  // }
 
-  public createStartEvent(lane: mxgraph.mxCell, y: number = EVENT_Y_LARGE, x = 60, name?: string): mxgraph.mxCell {
-    return this.graph.insertVertex(lane, null, name, x, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START) as mxgraph.mxCell;
+  public createStartEvent(lane: mxgraph.mxCell, y: number = EVENT_Y_LARGE, x = 60, name?: string, id?: string): mxgraph.mxCell {
+    return this.graph.insertVertex(lane, id, name, x, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START) as mxgraph.mxCell;
   }
 
   public createEndTerminateEvent(lane: mxgraph.mxCell, name: string, y: number = EVENT_Y_LARGE, x = LANE_WIDTH - 100): mxgraph.mxCell {
@@ -107,11 +140,11 @@ export default class MxGraphModelUpdater {
     return transition as mxgraph.mxEdge;
   }
 
-  public createAnimatedTransition(source: mxgraph.mxCell, target: mxgraph.mxCell) {
+  public createAnimatedTransition(source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
     return this.graph.insertEdge(this.graph.getDefaultParent(), null, null, source, target, MxGraphBpmnStyles.TRANSITION_ANIMATED);
   }
 
-  public addAnimation(edgesWithTransition: mxgraph.mxCell[]) {
+  public addAnimation(edgesWithTransition: mxgraph.mxCell[]): void {
     // Adds animation to edge shape and makes "pipe" visible
     this.graph.orderCells(true, edgesWithTransition);
     edgesWithTransition.forEach(edge => {
