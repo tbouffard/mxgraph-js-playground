@@ -34,6 +34,16 @@ export default class BpmnProcessCreatorExampleCodeOnly {
     lane2.addEdge(new BpmnEdge('Edge_2_1', null, 'HumanTask_2_1', 'HumanTask_2_2'));
     lane2.addEdge(new BpmnEdge('Edge_2_2', null, 'HumanTask_2_2', 'TerminateEnd_2'));
 
+    // LANE 3
+    const lane3 = new BpmnLane('Lane_3', 'Lane C', 400, 700, 120);
+    process.addLane(lane3);
+    lane3.add(new BpmnUserTask('HumanTask_3_1', 'Human 3_1', 306, 40, 50, 80));
+    lane3.add(new BpmnUserTask('HumanTask_3_2', 'Human 3_2', 450, 40, 50, 80));
+    lane3.add(new BpmnTerminateEndEvent('TerminateEnd_3', 'End 3', 50, 600));
+
+    lane3.addEdge(new BpmnEdge('Edge_3_1', null, 'HumanTask_3_1', 'HumanTask_3_2'));
+    lane3.addEdge(new BpmnEdge('Edge_3_2', null, 'HumanTask_3_2', 'TerminateEnd_3'));
+
     // INTER LANE EDGES
     process.addEdge(new BpmnEdge('Process_Edge_1', 'Inter lane', 'ParallelGateway_1_1', 'HumanTask_2_1'));
 
