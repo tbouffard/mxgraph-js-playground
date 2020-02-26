@@ -37,6 +37,12 @@ export class BpmnUserTask extends AbstractBpmnShape {
   }
 }
 
+export class BpmnParallelGateway extends AbstractBpmnShape {
+  constructor(id: string, label: string, x: number, y: number, height: number, width: number) {
+    super(id, x, y, height, width, label, 'ParallelGateway');
+  }
+}
+
 export class BpmnLane extends AbstractBpmnShape {
   private readonly _elements = new Set<AbstractBpmnShape>();
   private readonly _edges = new Set<BpmnEdge>();
