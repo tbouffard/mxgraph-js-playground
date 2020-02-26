@@ -23,8 +23,8 @@ export const TASK_Y_LITTLE = EVENT_Y_LITTLE - 22;
 export default class MxGraphModelUpdater {
   constructor(readonly graph: mxgraph.mxGraph) {}
 
-  public createPool(name: string, y = 0, width: number = LANE_WIDTH): mxgraph.mxCell {
-    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), null, name, 0, y, width, 0, MxGraphBpmnStyles.POLL_LANE);
+  public createPool(name: string, y = 0, width: number = LANE_WIDTH, height = 0): mxgraph.mxCell {
+    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), null, name, 0, y, width, height, MxGraphBpmnStyles.POLL_LANE);
     pool.setConnectable(false);
     return pool as mxgraph.mxCell;
   }
@@ -34,13 +34,17 @@ export default class MxGraphModelUpdater {
     lane.setConnectable(false);
     return lane as mxgraph.mxCell;
   }
+  //
+  // public createStartEvent(lane: mxgraph.mxCell, y: number = EVENT_Y_LARGE, x = 60): mxgraph.mxCell {
+  //   return this.graph.insertVertex(lane, null, null, x, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START) as mxgraph.mxCell;
+  // }
 
-  public createStartEvent(lane: mxgraph.mxCell, y: number = EVENT_Y_LARGE, x = 60): mxgraph.mxCell {
-    return this.graph.insertVertex(lane, null, null, x, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START) as mxgraph.mxCell;
+  public createStartEvent(lane: mxgraph.mxCell, y: number = EVENT_Y_LARGE, x = 60, name?: string): mxgraph.mxCell {
+    return this.graph.insertVertex(lane, null, name, x, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START) as mxgraph.mxCell;
   }
 
-  public createEndTerminateEvent(lane: mxgraph.mxCell, name: string, y: number = EVENT_Y_LARGE): mxgraph.mxCell {
-    return this.graph.insertVertex(lane, null, name, LANE_WIDTH - 100, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_END_TERMINATE) as mxgraph.mxCell;
+  public createEndTerminateEvent(lane: mxgraph.mxCell, name: string, y: number = EVENT_Y_LARGE, x = LANE_WIDTH - 100): mxgraph.mxCell {
+    return this.graph.insertVertex(lane, null, name, x, y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_END_TERMINATE) as mxgraph.mxCell;
   }
 
   public createEndEvent(lane: mxgraph.mxCell, y: number = EVENT_Y_LARGE, x: number = LANE_WIDTH - 100, name?: string): mxgraph.mxCell {
@@ -54,8 +58,8 @@ export default class MxGraphModelUpdater {
     return boundaryEvent as mxgraph.mxCell;
   }
 
-  public createTask(lane: mxgraph.mxCell, name: string, x: number, y: number = TASK_Y_LARGE): mxgraph.mxCell {
-    return this.graph.insertVertex(lane, null, name, x, y, TASK_WIDTH, TASK_HEIGHT, MxGraphBpmnStyles.TASK) as mxgraph.mxCell;
+  public createTask(lane: mxgraph.mxCell, name: string, x: number, y: number = TASK_Y_LARGE, width = TASK_WIDTH, height = TASK_HEIGHT): mxgraph.mxCell {
+    return this.graph.insertVertex(lane, null, name, x, y, width, height, MxGraphBpmnStyles.TASK) as mxgraph.mxCell;
   }
 
   public createCallActivity(

@@ -41,10 +41,10 @@ export class BpmnVisu extends LitElement {
     const mainGraph = new MainGraph(document.getElementById(this.containerId));
     mainGraph.loadGraph();
 
-    const modalGraph = new ModalGraph(document.getElementById(this.modalContainerId));
-    modalGraph.loadGraph();
-
-    const subGraph = new SubGraph(document.getElementById(this.subContainerId));
-    subGraph.loadGraph();
+    // const modalGraph = new ModalGraph(document.getElementById(this.modalContainerId));
+    // modalGraph.loadGraph();
+    //
+    // const subGraph = new SubGraph(document.getElementById(this.subContainerId));
+    // subGraph.loadGraph();
   }
 }

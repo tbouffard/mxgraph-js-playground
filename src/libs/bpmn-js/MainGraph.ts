@@ -1,5 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import AbstractGraph, { EVENT_WIDTH, EVENT_Y_LITTLE, LANE_HEIGHT_LITTLE, LANE_WIDTH, TASK_HEIGHT, TASK_Y_LARGE, TASK_Y_LITTLE } from './AbstractGraph';
+import BpmnProcessCreatorExampleCodeOnly from './model/BpmnProcessCreatorExample';
+import ModelConvertor from './model/BpmnModelToMxGraphModel';
 
 export default class MainGraph extends AbstractGraph {
   constructor(container: Element) {
@@ -7,6 +9,18 @@ export default class MainGraph extends AbstractGraph {
   }
 
   public loadGraph(): void {
+    // this.loadGraphMxGraphCodeOnly();
+    this.loadGraphWithBpmnProcess();
+  }
+
+  private loadGraphWithBpmnProcess(): void {
+    const process = new BpmnProcessCreatorExampleCodeOnly().createProcess();
+    new ModelConvertor(this.graph, this.mxGraphModelUpdater).updateMxGraphModel(process);
+
+    // this.graph.fit();
+  }
+
+  private loadGraphMxGraphCodeOnly(): void {
     const edgesWithTransition = this.updateModel();
     this.graph.fit();
     this.mxGraphModelUpdater.addAnimation(edgesWithTransition);
