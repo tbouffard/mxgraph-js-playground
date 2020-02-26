@@ -62,9 +62,9 @@ export default class MxGraphModelUpdater {
   }
 
   private getCell(id: string): mxgraph.mxCell {
-    console.debug('Get cell from id: ' + id);
+    // console.debug('Get cell from id: ' + id);
     const cell = this.graph.getModel().getCell(id);
-    console.debug(cell);
+    // console.debug(cell);
     return cell;
   }
 

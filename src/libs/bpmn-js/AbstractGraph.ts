@@ -3,7 +3,7 @@ import { mxgraphFactory } from '../../components/mxgraph-factory';
 import MxGraphConfigurator from './mxGraph/MxGraphConfigurator';
 import { MxGraphBpmnStyles } from './mxGraph/MxGraphBpmnStyles';
 import MxGraphModelUpdater from './mxGraph/MxGraphModelUpdater';
-const { mxEvent, mxClient, mxUtils, mxGraph, mxGraphModel, mxPoint } = mxgraphFactory({
+const { mxEvent, mxClient, mxLog, mxUtils, mxGraph, mxGraphModel, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
   mxLoadStylesheets: false,
 });
@@ -50,6 +50,8 @@ export default abstract class AbstractGraph {
       const model = new mxGraphModel();
       this.graph = new mxGraph(container, model);
 
+      this.initMxLog();
+
       this.handleClick();
       this.autoResizeContainer();
       new MxGraphConfigurator(this.graph).configureStyles();
@@ -73,6 +75,12 @@ export default abstract class AbstractGraph {
       mxUtils.alert('Cannot start application: ' + e.message);
       throw e; // for debugging
     }
+  }
+
+  private initMxLog(): void {
+    mxLog.TRACE = true;
+    mxLog.DEBUG = true;
+    mxLog.show();
   }
 
   private handleClick(resizeGraph?: Function) {
