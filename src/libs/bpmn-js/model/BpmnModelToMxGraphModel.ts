@@ -1,6 +1,6 @@
 import { mxgraph } from 'mxgraph';
 import MxGraphModelUpdater from '../mxGraph/MxGraphModelUpdater';
-import { BpmnHumanTask, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent } from './BpmnModel';
+import { BpmnUserTask, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent } from './BpmnModel';
 
 export default class ModelConvertor {
   constructor(readonly graph: mxgraph.mxGraph, readonly mxGraphModelUpdater: MxGraphModelUpdater) {}
@@ -33,8 +33,8 @@ export default class ModelConvertor {
           this.mxGraphModelUpdater.createStartEventWithId(laneId, element);
         } else if (element instanceof BpmnTerminateEndEvent) {
           this.mxGraphModelUpdater.createEndTerminateEventWithId(laneId, element);
-        } else if (element instanceof BpmnHumanTask) {
-          this.mxGraphModelUpdater.createHumanTask(laneId, element);
+        } else if (element instanceof BpmnUserTask) {
+          this.mxGraphModelUpdater.createUserTask(laneId, element);
         }
       });
       console.debug('Build edges of the lane');

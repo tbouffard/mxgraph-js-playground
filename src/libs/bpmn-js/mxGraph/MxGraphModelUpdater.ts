@@ -1,7 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import { MxGraphBpmnStyles } from './MxGraphBpmnStyles';
 import { mxgraphFactory } from '../../../components/mxgraph-factory';
-import {BpmnEdge, BpmnHumanTask, BpmnLane, BpmnStartEvent, BpmnTerminateEndEvent} from '../model/BpmnModel';
+import {BpmnEdge, BpmnUserTask, BpmnLane, BpmnStartEvent, BpmnTerminateEndEvent} from '../model/BpmnModel';
 
 const { mxUtils, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
@@ -39,7 +39,7 @@ export default class MxGraphModelUpdater {
     mxLane.setConnectable(false);
   }
 
-  public createHumanTask(laneId: string, task: BpmnHumanTask): void {
+  public createUserTask(laneId: string, task: BpmnUserTask): void {
     this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK);
   }
 

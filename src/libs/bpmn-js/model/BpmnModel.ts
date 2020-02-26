@@ -27,9 +27,9 @@ export class BpmnTerminateEndEvent extends AbstractBpmnShape {
   }
 }
 
-export class BpmnHumanTask extends AbstractBpmnShape {
+export class BpmnUserTask extends AbstractBpmnShape {
   constructor(id: string, label: string, x: number, y: number, height: number, width: number) {
-    super(id, x, y, height, width, label, 'HumanTask');
+    super(id, x, y, height, width, label, 'UserTask');
   }
 }
 
