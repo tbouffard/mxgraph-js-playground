@@ -8,7 +8,7 @@ export default class BpmnProcessCreatorExampleCodeOnly {
     process.lane = lane;
 
     lane.add(new BpmnStartEvent('Start_1', 'Start', 50, 60));
-    lane.add(new BpmnHumanTask('HumanTask_1', 'Human', 220, 50, 50, 100));
+    lane.add(new BpmnHumanTask('HumanTask_1', 'Human', 220, 40, 50, 100));
     lane.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End', 50, 600));
 
     const edgeStartHuman = new BpmnEdge('Edge_1', 'Edge 1', 'Start_1', 'HumanTask_1');
