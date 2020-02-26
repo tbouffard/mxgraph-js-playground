@@ -36,12 +36,12 @@ export default class MxGraphModelUpdater {
   // ===================================================================================================================
 
   public createPoolWithId(process: BpmnProcess): void {
-    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), process.id, process.label, process.x, process.y, process.width, process.height, MxGraphBpmnStyles.POLL_LANE);
+    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), process.id, process.label, process.x, process.y, process.width, process.height, MxGraphBpmnStyles.POOL);
     pool.setConnectable(false);
   }
 
   public createLaneWithId(poolId: string, lane: BpmnLane): void {
-    const mxLane = this.graph.insertVertex(this.getCell(poolId), lane.id, lane.label, lane.x, lane.y, lane.width, lane.height, MxGraphBpmnStyles.POLL_LANE);
+    const mxLane = this.graph.insertVertex(this.getCell(poolId), lane.id, lane.label, lane.x, lane.y, lane.width, lane.height, MxGraphBpmnStyles.LANE);
     mxLane.setConnectable(false);
   }
 

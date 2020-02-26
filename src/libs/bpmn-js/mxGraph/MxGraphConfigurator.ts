@@ -13,6 +13,9 @@ export default class MxGraphConfigurator {
   public configureStyles(): void {
     this.configureDefaultVertexStyle();
     this.configurePollLaneStyle();
+    this.configureLaneStyle();
+    this.configurePoolStyle();
+
     this.configureTaskStyle();
     this.configureCallActivityStyle();
     this.configureConditionStyle();
@@ -59,6 +62,30 @@ export default class MxGraphConfigurator {
 
     style[mxConstants.STYLE_STARTSIZE] = 30;
     this.graph.getStylesheet().putCellStyle(MxGraphBpmnStyles.POLL_LANE, style);
+  }
+
+  private configurePoolStyle(): void {
+    const style = this.cloneDefaultVertexStyle();
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
+    style[mxConstants.STYLE_HORIZONTAL] = false;
+    style[mxConstants.STYLE_FONTSIZE] = 20;
+    style[mxConstants.STYLE_FILLCOLOR] = '#d3d2d1';
+
+    style[mxConstants.STYLE_STARTSIZE] = 30;
+    this.graph.getStylesheet().putCellStyle(MxGraphBpmnStyles.POOL, style);
+  }
+
+  private configureLaneStyle(): void {
+    const style = this.cloneDefaultVertexStyle();
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
+    style[mxConstants.STYLE_HORIZONTAL] = false;
+    style[mxConstants.STYLE_FONTSIZE] = 15;
+    style[mxConstants.STYLE_FILLCOLOR] = 'white';
+
+    style[mxConstants.STYLE_STARTSIZE] = 30;
+    this.graph.getStylesheet().putCellStyle(MxGraphBpmnStyles.LANE, style);
   }
 
   private configureTaskStyle(): void {

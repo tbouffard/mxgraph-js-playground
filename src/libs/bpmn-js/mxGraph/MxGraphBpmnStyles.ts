@@ -7,6 +7,8 @@ export enum MxGraphBpmnStyles {
   TASK = 'task',
   TASK_CA = 'CallActivity',
   POLL_LANE = 'poolLane',
+  POOL = 'pool',
+  LANE = 'lane',
 
   TRANSITION_CROSSOVER = 'crossover',
   TRANSITION_ANIMATED = 'animated',
