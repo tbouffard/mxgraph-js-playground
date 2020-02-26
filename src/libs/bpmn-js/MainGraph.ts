@@ -14,10 +14,16 @@ export default class MainGraph extends AbstractGraph {
   }
 
   private loadGraphWithBpmnProcess(): void {
+    const t0 = new Date().getTime();
+
     const process = new BpmnProcessCreatorExampleCodeOnly().createProcess();
+    console.info('Load Graph BPMN MODEL CREATED: ', new Date().getTime() - t0);
+
     new ModelConvertor(this.graph, this.mxGraphModelUpdater).updateMxGraphModel(process);
+    console.info('Load Graph MODEL CONVERTED: ', new Date().getTime() - t0);
 
     this.graph.fit();
+    console.info('Load Graph FIT DONE: ', new Date().getTime() - t0);
   }
 
   private loadGraphMxGraphCodeOnly(): void {

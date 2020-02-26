@@ -22,14 +22,14 @@ export default class ModelConvertor {
   private doMxgraphModelUpdate(process: BpmnProcess): void {
     const t0 = new Date().getTime();
     this.mxGraphModelUpdater.createPoolWithId(process);
-    console.info('BpmnProcess to mxGraph Model POOL CREATED: ', new Date().getTime() - t0);
+    console.info('mxGraph Model POOL CREATED: ', new Date().getTime() - t0);
 
     process.lanes.forEach(lane => {
       // console.debug('Build lane');
       // console.debug(lane);
       const laneId = lane.id;
       this.mxGraphModelUpdater.createLaneWithId(process.id, lane);
-      console.info('BpmnProcess to mxGraph Model LANE CREATED: ', new Date().getTime() - t0);
+      console.info('mxGraph Model LANE CREATED: ', new Date().getTime() - t0);
       // console.debug('Build elements of the lane');
       lane.elements.forEach(element => {
         // console.debug(element);
@@ -43,13 +43,13 @@ export default class ModelConvertor {
           this.mxGraphModelUpdater.createParallelGateway(laneId, element);
         }
       });
-      console.info('BpmnProcess to mxGraph Model LANE ELEMENTS CREATED: ', new Date().getTime() - t0);
+      console.info('mxGraph Model LANE ELEMENTS CREATED: ', new Date().getTime() - t0);
       // console.debug('Build edges of the lane');
       lane.edges.forEach(edge => {
         // console.debug(edge);
         this.mxGraphModelUpdater.createSimpleTransition(laneId, edge);
       });
-      console.info('BpmnProcess to mxGraph Model LANE EDGES CREATED: ', new Date().getTime() - t0);
+      console.info('mxGraph Model LANE EDGES CREATED: ', new Date().getTime() - t0);
     });
 
     // console.debug('Build inter lane edges');
@@ -57,7 +57,7 @@ export default class ModelConvertor {
       // console.debug(edge);
       this.mxGraphModelUpdater.createSimpleTransition(process.id, edge);
     });
-    console.info('BpmnProcess to mxGraph Model INTER LANE EDGES DONE: ', new Date().getTime() - t0);
-    console.info('BpmnProcess to mxGraph Model TRANSFORMATION DONE: ', new Date().getTime() - t0);
+    console.info('mxGraph Model INTER LANE EDGES DONE: ', new Date().getTime() - t0);
+    console.info('mxGraph Model TRANSFORMATION DONE: ', new Date().getTime() - t0);
   }
 }
