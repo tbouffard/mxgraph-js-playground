@@ -76,11 +76,12 @@ export class BpmnWayPoint {
   constructor(readonly x: number, readonly y: number) {}
 }
 
-export class BpmnProcess {
+export class BpmnProcess extends AbstractBpmnShape {
+  constructor(id: string, label: string, x: number, y: number, height: number, width: number) {
+    super(id, x, y, height, width, label, 'Process');
+  }
+
   private _lane: BpmnLane;
-
-  constructor(readonly name: string) {}
-
   get lane(): BpmnLane {
     return this._lane;
   }

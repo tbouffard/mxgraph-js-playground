@@ -1,8 +1,15 @@
-import { BpmnEdge, BpmnUserTask, BpmnLane, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent, BpmnWayPoint } from './BpmnModel';
+import {
+  BpmnEdge,
+  BpmnUserTask,
+  BpmnLane,
+  BpmnProcess,
+  BpmnStartEvent,
+  BpmnTerminateEndEvent
+} from './BpmnModel';
 
 export default class BpmnProcessCreatorExampleCodeOnly {
   public createProcess(): BpmnProcess {
-    const process = new BpmnProcess('Pool 1');
+    const process = new BpmnProcess('Process_1', 'Customer Delivery', 0, 0, 720, 150);
 
     const lane = new BpmnLane('Lane_1', 'Lane A', 10, 700, 120);
     process.lane = lane;

@@ -18,14 +18,14 @@ export default class ModelConvertor {
   }
 
   private doMxgraphModelUpdate(process: BpmnProcess): void {
-    const pool = this.mxGraphModelUpdater.createPool(process.name, 0, 350, 200);
+    this.mxGraphModelUpdater.createPoolWithId(process);
 
     const bpmnLane = process.lane;
     if (bpmnLane != null) {
       console.debug('found bpmn lane');
       console.debug(bpmnLane);
       const laneId = bpmnLane.id;
-      this.mxGraphModelUpdater.createLaneWithId(pool, bpmnLane);
+      this.mxGraphModelUpdater.createLaneWithId(process.id, bpmnLane);
       console.debug('Build elements of the lane');
       bpmnLane.elements.forEach(element => {
         console.log(element);

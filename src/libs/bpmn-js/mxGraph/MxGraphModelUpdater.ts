@@ -1,7 +1,14 @@
 import { mxgraph } from 'mxgraph';
 import { MxGraphBpmnStyles } from './MxGraphBpmnStyles';
 import { mxgraphFactory } from '../../../components/mxgraph-factory';
-import {BpmnEdge, BpmnUserTask, BpmnLane, BpmnStartEvent, BpmnTerminateEndEvent} from '../model/BpmnModel';
+import {
+  BpmnEdge,
+  BpmnUserTask,
+  BpmnLane,
+  BpmnStartEvent,
+  BpmnTerminateEndEvent,
+  BpmnProcess,
+} from '../model/BpmnModel';
 
 const { mxUtils, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
@@ -19,23 +26,22 @@ export const EVENT_Y_LITTLE = LANE_HEIGHT_LITTLE / 2 - 10;
 export const TASK_WIDTH = 150;
 export const TASK_HEIGHT = 75;
 export const TASK_Y_LARGE = EVENT_Y_LARGE - 22;
-export const TASK_Y_LITTLE = EVENT_Y_LITTLE - 22;
+// export const TASK_Y_LITTLE = EVENT_Y_LITTLE - 22;
 
 export default class MxGraphModelUpdater {
   constructor(readonly graph: mxgraph.mxGraph) {}
-
-  public createPool(name: string, y = 0, width: number = LANE_WIDTH, height = 0): mxgraph.mxCell {
-    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), null, name, 0, y, width, height, MxGraphBpmnStyles.POLL_LANE);
-    pool.setConnectable(false);
-    return pool as mxgraph.mxCell;
-  }
 
   // ===================================================================================================================
   // usage with custom bpmn model
   // ===================================================================================================================
 
-  public createLaneWithId(pool: mxgraph.mxCell, lane: BpmnLane): void {
-    const mxLane = this.graph.insertVertex(pool, lane.id, lane.label, 0, lane.y, lane.width, lane.height, MxGraphBpmnStyles.POLL_LANE);
+  public createPoolWithId(process: BpmnProcess): void {
+    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), process.id, process.label, process.x, process.y, process.width, process.height, MxGraphBpmnStyles.POLL_LANE);
+    pool.setConnectable(false);
+  }
+
+  public createLaneWithId(poolId: string, lane: BpmnLane): void {
+    const mxLane = this.graph.insertVertex(this.getCell(poolId), lane.id, lane.label, lane.x, lane.y, lane.width, lane.height, MxGraphBpmnStyles.POLL_LANE);
     mxLane.setConnectable(false);
   }
 
@@ -65,6 +71,12 @@ export default class MxGraphModelUpdater {
   // ===================================================================================================================
   // usage with direct mxgraph code
   // ===================================================================================================================
+
+  public createPool(name: string, y = 0, width: number = LANE_WIDTH, height = 0): mxgraph.mxCell {
+    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), null, name, 0, y, width, height, MxGraphBpmnStyles.POLL_LANE);
+    pool.setConnectable(false);
+    return pool as mxgraph.mxCell;
+  }
 
   public createLane(pool: mxgraph.mxCell, name: string, y = 0, height: number = LANE_HEIGHT_LARGE, width: number = LANE_WIDTH): mxgraph.mxCell {
     const lane = this.graph.insertVertex(pool, null, name, 0, y, width, height, MxGraphBpmnStyles.POLL_LANE);
