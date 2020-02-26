@@ -10,19 +10,23 @@ abstract class AbstractBpmnShape {
     readonly y: number,
     readonly height: number,
     readonly width: number,
+    // TODO label should be an object to manage bpmn bounds
+    // <bpmndi:BPMNLabel>
+    //   <dc:Bounds x="239" y="205" width="22" height="14" />
+    // </bpmndi:BPMNLabel>
     readonly label: string,
     readonly type: string,
   ) {}
 }
 
 export class BpmnStartEvent extends AbstractBpmnShape {
-  constructor(id: string, label: string, y = EVENT_Y_LARGE, x = 60) {
+  constructor(id: string, label: string, y: number, x: number) {
     super(id, x, y, -1, -1, label, 'StartEvent');
   }
 }
 
 export class BpmnTerminateEndEvent extends AbstractBpmnShape {
-  constructor(id: string, label: string, y = EVENT_Y_LARGE, x: number) {
+  constructor(id: string, label: string, y: number, x: number) {
     super(id, x, y, -1, -1, label, 'TerminateEndEvent');
   }
 }
@@ -81,12 +85,13 @@ export class BpmnProcess extends AbstractBpmnShape {
     super(id, x, y, height, width, label, 'Process');
   }
 
-  private _lane: BpmnLane;
-  get lane(): BpmnLane {
-    return this._lane;
+  private readonly _lanes = new Set<BpmnLane>();
+
+  public addLane(lane: BpmnLane): void {
+    this._lanes.add(lane);
+  }
+  get lanes(): Set<BpmnLane> {
+    return this._lanes;
   }
 
-  set lane(value: BpmnLane) {
-    this._lane = value;
-  }
 }

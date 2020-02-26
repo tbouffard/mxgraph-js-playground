@@ -20,14 +20,14 @@ export default class ModelConvertor {
   private doMxgraphModelUpdate(process: BpmnProcess): void {
     this.mxGraphModelUpdater.createPoolWithId(process);
 
-    const bpmnLane = process.lane;
-    if (bpmnLane != null) {
-      console.debug('found bpmn lane');
-      console.debug(bpmnLane);
-      const laneId = bpmnLane.id;
-      this.mxGraphModelUpdater.createLaneWithId(process.id, bpmnLane);
+
+    process.lanes.forEach(lane => {
+      console.debug('Build lane');
+      console.debug(lane);
+      const laneId = lane.id;
+      this.mxGraphModelUpdater.createLaneWithId(process.id, lane);
       console.debug('Build elements of the lane');
-      bpmnLane.elements.forEach(element => {
+      lane.elements.forEach(element => {
         console.log(element);
         if (element instanceof BpmnStartEvent) {
           this.mxGraphModelUpdater.createStartEventWithId(laneId, element);
@@ -38,10 +38,10 @@ export default class ModelConvertor {
         }
       });
       console.debug('Build edges of the lane');
-      bpmnLane.edges.forEach(edge => {
+      lane.edges.forEach(edge => {
         console.debug(edge);
         this.mxGraphModelUpdater.createSimpleTransition(laneId, edge);
       });
-    }
+    });
   }
 }

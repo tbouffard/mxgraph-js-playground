@@ -1,28 +1,28 @@
-import {
-  BpmnEdge,
-  BpmnUserTask,
-  BpmnLane,
-  BpmnProcess,
-  BpmnStartEvent,
-  BpmnTerminateEndEvent
-} from './BpmnModel';
+import {BpmnEdge, BpmnLane, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent, BpmnUserTask} from './BpmnModel';
 
 export default class BpmnProcessCreatorExampleCodeOnly {
   public createProcess(): BpmnProcess {
-    const process = new BpmnProcess('Process_1', 'Customer Delivery', 0, 0, 720, 150);
+    const process = new BpmnProcess('Process_1', 'Customer Delivery', 0, 0, 720, 800);
 
-    const lane = new BpmnLane('Lane_1', 'Lane A', 10, 700, 120);
-    process.lane = lane;
+    const lane1 = new BpmnLane('Lane_1', 'Lane A', 10, 700, 120);
+    process.addLane(lane1);
 
-    lane.add(new BpmnStartEvent('Start_1', 'Start', 50, 60));
-    lane.add(new BpmnUserTask('HumanTask_1', 'Human', 220, 40, 50, 100));
-    lane.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End', 50, 600));
+    lane1.add(new BpmnStartEvent('Start_1', 'Start', 50, 60));
+    lane1.add(new BpmnUserTask('HumanTask_1_1', 'Human 1_1', 160, 40, 50, 100));
+    lane1.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End', 50, 600));
 
-    const edgeStartHuman = new BpmnEdge('Edge_1', 'Edge 1', 'Start_1', 'HumanTask_1');
-    const edgeHumanEnd = new BpmnEdge('Edge_2', 'Edge 2', 'HumanTask_1', 'TerminateEnd_1');
-    lane.addEdge(edgeStartHuman);
-    lane.addEdge(edgeHumanEnd);
+    lane1.addEdge(new BpmnEdge('Edge_1_1', 'Edge 1', 'Start_1', 'HumanTask_1_1'));
+    lane1.addEdge(new BpmnEdge('Edge_1_2', 'Edge 2', 'HumanTask_1_1', 'TerminateEnd_1'));
     // TODO way points
+
+    const lane2 = new BpmnLane('Lane_2', 'Lane B', 200, 700, 120);
+    process.addLane(lane2);
+    lane2.add(new BpmnUserTask('HumanTask_2_1', 'Human 2_1', 320, 40, 50, 80));
+    lane2.add(new BpmnUserTask('HumanTask_2_2', 'Human 2_2', 450, 40, 50, 80));
+    lane2.add(new BpmnTerminateEndEvent('TerminateEnd_2', 'End', 50, 600));
+
+    lane2.addEdge(new BpmnEdge('Edge_2_1', null, 'HumanTask_2_1', 'HumanTask_2_2'));
+    lane2.addEdge(new BpmnEdge('Edge_2_2', null, 'HumanTask_2_2', 'TerminateEnd_2'));
 
     return process;
   }
