@@ -72,6 +72,7 @@ export class BpmnEdge {
 
   constructor(readonly id: string, readonly label: string, readonly sourceRefId: string, readonly targetRefId: string) {}
 
+  // TODO way points
   addWayPoint(wayPoint: BpmnWayPoint) {
     this._wayPoints.add(wayPoint);
   }

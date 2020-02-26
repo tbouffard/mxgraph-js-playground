@@ -1,4 +1,12 @@
-import {BpmnEdge, BpmnLane, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent, BpmnUserTask} from './BpmnModel';
+import {
+  BpmnEdge,
+  BpmnLane,
+  BpmnParallelGateway,
+  BpmnProcess,
+  BpmnStartEvent,
+  BpmnTerminateEndEvent,
+  BpmnUserTask
+} from './BpmnModel';
 
 export default class BpmnProcessCreatorExampleCodeOnly {
   public createProcess(): BpmnProcess {
@@ -9,11 +17,12 @@ export default class BpmnProcessCreatorExampleCodeOnly {
 
     lane1.add(new BpmnStartEvent('Start_1', 'Start', 50, 60));
     lane1.add(new BpmnUserTask('HumanTask_1_1', 'Human 1_1', 160, 40, 50, 100));
+    lane1.add(new BpmnParallelGateway('ParallelGateway_1_1', 'Para Gw 1_1', 310, 27, 50, 100));
     lane1.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End', 50, 600));
 
     lane1.addEdge(new BpmnEdge('Edge_1_1', 'Edge 1', 'Start_1', 'HumanTask_1_1'));
-    lane1.addEdge(new BpmnEdge('Edge_1_2', 'Edge 2', 'HumanTask_1_1', 'TerminateEnd_1'));
-    // TODO way points
+    lane1.addEdge(new BpmnEdge('Edge_1_2', null, 'HumanTask_1_1', 'ParallelGateway_1_1'));
+    lane1.addEdge(new BpmnEdge('Edge_1_3', 'Edge 2', 'ParallelGateway_1_1', 'TerminateEnd_1'));
 
     const lane2 = new BpmnLane('Lane_2', 'Lane B', 200, 700, 120);
     process.addLane(lane2);
