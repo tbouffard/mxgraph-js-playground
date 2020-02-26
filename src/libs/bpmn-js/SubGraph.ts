@@ -10,17 +10,17 @@ export default class SubGraph extends AbstractGraph {
 
     model.beginUpdate();
     try {
-      const pool = this.createPool('Sub Pool');
-      const lane = this.createLane(pool, 'Sub Lane', 0, LANE_HEIGHT_LITTLE);
+      const pool = this.mxGraphModelUpdater.createPool('Sub Pool');
+      const lane = this.mxGraphModelUpdater.createLane(pool, 'Sub Lane', 0, LANE_HEIGHT_LITTLE);
 
-      const start = this.createStartEvent(lane, EVENT_Y_LITTLE, 100);
-      const task1 = this.createTask(lane, 'Task 1', 300, TASK_Y_LITTLE);
-      const task2 = this.createTask(lane, 'Task 2', 600, TASK_Y_LITTLE);
-      const end = this.createEndEvent(lane, EVENT_Y_LITTLE, 900);
+      const start = this.mxGraphModelUpdater.createStartEvent(lane, EVENT_Y_LITTLE, 100);
+      const task1 = this.mxGraphModelUpdater.createTask(lane, 'Task 1', 300, TASK_Y_LITTLE);
+      const task2 = this.mxGraphModelUpdater.createTask(lane, 'Task 2', 600, TASK_Y_LITTLE);
+      const end = this.mxGraphModelUpdater.createEndEvent(lane, EVENT_Y_LITTLE, 900);
 
-      this.createDefaultTransition(start, task1);
-      this.createDefaultTransition(task1, task2);
-      this.createDefaultTransition(task2, end);
+      this.mxGraphModelUpdater.createDefaultTransition(start, task1);
+      this.mxGraphModelUpdater.createDefaultTransition(task1, task2);
+      this.mxGraphModelUpdater.createDefaultTransition(task2, end);
     } finally {
       // Updates the display
       model.endUpdate();
