@@ -1,6 +1,6 @@
 import { mxgraph } from 'mxgraph';
 import MxGraphModelUpdater from '../mxGraph/MxGraphModelUpdater';
-import { BpmnUserTask, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent } from './BpmnModel';
+import { BpmnUserTask, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent } from '../model/BpmnModel';
 
 export default class ModelConvertor {
   constructor(readonly graph: mxgraph.mxGraph, readonly mxGraphModelUpdater: MxGraphModelUpdater) {}
