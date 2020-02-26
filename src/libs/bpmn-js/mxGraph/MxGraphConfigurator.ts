@@ -34,7 +34,7 @@ export default class MxGraphConfigurator {
 
   // TODO specify explicit type
   private cloneDefaultVertexStyle(): any {
-    return this.graph.getStylesheet().getDefaultVertexStyle();
+    return mxUtils.clone(this.graph.getStylesheet().getDefaultVertexStyle());
   }
 
   // TODO specify explicit type
@@ -43,7 +43,7 @@ export default class MxGraphConfigurator {
   }
 
   private configureDefaultVertexStyle(): void {
-    const style = this.cloneDefaultVertexStyle();
+    const style = this.graph.getStylesheet().getDefaultVertexStyle();
     style[mxConstants.STYLE_HORIZONTAL] = true;
     style[mxConstants.STYLE_FONTSIZE] = 15;
     style[mxConstants.STYLE_FILLCOLOR] = 'white';
