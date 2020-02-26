@@ -93,6 +93,7 @@ export class BpmnProcess extends AbstractBpmnShape {
   }
 
   private readonly _lanes = new Set<BpmnLane>();
+  private readonly _edges = new Set<BpmnEdge>();
 
   public addLane(lane: BpmnLane): void {
     this._lanes.add(lane);
@@ -101,4 +102,11 @@ export class BpmnProcess extends AbstractBpmnShape {
     return this._lanes;
   }
 
+  // TODO duplication with lanes, introduce a new 'Edges aware' type
+  get edges(): Set<BpmnEdge> {
+    return this._edges;
+  }
+  addEdge(edge: BpmnEdge): void {
+    this._edges.add(edge);
+  }
 }

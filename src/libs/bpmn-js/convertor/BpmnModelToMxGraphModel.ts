@@ -1,12 +1,6 @@
 import { mxgraph } from 'mxgraph';
 import MxGraphModelUpdater from '../mxGraph/MxGraphModelUpdater';
-import {
-  BpmnUserTask,
-  BpmnProcess,
-  BpmnStartEvent,
-  BpmnTerminateEndEvent,
-  BpmnParallelGateway
-} from '../model/BpmnModel';
+import { BpmnUserTask, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent, BpmnParallelGateway } from '../model/BpmnModel';
 
 export default class ModelConvertor {
   constructor(readonly graph: mxgraph.mxGraph, readonly mxGraphModelUpdater: MxGraphModelUpdater) {}
@@ -25,7 +19,6 @@ export default class ModelConvertor {
 
   private doMxgraphModelUpdate(process: BpmnProcess): void {
     this.mxGraphModelUpdater.createPoolWithId(process);
-
 
     process.lanes.forEach(lane => {
       console.debug('Build lane');
@@ -50,6 +43,12 @@ export default class ModelConvertor {
         console.debug(edge);
         this.mxGraphModelUpdater.createSimpleTransition(laneId, edge);
       });
+    });
+
+    console.debug('Build inter lane edges');
+    process.edges.forEach(edge => {
+      console.debug(edge);
+      this.mxGraphModelUpdater.createSimpleTransition(process.id, edge);
     });
   }
 }
