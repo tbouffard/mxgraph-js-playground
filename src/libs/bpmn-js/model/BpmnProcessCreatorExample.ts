@@ -1,15 +1,21 @@
-import { BpmnHumanTask, BpmnLane, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent } from './BpmnModel';
+import { BpmnEdge, BpmnHumanTask, BpmnLane, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent, BpmnWayPoint } from './BpmnModel';
 
 export default class BpmnProcessCreatorExampleCodeOnly {
   public createProcess(): BpmnProcess {
     const process = new BpmnProcess('Pool 1');
 
-    const lane = new BpmnLane('Lane A', 10, 700, 120);
+    const lane = new BpmnLane('Lane_1', 'Lane A', 10, 700, 120);
     process.lane = lane;
 
-    lane.add(new BpmnStartEvent('Start', 50, 60));
-    lane.add(new BpmnHumanTask('Human', 220, 50, 50, 100));
-    lane.add(new BpmnTerminateEndEvent('End', 50, 600));
+    lane.add(new BpmnStartEvent('Start_1', 'Start', 50, 60));
+    lane.add(new BpmnHumanTask('HumanTask_1', 'Human', 220, 50, 50, 100));
+    lane.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End', 50, 600));
+
+    const edgeStartHuman = new BpmnEdge('Edge 1', 'Start_1', 'HumanTask_1');
+    const edgeHumanEnd = new BpmnEdge('Edge 2', 'HumanTask_1', 'TerminateEnd_1');
+    lane.addEdge(edgeStartHuman);
+    lane.addEdge(edgeHumanEnd);
+    // TODO way points
 
     return process;
   }

@@ -17,7 +17,7 @@ export default class MainGraph extends AbstractGraph {
     const process = new BpmnProcessCreatorExampleCodeOnly().createProcess();
     new ModelConvertor(this.graph, this.mxGraphModelUpdater).updateMxGraphModel(process);
 
-    // this.graph.fit();
+    this.graph.fit();
   }
 
   private loadGraphMxGraphCodeOnly(): void {
