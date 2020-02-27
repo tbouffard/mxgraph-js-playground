@@ -5,6 +5,7 @@ export enum MxGraphBpmnStyles {
   EVENT_BOUNDARY = 'boundary',
   GATEWAY = 'condition',
   TASK = 'task',
+  TASK_SERVICE = 'taskService',
   TASK_CA = 'CallActivity',
   POLL_LANE = 'poolLane',
   POOL = 'pool',

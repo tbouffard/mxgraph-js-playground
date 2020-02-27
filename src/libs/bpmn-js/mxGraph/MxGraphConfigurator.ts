@@ -17,12 +17,15 @@ export default class MxGraphConfigurator {
     this.configurePoolStyle();
 
     this.configureTaskStyle();
+    this.configureServiceTaskStyle();
     this.configureCallActivityStyle();
+
     this.configureConditionStyle();
     this.configureStartStyle();
     this.configureEndTerminateStyle();
     this.configureEndStyle();
     this.configureBoundaryEventStyle();
+
     this.configureDefaultTransitionStyle();
     this.configureAnimatedTransitionStyle();
     this.configureCrossoverTransitionStyle();
@@ -98,6 +101,16 @@ export default class MxGraphConfigurator {
     style[mxConstants.STYLE_ROUNDED] = true;
     style[mxConstants.STYLE_GRADIENTCOLOR] = '#B8B9DA';
     this.graph.getStylesheet().putCellStyle(MxGraphBpmnStyles.TASK, style);
+  }
+
+  private configureServiceTaskStyle(): void {
+    const style = this.cloneDefaultVertexStyle();
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = 'middle';
+    style[mxConstants.STYLE_STROKEWIDTH] = 2;
+
+    style[mxConstants.STYLE_ROUNDED] = true;
+    this.graph.getStylesheet().putCellStyle(MxGraphBpmnStyles.TASK_SERVICE, style);
   }
 
   private configureCallActivityStyle(): void {

@@ -1,6 +1,13 @@
 import { mxgraph } from 'mxgraph';
 import MxGraphModelUpdater from '../mxGraph/MxGraphModelUpdater';
-import { BpmnUserTask, BpmnProcess, BpmnStartEvent, BpmnTerminateEndEvent, BpmnParallelGateway } from '../model/BpmnModel';
+import {
+  BpmnUserTask,
+  BpmnProcess,
+  BpmnStartEvent,
+  BpmnTerminateEndEvent,
+  BpmnParallelGateway,
+  BpmnServiceTask
+} from '../model/BpmnModel';
 
 export default class ModelConvertor {
   constructor(readonly graph: mxgraph.mxGraph, readonly mxGraphModelUpdater: MxGraphModelUpdater) {}
@@ -39,6 +46,8 @@ export default class ModelConvertor {
           this.mxGraphModelUpdater.createEndTerminateEventWithId(laneId, element);
         } else if (element instanceof BpmnUserTask) {
           this.mxGraphModelUpdater.createUserTask(laneId, element);
+        } else if (element instanceof BpmnServiceTask) {
+          this.mxGraphModelUpdater.createServiceTask(laneId, element);
         } else if (element instanceof BpmnParallelGateway) {
           this.mxGraphModelUpdater.createParallelGateway(laneId, element);
         }

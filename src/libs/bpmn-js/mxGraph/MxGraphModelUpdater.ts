@@ -7,7 +7,7 @@ import {
   BpmnLane,
   BpmnStartEvent,
   BpmnTerminateEndEvent,
-  BpmnProcess, BpmnParallelGateway,
+  BpmnProcess, BpmnParallelGateway, BpmnServiceTask,
 } from '../model/BpmnModel';
 
 const { mxUtils, mxPoint } = mxgraphFactory({
@@ -47,6 +47,10 @@ export default class MxGraphModelUpdater {
 
   public createUserTask(laneId: string, task: BpmnUserTask): void {
     this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK);
+  }
+
+  public createServiceTask(laneId: string, task: BpmnServiceTask): void {
+    this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK_SERVICE);
   }
 
   public createStartEventWithId(laneId: string, event: BpmnStartEvent): void {
