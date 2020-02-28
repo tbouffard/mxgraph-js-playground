@@ -1,4 +1,5 @@
-import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
+import { mxgraph } from 'mxgraph';
+import { mxgraphFactory } from '../../../components/mxgraph-factory';
 import { MxGraphBpmnStyles } from './MxGraphBpmnStyles';
 
 const { mxUtils, mxConstants, mxEdgeStyle, mxPerimeter } = mxgraphFactory({
@@ -40,7 +41,7 @@ export default class MxGraphConfigurator {
 
   // TODO specify explicit type
   private cloneVertexStyle(style: string): any {
-    return mxUtils.clone(this.graph.getStylesheet().getCellStyle(style, 'default'));
+    return mxUtils.clone(this.graph.getStylesheet().getCellStyle(style));
   }
 
   private configureDefaultVertexStyle(): void {

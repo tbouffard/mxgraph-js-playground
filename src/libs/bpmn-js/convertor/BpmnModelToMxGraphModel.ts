@@ -1,4 +1,4 @@
-import { mxgraph } from 'mxgraph-factory';
+import { mxgraph } from 'mxgraph';
 import MxGraphModelUpdater from '../mxGraph/MxGraphModelUpdater';
 import {
   BpmnUserTask,

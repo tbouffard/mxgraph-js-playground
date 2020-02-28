@@ -25,7 +25,7 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
-    "mxgraph-factory": "^4.1.0"
+    "mxgraph": "^4.1.0"
   },
   "husky": {
     "hooks": {
@@ -42,7 +42,7 @@
   "scripts": {
     "dev": "webpack-dev-server --config webpack.dev.config.js",
     "build-dev": "webpack --config webpack.dev.config.js",
-    "lint": "tsc --noEmit && eslint */**/*.{js,ts,tsx} --quiet --fix",
     "test": "cypress run"
-  }
+  },
+  "types": "./index.d.ts"
 }

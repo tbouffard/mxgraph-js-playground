@@ -1,4 +1,5 @@
-import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
+import { mxgraph } from 'mxgraph';
+import { mxgraphFactory } from '../../components/mxgraph-factory';
 import MxGraphConfigurator from './mxGraph/MxGraphConfigurator';
 import { MxGraphBpmnStyles } from './mxGraph/MxGraphBpmnStyles';
 import MxGraphModelUpdater from './mxGraph/MxGraphModelUpdater';
@@ -25,7 +26,7 @@ mxGraph.prototype.cellsLocked = true;
 
 // Overrides method to provide a cell label in the display
 mxGraph.prototype.convertValueToString = function(cell) {
-  if (mxUtils.isNode(cell.value, null)) {
+  if (mxUtils.isNode(cell.value)) {
     if (cell.value.nodeName != undefined && cell.value.nodeName == MxGraphBpmnStyles.TASK_CA) {
       return cell.getAttribute('name');
     }

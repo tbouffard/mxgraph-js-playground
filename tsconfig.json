@@ -5,6 +5,11 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "typeRoots" : ["src/@types", "./node_modules/@types"]
   },
   "exclude": ["node_modules"],
+
+  "files": [
+    "src/@types/mxgraph/index.d.ts"
+  ]
 }
