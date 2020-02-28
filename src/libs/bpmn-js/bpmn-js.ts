@@ -53,7 +53,7 @@ export class BpmnJs {
   }
 
   public loadGraph(): void {
-    this.loadGraph_(null);
+    this.loadGraph_('sample');
   }
 
   public loadGraph_(graphName: string): void {
@@ -358,7 +358,7 @@ export class BpmnJs {
         mxUtils.para(div, 'Graphs');
         mxUtils.linkInvoke(div, 'New', currentEditor, 'open', 'resources/diagrams/empty.xml', off);
         mxUtils.br(div);
-        mxUtils.linkAction(div, 'Marcin Sample', currentEditor, 'loadGraphSample', off);
+        mxUtils.linkAction(div, 'Sample Graph', currentEditor, 'loadGraphSample', off);
         mxUtils.br(div);
         mxUtils.linkAction(div, 'Custom travel-booking', currentEditor, 'loadGraphTravelBooking', off);
         mxUtils.br(div);
