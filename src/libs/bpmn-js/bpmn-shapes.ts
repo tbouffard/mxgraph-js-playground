@@ -241,20 +241,17 @@ abstract class BpmnShapeTask extends mxRectangleShape {
         switch (symbol) {
           case 'compensation': {
             this.drawCompensation(c, x, y, symbolBaseSize/6, symbolBaseSize/6);
-            // this.drawCompensation(c, x, y, w, h);
             break;
           }
           case 'loop': {
             break;
           }
           case 'multi-parallel': {
-            this.drawMultipleParallel(c, x, y, symbolBaseSize / 6, symbolBaseSize / 6);
-            // this.drawMultipleParallel(c, x, y, w, h);
+            this.drawMultipleParallel(c, symbolBaseSize / 6, symbolBaseSize / 6);
             break;
           }
           case 'multi-sequential': {
-            //this.drawMultipleSequential(c, x, y, symbolBaseSize, symbolBaseSize);
-            // this.drawMultipleSequential(c, x, y, w, h);
+            this.drawMultipleSequential(c, symbolBaseSize / 6, symbolBaseSize / 6);
             break;
           }
           case 'star': {
@@ -367,19 +364,24 @@ abstract class BpmnShapeTask extends mxRectangleShape {
 </shape>
  */
 
-  private drawMultipleSequential(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+  // TODO duplication with parallel
+  // TODO we could rotate the parallel symbol
+  private drawMultipleSequential(c: mxgraph.mxXmlCanvas2D, w: number, h: number): void {
     c.begin();
-    c.moveTo(0, h * 0.39);
-    c.lineTo(w * 0.5, 0);
-    c.lineTo(w, h * 0.39);
-    c.lineTo(w * 0.815, h);
-    c.lineTo(w * 0.185, h);
+    c.setStrokeWidth(1);
+    c.setFillColor(this.stroke);
+    const w2 = w / 5;
+    const h2 = h / 5;
+    c.rect(0, 0, w, h2);
+    c.fillAndStroke();
+    c.rect(0, 2 * h2, w, h2);
+    c.fillAndStroke();
+    c.rect(0, 4 * h2, w, h2);
     c.close();
     c.fillAndStroke();
   }
 
-  private drawMultipleParallel(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
-    // c.translate(x, y);
+  private drawMultipleParallel(c: mxgraph.mxXmlCanvas2D, w: number, h: number): void {
     c.begin();
     c.setStrokeWidth(1);
     c.setFillColor(this.stroke);
