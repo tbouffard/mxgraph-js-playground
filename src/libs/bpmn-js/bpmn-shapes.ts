@@ -442,7 +442,7 @@ export class BpmnShapeTaskUser extends BpmnShapeTask {
     const xTranslation = x + w / 10;
     const yTranslation = y + h / 10;
 
-    //c.translate(xTranslation, yTranslation);
+    c.translate(xTranslation, yTranslation);
     //c.translate(x + w/10, y + h/10);
     c.begin();
     this.redrawActor(c, x, y, actorBaseSize / 6, actorBaseSize / 6);
@@ -450,7 +450,7 @@ export class BpmnShapeTaskUser extends BpmnShapeTask {
     c.fillAndStroke();
 
     // TODO hack for translation
-    // c.translate(-xTranslation, -yTranslation);
+    c.translate(-xTranslation, -yTranslation);
   }
 
   private redrawActor(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
