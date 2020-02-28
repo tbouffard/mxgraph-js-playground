@@ -1,6 +1,6 @@
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 
-const { mxShape, mxConstants, mxPoint, mxUtils } = mxgraphFactory({
+const { mxShape, mxConstants, mxPoint, mxUtils, mxRectangleShape } = mxgraphFactory({
   mxLoadResources: false, // for graph and editors resources files
   mxLoadStylesheets: false,
 });
@@ -15,7 +15,6 @@ export enum BpmnGatewayType {
 export const SHAPE_BPMN_GATEWAY = 'bpmn.gateway';
 export const SHAPE_BPMN_TASK_USER = 'bpmn.task.user';
 
-
 abstract class AbstractBpmnShape extends mxShape {
   protected constructor(bounds: mxgraph.mxRectangle, fill: any, stroke: any, strokewidth: number) {
     super();
@@ -24,7 +23,6 @@ abstract class AbstractBpmnShape extends mxShape {
     this.stroke = stroke;
     this.strokewidth = strokewidth != null ? strokewidth : 1;
   }
-
 }
 
 export class BpmnShapeGateway extends AbstractBpmnShape {
@@ -37,7 +35,7 @@ export class BpmnShapeGateway extends AbstractBpmnShape {
   }
 
   // TODO we may only consider x and w to have same proportion with y and h
-  public paintVertexShape(c: mxgraph.mxXmlCanvas2D, x, y, w, h): void {
+  public paintVertexShape(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     // BACKGROUND
     c.setShadow(false);
 
@@ -197,3 +195,68 @@ export class BpmnShapeGateway extends AbstractBpmnShape {
     c.setFillColor(fillColor);
   }
 }
+
+abstract class BpmnShapeTask extends mxRectangleShape {
+  public paintVertexShape(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    this.isRounded = true;
+    // the following is taken from mxshape
+    this.paintBackground(c, x, y, w, h);
+
+    // TODO make it work
+    // if (!this.outline || this.style == null || mxUtils.getValue(this.style, mxConstants.STYLE_OUBACKGROUND_OUTLINE, 0) == 0) {
+    //   c.setShadow(false);
+    //   this.paintForeground(c, x, y, w, h);
+    // }
+
+    // custom to add symbols
+    // may apply to all bpmn shapes that require adding symbols
+    this.paintSymbols(c, x, y, w, h);
+  }
+
+  protected abstract paintSymbols(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void;
+}
+
+export class BpmnShapeTaskUser extends BpmnShapeTask {
+  // TAKEN from mxgraph mxActor
+  protected paintSymbols(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    c.translate(x + w/10, y + h/10);
+    c.begin();
+    this.redrawActor(c, x, y, w/6, h/6);
+    c.fillAndStroke();
+  }
+
+  private redrawActor(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    const width = w / 3;
+    c.moveTo(0, h);
+    c.curveTo(0, (3 * h) / 5, 0, (2 * h) / 5, w / 2, (2 * h) / 5);
+    c.curveTo(w / 2 - width, (2 * h) / 5, w / 2 - width, 0, w / 2, 0);
+    c.curveTo(w / 2 + width, 0, w / 2 + width, (2 * h) / 5, w / 2, (2 * h) / 5);
+    c.curveTo(w, (2 * h) / 5, w, (3 * h) / 5, w, h);
+    c.close();
+  }
+}
+
+/*
+TAKEN from mxgraph mxActor
+
+mxActor.prototype.paintVertexShape = function(c, x, y, w, h)
+{
+  c.translate(x, y);
+  c.begin();
+  this.redrawPath(c, x, y, w, h);
+  c.fillAndStroke();
+};
+
+mxActor.prototype.redrawPath = function(c, x, y, w, h)
+{
+  var width = w/3;
+  c.moveTo(0, h);
+  c.curveTo(0, 3 * h / 5, 0, 2 * h / 5, w / 2, 2 * h / 5);
+  c.curveTo(w / 2 - width, 2 * h / 5, w / 2 - width, 0, w / 2, 0);
+  c.curveTo(w / 2 + width, 0, w / 2 + width, 2 * h / 5, w / 2, 2 * h / 5);
+  c.curveTo(w, 2 * h / 5, w, 3 * h / 5, w, h);
+  c.close();
+};
+
+
+ */
