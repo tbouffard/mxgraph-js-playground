@@ -5,8 +5,8 @@ import {
   BpmnProcess,
   BpmnStartEvent,
   BpmnTerminateEndEvent,
-  BpmnParallelGateway,
-  BpmnServiceTask
+  BpmnServiceTask,
+  BpmnGateway
 } from '../model/BpmnModel';
 
 export default class ModelConvertor {
@@ -48,8 +48,8 @@ export default class ModelConvertor {
           this.mxGraphModelUpdater.createUserTask(laneId, element);
         } else if (element instanceof BpmnServiceTask) {
           this.mxGraphModelUpdater.createServiceTask(laneId, element);
-        } else if (element instanceof BpmnParallelGateway) {
-          this.mxGraphModelUpdater.createParallelGateway(laneId, element);
+        } else if (element instanceof BpmnGateway) {
+          this.mxGraphModelUpdater.createGateway(laneId, element);
         }
       });
       console.info('mxGraph Model LANE ELEMENTS CREATED: ', new Date().getTime() - t0);

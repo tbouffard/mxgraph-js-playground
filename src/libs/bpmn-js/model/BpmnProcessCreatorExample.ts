@@ -1,11 +1,13 @@
 import {
   BpmnEdge,
+  BpmnGateway,
+  BpmnGatewayType,
   BpmnLane,
-  BpmnParallelGateway,
-  BpmnProcess, BpmnServiceTask,
+  BpmnProcess,
+  BpmnServiceTask,
   BpmnStartEvent,
   BpmnTerminateEndEvent,
-  BpmnUserTask
+  BpmnUserTask,
 } from './BpmnModel';
 
 export default class BpmnProcessCreatorExampleCodeOnly {
@@ -17,7 +19,7 @@ export default class BpmnProcessCreatorExampleCodeOnly {
     process.addLane(lane1);
     lane1.add(new BpmnStartEvent('Start_1', 'Start', 50, 60));
     lane1.add(new BpmnUserTask('HumanTask_1_1', 'Human 1_1', 160, 40, 50, 100));
-    lane1.add(new BpmnParallelGateway('ParallelGateway_1_1', 'Para Gw 1_1', 310, 27, 50, 100));
+    lane1.add(new BpmnGateway('ParallelGateway_1_1', 'Para Gw 1_1', 310, 27, 75, 75, BpmnGatewayType.PARALLEL));
     lane1.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End 1', 50, 600));
 
     lane1.addEdge(new BpmnEdge('Edge_1_1', 'Edge 1', 'Start_1', 'HumanTask_1_1'));
@@ -37,15 +39,20 @@ export default class BpmnProcessCreatorExampleCodeOnly {
     // LANE 3
     const lane3 = new BpmnLane('Lane_3', 'Lane C', 400, 700, 120);
     process.addLane(lane3);
-    lane3.add(new BpmnServiceTask('ServiceTask_3_1', 'Service 3_1', 306, 40, 50, 80));
-    lane3.add(new BpmnUserTask('HumanTask_3_2', 'Human 3_2', 450, 40, 50, 80));
-    lane3.add(new BpmnTerminateEndEvent('TerminateEnd_3', 'End 3', 50, 600));
+    lane3.add(new BpmnGateway('ExclusiveGateway_3_1', 'Excl Gw 3_1', 310, 28, 75, 75, BpmnGatewayType.EXCLUSIVE));
+    lane3.add(new BpmnServiceTask('ServiceTask_3_1', 'Service 3_1', 160, 40, 50, 80));
+    lane3.add(new BpmnUserTask('HumanTask_3_1', 'Human 3_1', 450, 40, 50, 80));
+    lane3.add(new BpmnTerminateEndEvent('TerminateEnd_3_1', 'End 3_1', 50, 600));
+    lane3.add(new BpmnTerminateEndEvent('TerminateEnd_3_2', 'End 3_2', 50, 60));
 
-    lane3.addEdge(new BpmnEdge('Edge_3_1', null, 'ServiceTask_3_1', 'HumanTask_3_2'));
-    lane3.addEdge(new BpmnEdge('Edge_3_2', null, 'HumanTask_3_2', 'TerminateEnd_3'));
+    lane3.addEdge(new BpmnEdge('Edge_3_1', null, 'ExclusiveGateway_3_1', 'HumanTask_3_1'));
+    lane3.addEdge(new BpmnEdge('Edge_3_2', null, 'HumanTask_3_1', 'TerminateEnd_3_1'));
+    lane3.addEdge(new BpmnEdge('Edge_3_3', null, 'ExclusiveGateway_3_1', 'ServiceTask_3_1'));
+    lane3.addEdge(new BpmnEdge('Edge_3_4', null, 'ServiceTask_3_1', 'TerminateEnd_3_2'));
 
     // INTER LANE EDGES
-    process.addEdge(new BpmnEdge('Process_Edge_1', 'Inter lane', 'ParallelGateway_1_1', 'HumanTask_2_1'));
+    process.addEdge(new BpmnEdge('Process_Edge_1', 'Inter lane 1', 'ParallelGateway_1_1', 'HumanTask_2_1'));
+    process.addEdge(new BpmnEdge('Process_Edge_2', 'Inter lane 2', 'HumanTask_2_1', 'ExclusiveGateway_3_1'));
 
     return process;
   }

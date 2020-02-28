@@ -7,7 +7,7 @@ import {
   BpmnLane,
   BpmnStartEvent,
   BpmnTerminateEndEvent,
-  BpmnProcess, BpmnParallelGateway, BpmnServiceTask,
+  BpmnProcess, BpmnGateway, BpmnServiceTask,
 } from '../model/BpmnModel';
 
 const { mxUtils, mxPoint } = mxgraphFactory({
@@ -72,8 +72,8 @@ export default class MxGraphModelUpdater {
     return cell;
   }
 
-  public createParallelGateway(laneId: string, gateway: BpmnParallelGateway): void {
-    this.graph.insertVertex(this.getCell(laneId), gateway.id, gateway.label, gateway.x, gateway.y, TASK_HEIGHT, TASK_HEIGHT, MxGraphBpmnStyles.GATEWAY);
+  public createGateway(laneId: string, gateway: BpmnGateway): void {
+    this.graph.insertVertex(this.getCell(laneId), gateway.id, gateway.label, gateway.x, gateway.y, gateway.width, gateway.height, MxGraphBpmnStyles.GATEWAY);
   }
 
   // ===================================================================================================================

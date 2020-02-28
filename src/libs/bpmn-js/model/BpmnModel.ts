@@ -43,9 +43,14 @@ export class BpmnServiceTask extends AbstractBpmnShape {
   }
 }
 
-export class BpmnParallelGateway extends AbstractBpmnShape {
-  constructor(id: string, label: string, x: number, y: number, height: number, width: number) {
-    super(id, x, y, height, width, label, 'ParallelGateway');
+export enum BpmnGatewayType {
+  PARALLEL,
+  EXCLUSIVE,
+}
+
+export class BpmnGateway extends AbstractBpmnShape {
+  constructor(id: string, label: string, x: number, y: number, height: number, width: number, readonly gatewayType: BpmnGatewayType) {
+    super(id, x, y, height, width, label, 'Gateway');
   }
 }
 
