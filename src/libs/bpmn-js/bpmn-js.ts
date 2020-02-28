@@ -5,7 +5,9 @@ import {
   GATEWAY_TYPE,
   SHAPE_BPMN_GATEWAY,
   SHAPE_BPMN_TASK_USER,
-  BpmnShapeTaskUser
+  BpmnShapeTaskUser,
+  SHAPE_BPMN_TASK_SERVICE,
+  BpmnShapeTaskService,
 } from './bpmn-shapes';
 
 const {
@@ -109,10 +111,11 @@ export class BpmnJs {
 
       const styleTaskUser = mxUtils.clone(style);
       styleTaskUser[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_TASK_USER;
-      // styleTaskUser[GATEWAY_TYPE] = BpmnGatewayType.EXCLUSIVE;
       this.editor.graph.getStylesheet().putCellStyle('taskUser', styleTaskUser);
 
-
+      const styleTaskService = mxUtils.clone(style);
+      styleTaskService[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_TASK_SERVICE;
+      this.editor.graph.getStylesheet().putCellStyle('taskService', styleTaskService);
 
       const parent = this.editor.graph.getDefaultParent();
 
@@ -120,17 +123,27 @@ export class BpmnJs {
       const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane', 20, 20, 600, 400, 'swimlane');
 
       const gw1 = this.editor.graph.insertVertex(swimlane, null, null, 40, 20, 40, 40, 'gatewayParallel');
-      const taskUser1 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 140, 10, 60, 60, 'taskUser');
-      const taskUser2 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 250, 10, 100, 30, 'taskUser');
-      const taskUser3 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 420, 10, 30, 100, 'taskUser');
+      const taskUser1 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 140, 10, 60, 60, 'taskUser;bpmn.symbols=multi-parallel,fixed');
+      const taskUser2 = this.editor.graph.insertVertex(swimlane, null, 'user 2', 250, 10, 100, 30, 'taskUser;bpmn.symbols=multi-sequential');
+      const taskUser3 = this.editor.graph.insertVertex(swimlane, null, 'user 3', 420, 10, 60, 60, 'taskUser;bpmn.symbols=compensation');
       const gw2 = this.editor.graph.insertVertex(swimlane, null, null, 400, 150, 40, 40, 'gatewayExclusive');
-      const cloud1 = this.editor.graph.insertVertex(swimlane, null, 'World!', 200, 150, 80, 30, 'styleCloud');
       this.editor.graph.insertEdge(swimlane, null, '', gw1, taskUser1);
       this.editor.graph.insertEdge(swimlane, null, '', taskUser1, taskUser2);
       this.editor.graph.insertEdge(swimlane, null, '', taskUser2, taskUser3);
       this.editor.graph.insertEdge(swimlane, null, '', taskUser3, gw2);
-      this.editor.graph.insertEdge(swimlane, null, '', gw2, cloud1);
+
+      const task_2_1 = this.editor.graph.insertVertex(swimlane, null, 'service 2.1', 320, 150, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
+      const task_2_2 = this.editor.graph.insertVertex(swimlane, null, 'service 2.2', 150, 150, 80, 60, 'taskService;bpmn.symbols=loop');
+      const task_2_3 = this.editor.graph.insertVertex(swimlane, null, 'service 2.3', 40, 150, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
+      const task_2_4 = this.editor.graph.insertVertex(swimlane, null, 'service 2.4', 40, 250, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
+
+      this.editor.graph.insertEdge(swimlane, null, '', gw2, task_2_1);
+      this.editor.graph.insertEdge(swimlane, null, '', task_2_1, task_2_2);
+      this.editor.graph.insertEdge(swimlane, null, '', task_2_2, task_2_3);
+
+      const cloud1 = this.editor.graph.insertVertex(swimlane, null, 'World!', 400, 300, 80, 30, 'styleCloud');
       const end = this.editor.graph.insertVertex(swimlane, null, 'end event', 200, 300, 30, 30, 'end');
+      this.editor.graph.insertEdge(swimlane, null, '', gw2, cloud1);
       this.editor.graph.insertEdge(swimlane, null, '', cloud1, end);
     } finally {
       // Updates the display
@@ -181,6 +194,7 @@ export class BpmnJs {
   private registerCustomShapes(): void {
     console.info('####register BPMN Shapes');
     mxCellRenderer.registerShape(SHAPE_BPMN_GATEWAY, BpmnShapeGateway);
+    mxCellRenderer.registerShape(SHAPE_BPMN_TASK_SERVICE, BpmnShapeTaskService);
     mxCellRenderer.registerShape(SHAPE_BPMN_TASK_USER, BpmnShapeTaskUser);
     console.info('####BPMN Shapes registered');
   }
