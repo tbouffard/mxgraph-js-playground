@@ -27,7 +27,7 @@ abstract class AbstractBpmnShape extends mxShape {
 
 }
 
-export class BpmnGatewayShape extends AbstractBpmnShape {
+export class BpmnShapeGateway extends AbstractBpmnShape {
   constructor(bounds: mxgraph.mxRectangle, fill: any, stroke: any, strokewidth: number) {
     super(bounds, fill, stroke, strokewidth);
     // this.bounds = bounds;

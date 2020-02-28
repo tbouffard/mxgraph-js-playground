@@ -1,5 +1,5 @@
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
-import { BpmnGatewayShape, BpmnGatewayType, GATEWAY_TYPE, SHAPE_BPMN_GATEWAY } from './bpmn-shapes';
+import { BpmnShapeGateway, BpmnGatewayType, GATEWAY_TYPE, SHAPE_BPMN_GATEWAY } from './bpmn-shapes';
 
 const {
   mxGraph,
@@ -160,7 +160,7 @@ export class BpmnJs {
 
   private registerCustomShapes(): void {
     console.info('####register BPMN Shapes');
-    mxCellRenderer.registerShape(SHAPE_BPMN_GATEWAY, BpmnGatewayShape);
+    mxCellRenderer.registerShape(SHAPE_BPMN_GATEWAY, BpmnShapeGateway);
     console.info('####BPMN Shapes registered');
   }
 
