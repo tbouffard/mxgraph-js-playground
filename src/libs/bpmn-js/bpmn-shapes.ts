@@ -13,9 +13,11 @@ export enum BpmnGatewayType {
 }
 
 export const SHAPE_BPMN_GATEWAY = 'bpmn.gateway';
+export const SHAPE_BPMN_TASK_USER = 'bpmn.task.user';
 
-export class BpmnGatewayShape extends mxShape {
-  constructor(bounds: mxgraph.mxRectangle, fill: any, stroke: any, strokewidth: number) {
+
+abstract class AbstractBpmnShape extends mxShape {
+  protected constructor(bounds: mxgraph.mxRectangle, fill: any, stroke: any, strokewidth: number) {
     super();
     this.bounds = bounds;
     this.fill = fill;
@@ -23,6 +25,18 @@ export class BpmnGatewayShape extends mxShape {
     this.strokewidth = strokewidth != null ? strokewidth : 1;
   }
 
+}
+
+export class BpmnGatewayShape extends AbstractBpmnShape {
+  constructor(bounds: mxgraph.mxRectangle, fill: any, stroke: any, strokewidth: number) {
+    super(bounds, fill, stroke, strokewidth);
+    // this.bounds = bounds;
+    // this.fill = fill;
+    // this.stroke = stroke;
+    // this.strokewidth = strokewidth != null ? strokewidth : 1;
+  }
+
+  // TODO we may only consider x and w to have same proportion with y and h
   public paintVertexShape(c: mxgraph.mxXmlCanvas2D, x, y, w, h): void {
     // BACKGROUND
     c.setShadow(false);
@@ -62,6 +76,14 @@ export class BpmnGatewayShape extends mxShape {
     // w /= 2;
 
     //add rhombus connections here
+    // constraints: in design mode, would be interesting
+    // in visu mode, to be confirmed depending of configuration defined in the bpmn file (connection point on the shape may be defined there)
+    // https://jgraph.github.io/mxgraph/docs/js-api/files/view/mxConnectionConstraint-js.html#mxConnectionConstraint
+    // Defines an object that contains the constraints about how to connect one side of an edge to its terminal.
+    // the following is taken from draw.io gateway
+    // first 4 constraints are for the edge of the rhombus
+    // mxShape ts type does not have a 'constraints' field
+    //
     // this.constraints = [
     //   new mxConnectionConstraint(new mxPoint(0.5, 0), true),
     //   new mxConnectionConstraint(new mxPoint(0.5, 1), true),
