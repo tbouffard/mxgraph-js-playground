@@ -124,8 +124,8 @@ export class BpmnJs {
 
       const gw1 = this.editor.graph.insertVertex(swimlane, null, null, 40, 20, 40, 40, 'gatewayParallel');
       const taskUser1 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 140, 10, 60, 60, 'taskUser;bpmn.symbols=multi-parallel,fixed');
-      const taskUser2 = this.editor.graph.insertVertex(swimlane, null, 'user 2', 250, 10, 100, 30, 'taskUser;bpmn.symbols=multi-sequential');
-      const taskUser3 = this.editor.graph.insertVertex(swimlane, null, 'user 3', 420, 10, 60, 60, 'taskUser;bpmn.symbols=compensation');
+      const taskUser2 = this.editor.graph.insertVertex(swimlane, null, 'user 2', 250, 10, 100, 60, 'taskUser;bpmn.symbols=multi-sequential');
+      const taskUser3 = this.editor.graph.insertVertex(swimlane, null, 'user 3', 380, 10, 60, 60, 'taskUser;bpmn.symbols=compensation');
       const gw2 = this.editor.graph.insertVertex(swimlane, null, null, 400, 150, 40, 40, 'gatewayExclusive');
       this.editor.graph.insertEdge(swimlane, null, '', gw1, taskUser1);
       this.editor.graph.insertEdge(swimlane, null, '', taskUser1, taskUser2);
@@ -140,6 +140,7 @@ export class BpmnJs {
       this.editor.graph.insertEdge(swimlane, null, '', gw2, task_2_1);
       this.editor.graph.insertEdge(swimlane, null, '', task_2_1, task_2_2);
       this.editor.graph.insertEdge(swimlane, null, '', task_2_2, task_2_3);
+      this.editor.graph.insertEdge(swimlane, null, '', task_2_3, task_2_4);
 
       const cloud1 = this.editor.graph.insertVertex(swimlane, null, 'World!', 400, 300, 80, 30, 'styleCloud');
       const end = this.editor.graph.insertVertex(swimlane, null, 'end event', 200, 300, 30, 30, 'end');
