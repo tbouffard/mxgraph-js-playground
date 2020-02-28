@@ -97,7 +97,7 @@ export class BpmnJs {
 
       const styleGatewayExclusive = mxUtils.clone(style);
       styleGatewayExclusive[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_GATEWAY;
-      styleGatewayParallel[GATEWAY_TYPE] = BpmnGatewayType.EXCLUSIVE;
+      styleGatewayExclusive[GATEWAY_TYPE] = BpmnGatewayType.EXCLUSIVE;
       this.editor.graph.getStylesheet().putCellStyle('gatewayExclusive', styleGatewayExclusive);
 
       const parent = this.editor.graph.getDefaultParent();
