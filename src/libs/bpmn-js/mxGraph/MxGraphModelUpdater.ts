@@ -1,14 +1,6 @@
-import { mxgraph } from 'mxgraph';
+import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 import { MxGraphBpmnStyles } from './MxGraphBpmnStyles';
-import { mxgraphFactory } from '../../../components/mxgraph-factory';
-import {
-  BpmnEdge,
-  BpmnUserTask,
-  BpmnLane,
-  BpmnStartEvent,
-  BpmnTerminateEndEvent,
-  BpmnProcess, BpmnGateway, BpmnServiceTask,
-} from '../model/BpmnModel';
+import { BpmnEdge, BpmnUserTask, BpmnLane, BpmnStartEvent, BpmnTerminateEndEvent, BpmnProcess, BpmnGateway, BpmnServiceTask } from '../model/BpmnModel';
 
 const { mxUtils, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
@@ -140,28 +132,28 @@ export default class MxGraphModelUpdater {
     return this.graph.insertVertex(lane, null, name, x, y, TASK_HEIGHT, TASK_HEIGHT, MxGraphBpmnStyles.GATEWAY) as mxgraph.mxCell;
   }
 
-  public createDefaultTransition(source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): mxgraph.mxEdge {
-    return this.graph.insertEdge(this.graph.getDefaultParent(), null, name, source, target, style) as mxgraph.mxEdge;
+  public createDefaultTransition(source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): void {
+    this.graph.insertEdge(this.graph.getDefaultParent(), null, name, source, target, style);
   }
 
-  public createDefaultTransitionWithPoint(source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): mxgraph.mxEdge {
-    const transition = this.createDefaultTransition(source, target, name, style);
-    transition.geometry.points = [new mxPoint(source.geometry.x + source.geometry.width / 2, target.geometry.y + target.geometry.height / 2)];
-    return transition as mxgraph.mxEdge;
+  public createDefaultTransitionWithPoint(source: mxgraph.mxCell, target: mxgraph.mxCell, name = null, style?: string): void {
+    this.createDefaultTransition(source, target, name, style);
+    // const transition = this.createDefaultTransition(source, target, name, style);
+    // transition.geometry.points = [new mxPoint(source.geometry.x + source.geometry.width / 2, target.geometry.y + target.geometry.height / 2)];
   }
 
-  public createCrossoverTransition(source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
-    return this.graph.insertEdge(this.graph.getDefaultParent(), null, null, source, target, MxGraphBpmnStyles.TRANSITION_CROSSOVER);
+  public createCrossoverTransition(source: mxgraph.mxCell, target: mxgraph.mxCell): void {
+    this.graph.insertEdge(this.graph.getDefaultParent(), null, null, source, target, MxGraphBpmnStyles.TRANSITION_CROSSOVER);
   }
 
-  public createCrossoverTransitionWithPoint(source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
-    const transition = this.createCrossoverTransition(source, target);
-    transition.geometry.points = [new mxPoint(target.geometry.x + target.geometry.width / 2 + 20, source.geometry.y + (source.geometry.height * 4) / 5)];
-    return transition as mxgraph.mxEdge;
+  public createCrossoverTransitionWithPoint(source: mxgraph.mxCell, target: mxgraph.mxCell): void {
+    this.createCrossoverTransition(source, target);
+    // const transition = this.createCrossoverTransition(source, target);
+    // transition.geometry.points = [new mxPoint(target.geometry.x + target.geometry.width / 2 + 20, source.geometry.y + (source.geometry.height * 4) / 5)];
   }
 
-  public createAnimatedTransition(source: mxgraph.mxCell, target: mxgraph.mxCell): mxgraph.mxEdge {
-    return this.graph.insertEdge(this.graph.getDefaultParent(), null, null, source, target, MxGraphBpmnStyles.TRANSITION_ANIMATED);
+  public createAnimatedTransition(source: mxgraph.mxCell, target: mxgraph.mxCell): void {
+    this.graph.insertEdge(this.graph.getDefaultParent(), null, null, source, target, MxGraphBpmnStyles.TRANSITION_ANIMATED);
   }
 
   public addAnimation(edgesWithTransition: mxgraph.mxCell[]): void {

@@ -1,4 +1,4 @@
-import { mxgraph } from 'mxgraph';
+import { mxgraph } from 'mxgraph-factory';
 import AbstractGraph, { EVENT_WIDTH, EVENT_Y_LITTLE, LANE_HEIGHT_LITTLE, LANE_WIDTH, TASK_HEIGHT, TASK_Y_LARGE, TASK_Y_LITTLE } from './AbstractGraph';
 import BpmnProcessCreatorExampleCodeOnly from './model/BpmnProcessCreatorExample';
 import ModelConvertor from './convertor/BpmnModelToMxGraphModel';

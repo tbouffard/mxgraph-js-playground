@@ -1,8 +1,6 @@
-import { mxgraph } from 'mxgraph'; // Typings only - no code!
+import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 
-import { mxgraphFactory } from '../../../components/mxgraph-factory';
-
-// const { mxSh, mxPoint } = mxgraphFactory({
+// const { mxShape } = mxgraphFactory({
 //     mxLoadResources: false,
 //     mxLoadStylesheets: false,
 // });
