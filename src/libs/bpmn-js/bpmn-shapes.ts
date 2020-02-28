@@ -5,9 +5,11 @@ const { mxShape, mxConstants, mxPoint, mxUtils } = mxgraphFactory({
   mxLoadStylesheets: false,
 });
 
+export const GATEWAY_TYPE = 'gw.type';
 export enum BpmnGatewayType {
-  PARALLEL,
-  EXCLUSIVE,
+  PARALLEL = 'para',
+  EXCLUSIVE = 'exclu',
+  COMPLEX = 'complex',
 }
 
 export const SHAPE_BPMN_GATEWAY = 'bpmn.gateway';
@@ -15,7 +17,6 @@ export const SHAPE_BPMN_GATEWAY = 'bpmn.gateway';
 export class BpmnGatewayShape extends mxShape {
   constructor(bounds: mxgraph.mxRectangle, fill: any, stroke: any, strokewidth: number) {
     super();
-    console.warn('@@@@BpmnGatewayShape');
     this.bounds = bounds;
     this.fill = fill;
     this.stroke = stroke;
@@ -47,13 +48,12 @@ export class BpmnGatewayShape extends mxShape {
     // }
 
     // from rhombus shape
-    var hw = w / 2;
-    var hh = h / 2;
+    const hw = w / 2;
+    const hh = h / 2;
     //
-    var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
+    const arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
     c.begin();
-    this.addPoints(c, [new mxPoint(x + hw, y), new mxPoint(x + w, y + hh), new mxPoint(x + hw, y + h),
-        new mxPoint(x, y + hh)], this.isRounded, arcSize, true, null, null);
+    this.addPoints(c, [new mxPoint(x + hw, y), new mxPoint(x + w, y + hh), new mxPoint(x + hw, y + h), new mxPoint(x, y + hh)], this.isRounded, arcSize, true, null, null);
     c.fillAndStroke();
 
     // OUTLINE
@@ -74,17 +74,52 @@ export class BpmnGatewayShape extends mxShape {
     // ];
 
     // SYMBOL
-    h /= 2;
-    w /= 2;
+    const gwType = mxUtils.getValue(this.style, GATEWAY_TYPE, BpmnGatewayType.PARALLEL);
+    console.info('@@gw type: ', gwType);
+    if (gwType == BpmnGatewayType.EXCLUSIVE) {
+      console.info('@@exclusive');
 
-    c.translate(x + w /2, y  + h /2);
-    this.addParallelGwSymbol(c, x, y, w, h);
-    // this.addParallelGwSymbol_updated(c, x + w /4, y + h /4, w/2, h/2);
+      const symbolHeight = (h / 2) * 0.76;
+      const symbolWidth = (w / 2) * 0.76;
 
-    // exclusive gateway
-    // c.translate(w * 0.12, 0);
-    // w = w * 0.76;
-    //
+      const heightDeviation = (h - symbolHeight) / 2;
+      const widthDeviation = (w - symbolWidth) / 2;
+      c.translate(x + widthDeviation, y + heightDeviation);
+      this.addExclusiveGwSymbol(c, x, y, symbolWidth, symbolHeight);
+
+
+      // c.translate(w * 0.12, 0);
+
+      // w *= 0.76;
+      // h *= 0.76;
+      // c.translate(x + w / 2, y + h / 2);
+      //
+      //this.addExclusiveGwSymbol(c, x, y, w, h);
+    }
+    // PARALLEL
+    else {
+      console.info('@@parallel');
+      const symbolHeight = h / 2;
+      const symbolWidth = w / 2;
+
+      const heightDeviation = (h - symbolHeight) / 2;
+      const widthDeviation = (w - symbolWidth) / 2;
+      c.translate(x + widthDeviation, y + heightDeviation);
+      // h /= 2;
+      // w /= 2;
+      // c.translate(x + w / 2, y + h / 2);
+      this.addParallelGwSymbol(c, x, y, symbolWidth, symbolHeight);
+    }
+
+    //c.translate(x + w /2, y  + h /2);
+    //this.addParallelGwSymbol(c, x, y, w, h);
+
+    // // exclusive gateway
+    // // c.translate(w * 0.12, 0);
+    // w *= 0.76;
+    // h *= 0.76;
+    // c.translate(x + w /2, y  + h /2);
+    // //
     // this.addExclusiveGwSymbol(c, x, y, w, h);
   }
 

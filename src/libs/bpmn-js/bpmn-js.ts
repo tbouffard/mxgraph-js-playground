@@ -1,5 +1,5 @@
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
-import { BpmnGatewayShape, SHAPE_BPMN_GATEWAY } from './bpmn-shapes';
+import { BpmnGatewayShape, BpmnGatewayType, GATEWAY_TYPE, SHAPE_BPMN_GATEWAY } from './bpmn-shapes';
 
 const {
   mxGraph,
@@ -23,7 +23,8 @@ const {
   // for xml display
   mxCodec,
   // custom shapes
-  mxCellRenderer, mxShape
+  mxCellRenderer,
+  mxShape,
 } = mxgraphFactory({
   mxLoadResources: false, // for graph and editors resources files
   mxLoadStylesheets: false,
@@ -89,18 +90,26 @@ export class BpmnJs {
       styleEnd[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_DOUBLE_ELLIPSE;
       this.editor.graph.getStylesheet().putCellStyle('end', styleEnd);
 
-      const styleGateway = mxUtils.clone(style);
-      styleGateway[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_GATEWAY;
-      this.editor.graph.getStylesheet().putCellStyle('gateway', styleGateway);
+      const styleGatewayParallel = mxUtils.clone(style);
+      styleGatewayParallel[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_GATEWAY;
+      styleGatewayParallel[GATEWAY_TYPE] = BpmnGatewayType.PARALLEL;
+      this.editor.graph.getStylesheet().putCellStyle('gatewayParallel', styleGatewayParallel);
+
+      const styleGatewayExclusive = mxUtils.clone(style);
+      styleGatewayExclusive[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_GATEWAY;
+      styleGatewayParallel[GATEWAY_TYPE] = BpmnGatewayType.EXCLUSIVE;
+      this.editor.graph.getStylesheet().putCellStyle('gatewayExclusive', styleGatewayExclusive);
 
       const parent = this.editor.graph.getDefaultParent();
 
       // already existing styles
       const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane', 20, 20, 600, 400, 'swimlane');
 
-      const v1 = this.editor.graph.insertVertex(swimlane, null, null, 40, 20, 40, 40, 'gateway');
+      const gw1 = this.editor.graph.insertVertex(swimlane, null, null, 40, 20, 40, 40, 'gatewayParallel');
+      const gw2 = this.editor.graph.insertVertex(swimlane, null, null, 40, 100, 40, 40, 'gatewayExclusive');
       const v2 = this.editor.graph.insertVertex(swimlane, null, 'World!', 200, 150, 80, 30, 'styleCloud');
-      this.editor.graph.insertEdge(swimlane, null, '', v1, v2);
+      this.editor.graph.insertEdge(swimlane, null, '', gw1, gw2);
+      this.editor.graph.insertEdge(swimlane, null, '', gw2, v2);
       const end = this.editor.graph.insertVertex(swimlane, null, 'end event', 200, 300, 30, 30, 'end');
       this.editor.graph.insertEdge(swimlane, null, '', v2, end);
     } finally {
