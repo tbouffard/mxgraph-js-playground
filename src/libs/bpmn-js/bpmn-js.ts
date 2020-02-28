@@ -98,7 +98,7 @@ export class BpmnJs {
       // already existing styles
       const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane', 20, 20, 600, 400, 'swimlane');
 
-      const v1 = this.editor.graph.insertVertex(swimlane, null, 'Hello,', 40, 20, 80, 30, 'gateway');
+      const v1 = this.editor.graph.insertVertex(swimlane, null, null, 40, 20, 40, 40, 'gateway');
       const v2 = this.editor.graph.insertVertex(swimlane, null, 'World!', 200, 150, 80, 30, 'styleCloud');
       this.editor.graph.insertEdge(swimlane, null, '', v1, v2);
       const end = this.editor.graph.insertVertex(swimlane, null, 'end event', 200, 300, 30, 30, 'end');
@@ -151,17 +151,7 @@ export class BpmnJs {
 
   private registerCustomShapes(): void {
     console.info('####register BPMN Shapes');
-
-    const bpmnGatewayShape = new BpmnGatewayShape(null, null, null, null);
-    bpmnGatewayShape.init(null);
-
-    // let myAdd = function(x, y) { return x + y; };
-    // const gwShapeConstructor = (function() {
-    //   return BpmnGatewayShape.prototype;
-    // })();
-    // mxUtils.extend(BpmnGatewayShape.constructor, mxShape);
-
-    mxCellRenderer.registerShape(SHAPE_BPMN_GATEWAY, BpmnGatewayShape.constructor);
+    mxCellRenderer.registerShape(SHAPE_BPMN_GATEWAY, BpmnGatewayShape);
     console.info('####BPMN Shapes registered');
   }
 

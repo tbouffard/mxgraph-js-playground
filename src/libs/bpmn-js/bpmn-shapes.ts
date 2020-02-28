@@ -1,6 +1,6 @@
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
 
-const { mxShape, mxConnectionConstraint, mxPoint } = mxgraphFactory({
+const { mxShape, mxConstants, mxPoint, mxUtils } = mxgraphFactory({
   mxLoadResources: false, // for graph and editors resources files
   mxLoadStylesheets: false,
 });
@@ -27,13 +27,14 @@ export class BpmnGatewayShape extends mxShape {
     c.setShadow(false);
 
     // BACKGROUND
-    c.begin();
-    c.moveTo(w / 2, 0);
-    c.lineTo(w, h / 2);
-    c.lineTo(w / 2, h);
-    c.lineTo(0, h / 2);
-    c.close();
-    c.fillAndStroke();
+    // from draw.io
+    // c.begin();
+    // c.moveTo(w / 2, 0);
+    // c.lineTo(w, h / 2);
+    // c.lineTo(w / 2, h);
+    // c.lineTo(0, h / 2);
+    // c.close();
+    // c.fillAndStroke();
     //     'gateway': function(c, x, y, w, h)
     // {
     //     c.begin();
@@ -46,14 +47,14 @@ export class BpmnGatewayShape extends mxShape {
     // }
 
     // from rhombus shape
-    // var hw = w / 2;
-    // var hh = h / 2;
+    var hw = w / 2;
+    var hh = h / 2;
     //
-    // var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
-    // c.begin();
-    // this.addPoints(c, [new mxPoint(x + hw, y), new mxPoint(x + w, y + hh), new mxPoint(x + hw, y + h),
-    //     new mxPoint(x, y + hh)], this.isRounded, arcSize, true);
-    // c.fillAndStroke();
+    var arcSize = mxUtils.getValue(this.style, mxConstants.STYLE_ARCSIZE, mxConstants.LINE_ARCSIZE) / 2;
+    c.begin();
+    this.addPoints(c, [new mxPoint(x + hw, y), new mxPoint(x + w, y + hh), new mxPoint(x + hw, y + h),
+        new mxPoint(x, y + hh)], this.isRounded, arcSize, true, null, null);
+    c.fillAndStroke();
 
     // OUTLINE
     // c.translate(w / 4, h / 4);
@@ -73,15 +74,21 @@ export class BpmnGatewayShape extends mxShape {
     // ];
 
     // SYMBOL
+    h /= 2;
+    w /= 2;
+
+    c.translate(x + w /2, y  + h /2);
+    this.addParallelGwSymbol(c, x, y, w, h);
+    // this.addParallelGwSymbol_updated(c, x + w /4, y + h /4, w/2, h/2);
 
     // exclusive gateway
     // c.translate(w * 0.12, 0);
     // w = w * 0.76;
-
-    this.addParallelGwSymbol(c, x, y, w, h);
+    //
+    // this.addExclusiveGwSymbol(c, x, y, w, h);
   }
 
-  private addParallelGwSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+  private addExclusiveGwSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     // const strokeColor = c.state.strokeColor;
     // const fillColor = c.state.fillColor;
     // c.setStrokeColor(fillColor);
@@ -107,7 +114,7 @@ export class BpmnGatewayShape extends mxShape {
     // c.setFillColor(fillColor);
   }
 
-  private addExclusiveGwSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+  private addParallelGwSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     // const strokeColor = c.state.strokeColor;
     // const fillColor = c.state.fillColor;
     // c.setStrokeColor(fillColor);
@@ -126,6 +133,31 @@ export class BpmnGatewayShape extends mxShape {
     c.lineTo(0, h * 0.62);
     c.lineTo(0, h * 0.38);
     c.lineTo(w * 0.38, h * 0.38);
+    c.close();
+    c.fillAndStroke();
+
+    // c.setStrokeColor(strokeColor);
+    // c.setFillColor(fillColor);
+  }
+  private addParallelGwSymbol_updated(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    // const strokeColor = c.state.strokeColor;
+    // const fillColor = c.state.fillColor;
+    // c.setStrokeColor(fillColor);
+    // c.setFillColor(strokeColor);
+
+    c.begin();
+    c.moveTo(x + w * 0.38, y + 0);
+    c.lineTo(x + w * 0.62, y + 0);
+    c.lineTo(x + w * 0.62, y + h * 0.38);
+    c.lineTo(x + w, y + h * 0.38);
+    c.lineTo(x + w, y + h * 0.62);
+    c.lineTo(x + w * 0.62, y + h * 0.62);
+    c.lineTo(x + w * 0.62, y + h);
+    c.lineTo(x + w * 0.38, y + h);
+    c.lineTo(x + w * 0.38, y + h * 0.62);
+    c.lineTo(x + 0, y + h * 0.62);
+    c.lineTo(x + 0, y + h * 0.38);
+    c.lineTo(x + w * 0.38, y + h * 0.38);
     c.close();
     c.fillAndStroke();
 
