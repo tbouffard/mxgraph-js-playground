@@ -1,4 +1,5 @@
 import { mxgraph, mxgraphFactory } from 'mxgraph-factory';
+import { BpmnGatewayShape, SHAPE_BPMN_GATEWAY } from './bpmn-shapes';
 
 const {
   mxGraph,
@@ -21,6 +22,8 @@ const {
   //mxResources,
   // for xml display
   mxCodec,
+  // custom shapes
+  mxCellRenderer, mxShape
 } = mxgraphFactory({
   mxLoadResources: false, // for graph and editors resources files
   mxLoadStylesheets: false,
@@ -86,12 +89,16 @@ export class BpmnJs {
       styleEnd[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_DOUBLE_ELLIPSE;
       this.editor.graph.getStylesheet().putCellStyle('end', styleEnd);
 
+      const styleGateway = mxUtils.clone(style);
+      styleGateway[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_GATEWAY;
+      this.editor.graph.getStylesheet().putCellStyle('gateway', styleGateway);
+
       const parent = this.editor.graph.getDefaultParent();
 
       // already existing styles
       const swimlane = this.editor.graph.insertVertex(parent, null, 'My custom swimlane', 20, 20, 600, 400, 'swimlane');
 
-      const v1 = this.editor.graph.insertVertex(swimlane, null, 'Hello,', 40, 20, 80, 30, 'condition');
+      const v1 = this.editor.graph.insertVertex(swimlane, null, 'Hello,', 40, 20, 80, 30, 'gateway');
       const v2 = this.editor.graph.insertVertex(swimlane, null, 'World!', 200, 150, 80, 30, 'styleCloud');
       this.editor.graph.insertEdge(swimlane, null, '', v1, v2);
       const end = this.editor.graph.insertVertex(swimlane, null, 'end event', 200, 300, 30, 30, 'end');
@@ -117,6 +124,8 @@ export class BpmnJs {
         this.configureEditorFunctions();
         this.configureEditorActions();
 
+        this.registerCustomShapes();
+
         this.registerCreateTasks();
         this.editor.showTasks();
 
@@ -138,6 +147,22 @@ export class BpmnJs {
       throw e; // for debugging
     }
     this.initView();
+  }
+
+  private registerCustomShapes(): void {
+    console.info('####register BPMN Shapes');
+
+    const bpmnGatewayShape = new BpmnGatewayShape(null, null, null, null);
+    bpmnGatewayShape.init(null);
+
+    // let myAdd = function(x, y) { return x + y; };
+    // const gwShapeConstructor = (function() {
+    //   return BpmnGatewayShape.prototype;
+    // })();
+    // mxUtils.extend(BpmnGatewayShape.constructor, mxShape);
+
+    mxCellRenderer.registerShape(SHAPE_BPMN_GATEWAY, BpmnGatewayShape.constructor);
+    console.info('####BPMN Shapes registered');
   }
 
   private initView(): void {
