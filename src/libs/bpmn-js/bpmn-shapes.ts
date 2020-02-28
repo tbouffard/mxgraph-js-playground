@@ -79,14 +79,13 @@ export class BpmnGatewayShape extends mxShape {
     if (gwType == BpmnGatewayType.EXCLUSIVE) {
       console.info('@@exclusive');
 
-      const symbolHeight = (h / 2) * 0.76;
-      const symbolWidth = (w / 2) * 0.76;
+      const symbolHeight = (h / 2) * 0.85;
+      const symbolWidth = (w / 2) * 0.85;
 
       const heightDeviation = (h - symbolHeight) / 2;
       const widthDeviation = (w - symbolWidth) / 2;
       c.translate(x + widthDeviation, y + heightDeviation);
       this.addExclusiveGwSymbol(c, x, y, symbolWidth, symbolHeight);
-
 
       // c.translate(w * 0.12, 0);
 
@@ -126,8 +125,10 @@ export class BpmnGatewayShape extends mxShape {
   private addExclusiveGwSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     // const strokeColor = c.state.strokeColor;
     // const fillColor = c.state.fillColor;
-    // c.setStrokeColor(fillColor);
-    // c.setFillColor(strokeColor);
+    const strokeColor = 'black';
+    const fillColor = 'white';
+    c.setStrokeColor(fillColor);
+    c.setFillColor(strokeColor);
 
     c.begin();
     c.moveTo(w * 0.105, 0);
@@ -145,15 +146,18 @@ export class BpmnGatewayShape extends mxShape {
     c.close();
     c.fillAndStroke();
 
-    // c.setStrokeColor(strokeColor);
-    // c.setFillColor(fillColor);
+    c.setStrokeColor(strokeColor);
+    c.setFillColor(fillColor);
   }
 
   private addParallelGwSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     // const strokeColor = c.state.strokeColor;
     // const fillColor = c.state.fillColor;
-    // c.setStrokeColor(fillColor);
-    // c.setFillColor(strokeColor);
+    const strokeColor = 'black';
+    const fillColor = 'white';
+
+    c.setStrokeColor(fillColor);
+    c.setFillColor(strokeColor);
 
     c.begin();
     c.moveTo(w * 0.38, 0);
@@ -171,32 +175,7 @@ export class BpmnGatewayShape extends mxShape {
     c.close();
     c.fillAndStroke();
 
-    // c.setStrokeColor(strokeColor);
-    // c.setFillColor(fillColor);
-  }
-  private addParallelGwSymbol_updated(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
-    // const strokeColor = c.state.strokeColor;
-    // const fillColor = c.state.fillColor;
-    // c.setStrokeColor(fillColor);
-    // c.setFillColor(strokeColor);
-
-    c.begin();
-    c.moveTo(x + w * 0.38, y + 0);
-    c.lineTo(x + w * 0.62, y + 0);
-    c.lineTo(x + w * 0.62, y + h * 0.38);
-    c.lineTo(x + w, y + h * 0.38);
-    c.lineTo(x + w, y + h * 0.62);
-    c.lineTo(x + w * 0.62, y + h * 0.62);
-    c.lineTo(x + w * 0.62, y + h);
-    c.lineTo(x + w * 0.38, y + h);
-    c.lineTo(x + w * 0.38, y + h * 0.62);
-    c.lineTo(x + 0, y + h * 0.62);
-    c.lineTo(x + 0, y + h * 0.38);
-    c.lineTo(x + w * 0.38, y + h * 0.38);
-    c.close();
-    c.fillAndStroke();
-
-    // c.setStrokeColor(strokeColor);
-    // c.setFillColor(fillColor);
+    c.setStrokeColor(strokeColor);
+    c.setFillColor(fillColor);
   }
 }
