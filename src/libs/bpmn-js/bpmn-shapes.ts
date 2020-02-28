@@ -219,9 +219,13 @@ abstract class BpmnShapeTask extends mxRectangleShape {
 export class BpmnShapeTaskUser extends BpmnShapeTask {
   // TAKEN from mxgraph mxActor
   protected paintSymbols(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
-    c.translate(x + w/10, y + h/10);
+    const actorBaseSize = Math.min(w, h);
+
+    c.translate(x + actorBaseSize/10, y + actorBaseSize/10);
+    // c.translate(x + w/10, y + h/10);
     c.begin();
-    this.redrawActor(c, x, y, w/6, h/6);
+    this.redrawActor(c, x, y, actorBaseSize/6, actorBaseSize/6);
+    // this.redrawActor(c, x, y, w/6, h/6);
     c.fillAndStroke();
   }
 

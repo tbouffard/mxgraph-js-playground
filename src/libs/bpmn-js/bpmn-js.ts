@@ -121,10 +121,14 @@ export class BpmnJs {
 
       const gw1 = this.editor.graph.insertVertex(swimlane, null, null, 40, 20, 40, 40, 'gatewayParallel');
       const taskUser1 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 140, 10, 60, 60, 'taskUser');
-      const gw2 = this.editor.graph.insertVertex(swimlane, null, null, 100, 100, 40, 40, 'gatewayExclusive');
+      const taskUser2 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 250, 10, 100, 30, 'taskUser');
+      const taskUser3 = this.editor.graph.insertVertex(swimlane, null, 'user 1', 420, 10, 30, 100, 'taskUser');
+      const gw2 = this.editor.graph.insertVertex(swimlane, null, null, 400, 150, 40, 40, 'gatewayExclusive');
       const cloud1 = this.editor.graph.insertVertex(swimlane, null, 'World!', 200, 150, 80, 30, 'styleCloud');
       this.editor.graph.insertEdge(swimlane, null, '', gw1, taskUser1);
-      this.editor.graph.insertEdge(swimlane, null, '', taskUser1, gw2);
+      this.editor.graph.insertEdge(swimlane, null, '', taskUser1, taskUser2);
+      this.editor.graph.insertEdge(swimlane, null, '', taskUser2, taskUser3);
+      this.editor.graph.insertEdge(swimlane, null, '', taskUser3, gw2);
       this.editor.graph.insertEdge(swimlane, null, '', gw2, cloud1);
       const end = this.editor.graph.insertVertex(swimlane, null, 'end event', 200, 300, 30, 30, 'end');
       this.editor.graph.insertEdge(swimlane, null, '', cloud1, end);
