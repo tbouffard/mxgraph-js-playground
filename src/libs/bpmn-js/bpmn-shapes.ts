@@ -97,10 +97,7 @@ export class BpmnGatewayShape extends AbstractBpmnShape {
 
     // SYMBOL
     const gwType = mxUtils.getValue(this.style, GATEWAY_TYPE, BpmnGatewayType.PARALLEL);
-    console.info('@@gw type: ', gwType);
     if (gwType == BpmnGatewayType.EXCLUSIVE) {
-      console.info('@@exclusive');
-
       const symbolHeight = (h / 2) * 0.85;
       const symbolWidth = (w / 2) * 0.85;
 
@@ -119,7 +116,6 @@ export class BpmnGatewayShape extends AbstractBpmnShape {
     }
     // PARALLEL
     else {
-      console.info('@@parallel');
       const symbolHeight = h / 2;
       const symbolWidth = w / 2;
 
