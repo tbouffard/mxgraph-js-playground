@@ -245,6 +245,7 @@ abstract class BpmnShapeTask extends mxRectangleShape {
             break;
           }
           case 'loop': {
+            this.drawLoop(c, x, y, symbolBaseSize, symbolBaseSize);
             break;
           }
           case 'multi-parallel': {
@@ -304,43 +305,6 @@ abstract class BpmnShapeTask extends mxRectangleShape {
      */
   }
 
-  /*
-<shape h="21.62" name="Loop" strokewidth="inherit" w="22.49">
-    <connections/>
-    <background>
-        <path>
-            <move x="5.5" y="19.08"/>
-            <arc large-arc-flag="1" rx="10" ry="10" sweep-flag="1" x="10.5" x-axis-rotation="0" y="21.08"/>
-            <move x="5.5" y="14.08"/>
-            <line x="5.5" y="19.08"/>
-            <line x="0" y="17.58"/>
-        </path>
-    </background>
-    <foreground>
-        <stroke/>
-    </foreground>
-</shape>
-<shape aspect="fixed" h="10.39" name="Loop Marker" strokewidth="inherit" w="15">
-    <connections/>
-    <background>
-        <path>
-            <move x="0" y="1.69"/>
-            <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="1" x="7.5" x-axis-rotation="0" y="1.69"/>
-            <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="0" x="15" x-axis-rotation="0" y="1.69"/>
-            <line x="15" y="8.69"/>
-            <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="1" x="7.5" x-axis-rotation="0" y="8.69"/>
-            <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="0" x="0" x-axis-rotation="0" y="8.69"/>
-            <close/>
-            <close/>
-        </path>
-    </background>
-    <foreground>
-        <fillstroke/>
-    </foreground>
-</shape>
-
-
- */
 
   /*
 <shape aspect="fixed" h="14" name="Multiple Instances" strokewidth="inherit" w="9">
@@ -414,6 +378,55 @@ abstract class BpmnShapeTask extends mxRectangleShape {
  */
   }
 
+  private drawLoop(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    c.begin();
+    c.moveTo(5.5, 19.08);
+    c.arcTo(10, 10, 0, 1, 1, 10.5, 21.0);
+    c.moveTo(5.5, 14.08);
+    c.lineTo(5.5, 19.08)
+    c.lineTo(0, 17.58)
+    c.fillAndStroke();
+    c.close();
+
+    /*
+    <shape h="21.62" name="Loop" strokewidth="inherit" w="22.49">
+        <connections/>
+        <background>
+            <path>
+                <move x="5.5" y="19.08"/>
+                <arc large-arc-flag="1" rx="10" ry="10" sweep-flag="1" x="10.5" x-axis-rotation="0" y="21.08"/>
+                <move x="5.5" y="14.08"/>
+                <line x="5.5" y="19.08"/>
+                <line x="0" y="17.58"/>
+            </path>
+        </background>
+        <foreground>
+            <stroke/>
+        </foreground>
+    </shape>
+    <shape aspect="fixed" h="10.39" name="Loop Marker" strokewidth="inherit" w="15">
+        <connections/>
+        <background>
+            <path>
+                <move x="0" y="1.69"/>
+                <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="1" x="7.5" x-axis-rotation="0" y="1.69"/>
+                <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="0" x="15" x-axis-rotation="0" y="1.69"/>
+                <line x="15" y="8.69"/>
+                <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="1" x="7.5" x-axis-rotation="0" y="8.69"/>
+                <arc large-arc-flag="0" rx="5" ry="5" sweep-flag="0" x="0" x-axis-rotation="0" y="8.69"/>
+                <close/>
+                <close/>
+            </path>
+        </background>
+        <foreground>
+            <fillstroke/>
+        </foreground>
+    </shape>
+    */
+  }
+
+
+  // TODO remove as useless, to be replaced by the "complex" symbox
   private drawStar(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     c.translate(w / 5, h / 6);
     h *= 2 / 3;
@@ -520,149 +533,127 @@ export class BpmnShapeTaskUser extends BpmnShapeTask {
 </shape>
 
  */
+
+  /*
+  TAKEN from mxgraph mxActor
+
+  mxActor.prototype.paintVertexShape = function(c, x, y, w, h)
+  {
+    c.translate(x, y);
+    c.begin();
+    this.redrawPath(c, x, y, w, h);
+    c.fillAndStroke();
+  };
+
+  mxActor.prototype.redrawPath = function(c, x, y, w, h)
+  {
+    var width = w/3;
+    c.moveTo(0, h);
+    c.curveTo(0, 3 * h / 5, 0, 2 * h / 5, w / 2, 2 * h / 5);
+    c.curveTo(w / 2 - width, 2 * h / 5, w / 2 - width, 0, w / 2, 0);
+    c.curveTo(w / 2 + width, 0, w / 2 + width, 2 * h / 5, w / 2, 2 * h / 5);
+    c.curveTo(w, 2 * h / 5, w, 3 * h / 5, w, h);
+    c.close();
+  };
+   */
+
 }
 
-/*
-TAKEN from mxgraph mxActor
-
-mxActor.prototype.paintVertexShape = function(c, x, y, w, h)
-{
-  c.translate(x, y);
-  c.begin();
-  this.redrawPath(c, x, y, w, h);
-  c.fillAndStroke();
-};
-
-mxActor.prototype.redrawPath = function(c, x, y, w, h)
-{
-  var width = w/3;
-  c.moveTo(0, h);
-  c.curveTo(0, 3 * h / 5, 0, 2 * h / 5, w / 2, 2 * h / 5);
-  c.curveTo(w / 2 - width, 2 * h / 5, w / 2 - width, 0, w / 2, 0);
-  c.curveTo(w / 2 + width, 0, w / 2 + width, 2 * h / 5, w / 2, 2 * h / 5);
-  c.curveTo(w, 2 * h / 5, w, 3 * h / 5, w, h);
-  c.close();
-};
- */
-
-
-
-/*
-<shape h="93.3" name="Service Task" strokewidth="inherit" w="90.9">
-    <connections/>
-    <background>
-        <path>
-            <move x="2.06" y="24.62"/>
-            <line x="10.17" y="30.95"/>
-            <line x="9.29" y="37.73"/>
-            <line x="0" y="41.42"/>
-            <line x="2.95" y="54.24"/>
-            <line x="13.41" y="52.92"/>
-            <line x="17.39" y="58.52"/>
-            <line x="13.56" y="67.66"/>
-            <line x="24.47" y="74.44"/>
-            <line x="30.81" y="66.33"/>
-            <line x="37.88" y="67.21"/>
-            <line x="41.57" y="76.5"/>
-            <line x="54.24" y="73.55"/>
-            <line x="53.06" y="62.94"/>
-            <line x="58.52" y="58.52"/>
-            <line x="67.21" y="63.09"/>
-            <line x="74.58" y="51.88"/>
-            <line x="66.03" y="45.25"/>
-            <line x="66.92" y="38.62"/>
-            <line x="76.5" y="34.93"/>
-            <line x="73.7" y="22.26"/>
-            <line x="62.64" y="23.44"/>
-            <line x="58.81" y="18.42"/>
-            <line x="62.79" y="8.7"/>
-            <line x="51.74" y="2.21"/>
-            <line x="44.81" y="10.47"/>
-            <line x="38.03" y="9.43"/>
-            <line x="33.75" y="0"/>
-            <line x="21.52" y="3.24"/>
-            <line x="22.7" y="13.56"/>
-            <line x="18.13" y="17.54"/>
-            <line x="8.7" y="13.56"/>
-            <close/>
-            <move x="24.8" y="39"/>
-            <arc large-arc-flag="1" rx="12" ry="12" sweep-flag="1" x="51.8" x-axis-rotation="0" y="39"/>
-            <arc large-arc-flag="0" rx="12" ry="12" sweep-flag="1" x="24.8" x-axis-rotation="0" y="39"/>
-            <close/>
-        </path>
-    </background>
-    <foreground>
-        <fillstroke/>
-        <path>
-            <move x="16.46" y="41.42"/>
-            <line x="24.57" y="47.75"/>
-            <line x="23.69" y="54.53"/>
-            <line x="14.4" y="58.22"/>
-            <line x="17.35" y="71.04"/>
-            <line x="27.81" y="69.72"/>
-            <line x="31.79" y="75.32"/>
-            <line x="27.96" y="84.46"/>
-            <line x="38.87" y="91.24"/>
-            <line x="45.21" y="83.13"/>
-            <line x="52.28" y="84.01"/>
-            <line x="55.97" y="93.3"/>
-            <line x="68.64" y="90.35"/>
-            <line x="67.46" y="79.74"/>
-            <line x="72.92" y="75.32"/>
-            <line x="81.61" y="79.89"/>
-            <line x="88.98" y="68.68"/>
-            <line x="80.43" y="62.05"/>
-            <line x="81.32" y="55.42"/>
-            <line x="90.9" y="51.73"/>
-            <line x="88.1" y="39.06"/>
-            <line x="77.04" y="40.24"/>
-            <line x="73.21" y="35.22"/>
-            <line x="77.19" y="25.5"/>
-            <line x="66.14" y="19.01"/>
-            <line x="59.21" y="27.27"/>
-            <line x="52.43" y="26.23"/>
-            <line x="48.15" y="16.8"/>
-            <line x="35.92" y="20.04"/>
-            <line x="37.1" y="30.36"/>
-            <line x="32.53" y="34.34"/>
-            <line x="23.1" y="30.36"/>
-            <close/>
-            <move x="39.2" y="55.8"/>
-            <arc large-arc-flag="1" rx="12" ry="12" sweep-flag="1" x="66.2" x-axis-rotation="0" y="55.8"/>
-            <arc large-arc-flag="0" rx="12" ry="12" sweep-flag="1" x="39.2" x-axis-rotation="0" y="55.8"/>
-            <close/>
-        </path>
-        <fillstroke/>
-    </foreground>
-</shape>
-*/
 export class BpmnShapeTaskService extends BpmnShapeTask {
   protected paintTaskSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     // TODO implement service task shape
+
+    /*
+    <shape h="93.3" name="Service Task" strokewidth="inherit" w="90.9">
+        <connections/>
+        <background>
+            <path>
+                <move x="2.06" y="24.62"/>
+                <line x="10.17" y="30.95"/>
+                <line x="9.29" y="37.73"/>
+                <line x="0" y="41.42"/>
+                <line x="2.95" y="54.24"/>
+                <line x="13.41" y="52.92"/>
+                <line x="17.39" y="58.52"/>
+                <line x="13.56" y="67.66"/>
+                <line x="24.47" y="74.44"/>
+                <line x="30.81" y="66.33"/>
+                <line x="37.88" y="67.21"/>
+                <line x="41.57" y="76.5"/>
+                <line x="54.24" y="73.55"/>
+                <line x="53.06" y="62.94"/>
+                <line x="58.52" y="58.52"/>
+                <line x="67.21" y="63.09"/>
+                <line x="74.58" y="51.88"/>
+                <line x="66.03" y="45.25"/>
+                <line x="66.92" y="38.62"/>
+                <line x="76.5" y="34.93"/>
+                <line x="73.7" y="22.26"/>
+                <line x="62.64" y="23.44"/>
+                <line x="58.81" y="18.42"/>
+                <line x="62.79" y="8.7"/>
+                <line x="51.74" y="2.21"/>
+                <line x="44.81" y="10.47"/>
+                <line x="38.03" y="9.43"/>
+                <line x="33.75" y="0"/>
+                <line x="21.52" y="3.24"/>
+                <line x="22.7" y="13.56"/>
+                <line x="18.13" y="17.54"/>
+                <line x="8.7" y="13.56"/>
+                <close/>
+                <move x="24.8" y="39"/>
+                <arc large-arc-flag="1" rx="12" ry="12" sweep-flag="1" x="51.8" x-axis-rotation="0" y="39"/>
+                <arc large-arc-flag="0" rx="12" ry="12" sweep-flag="1" x="24.8" x-axis-rotation="0" y="39"/>
+                <close/>
+            </path>
+        </background>
+        <foreground>
+            <fillstroke/>
+            <path>
+                <move x="16.46" y="41.42"/>
+                <line x="24.57" y="47.75"/>
+                <line x="23.69" y="54.53"/>
+                <line x="14.4" y="58.22"/>
+                <line x="17.35" y="71.04"/>
+                <line x="27.81" y="69.72"/>
+                <line x="31.79" y="75.32"/>
+                <line x="27.96" y="84.46"/>
+                <line x="38.87" y="91.24"/>
+                <line x="45.21" y="83.13"/>
+                <line x="52.28" y="84.01"/>
+                <line x="55.97" y="93.3"/>
+                <line x="68.64" y="90.35"/>
+                <line x="67.46" y="79.74"/>
+                <line x="72.92" y="75.32"/>
+                <line x="81.61" y="79.89"/>
+                <line x="88.98" y="68.68"/>
+                <line x="80.43" y="62.05"/>
+                <line x="81.32" y="55.42"/>
+                <line x="90.9" y="51.73"/>
+                <line x="88.1" y="39.06"/>
+                <line x="77.04" y="40.24"/>
+                <line x="73.21" y="35.22"/>
+                <line x="77.19" y="25.5"/>
+                <line x="66.14" y="19.01"/>
+                <line x="59.21" y="27.27"/>
+                <line x="52.43" y="26.23"/>
+                <line x="48.15" y="16.8"/>
+                <line x="35.92" y="20.04"/>
+                <line x="37.1" y="30.36"/>
+                <line x="32.53" y="34.34"/>
+                <line x="23.1" y="30.36"/>
+                <close/>
+                <move x="39.2" y="55.8"/>
+                <arc large-arc-flag="1" rx="12" ry="12" sweep-flag="1" x="66.2" x-axis-rotation="0" y="55.8"/>
+                <arc large-arc-flag="0" rx="12" ry="12" sweep-flag="1" x="39.2" x-axis-rotation="0" y="55.8"/>
+                <close/>
+            </path>
+            <fillstroke/>
+        </foreground>
+    </shape>
+    */
   }
 }
-
-/*
-from draw.io bpmn stencils
-<shape h="65" name="Business Rule Task" strokewidth="inherit" w="100">
-    <connections/>
-    <background>
-        <rect h="65" w="100" x="0" y="0"/>
-    </background>
-    <foreground>
-        <fillstroke/>
-        <path>
-            <move x="0" y="15"/>
-            <line x="100" y="15"/>
-            <move x="1" y="40"/>
-            <line x="99.4" y="40"/>
-            <move x="25" y="15"/>
-            <line x="25" y="65"/>
-        </path>
-        <stroke/>
-    </foreground>
-</shape>
- */
 
 export class BpmnShapeTaskBusinessRule extends BpmnShapeTask {
   protected paintTaskSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
@@ -706,6 +697,28 @@ export class BpmnShapeTaskBusinessRule extends BpmnShapeTask {
 
     c.fillAndStroke();
     c.close();
+
+    /*
+    from draw.io bpmn stencils
+    <shape h="65" name="Business Rule Task" strokewidth="inherit" w="100">
+        <connections/>
+        <background>
+            <rect h="65" w="100" x="0" y="0"/>
+        </background>
+        <foreground>
+            <fillstroke/>
+            <path>
+                <move x="0" y="15"/>
+                <line x="100" y="15"/>
+                <move x="1" y="40"/>
+                <line x="99.4" y="40"/>
+                <move x="25" y="15"/>
+                <line x="25" y="65"/>
+            </path>
+            <stroke/>
+        </foreground>
+    </shape>
+     */
   }
 }
 
