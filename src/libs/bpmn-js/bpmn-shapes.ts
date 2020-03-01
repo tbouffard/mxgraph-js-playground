@@ -256,10 +256,6 @@ abstract class BpmnShapeTask extends mxRectangleShape {
             this.drawMultipleSequential(c, symbolBaseSize / 6, symbolBaseSize / 6);
             break;
           }
-          case 'star': {
-            this.drawStar(c, x, y, symbolBaseSize, symbolBaseSize);
-            break;
-          }
           default: {
             // ignored
             console.debug('@@ignored symbol: ' + symbol);
@@ -425,29 +421,6 @@ abstract class BpmnShapeTask extends mxRectangleShape {
     */
   }
 
-
-  // TODO remove as useless, to be replaced by the "complex" symbox
-  private drawStar(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
-    c.translate(w / 5, h / 6);
-    h *= 2 / 3;
-    w *= 3 / 5;
-
-    c.begin();
-    c.moveTo(0, h / 4);
-    c.lineTo(w / 3, h / 4);
-    c.lineTo(w / 2, 0);
-    c.lineTo((2 * w) / 3, h / 4);
-    c.lineTo(w, h / 4);
-    c.lineTo((5 * w) / 6, h / 2);
-    c.lineTo(w, (3 * h) / 4);
-    c.lineTo((2 * w) / 3, (3 * h) / 4);
-    c.lineTo(w / 2, h);
-    c.lineTo(w / 3, (3 * h) / 4);
-    c.lineTo(0, (3 * h) / 4);
-    c.lineTo(w / 6, h / 2);
-    c.close();
-    c.fillAndStroke();
-  }
 }
 
 export class BpmnShapeTaskUser extends BpmnShapeTask {
