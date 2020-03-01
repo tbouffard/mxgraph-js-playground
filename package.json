@@ -27,12 +27,6 @@
   "dependencies": {
     "mxgraph": "^4.1.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsc --noEmit && lint-staged",
-      "pre-push": "npm test"
-    }
-  },
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix",
