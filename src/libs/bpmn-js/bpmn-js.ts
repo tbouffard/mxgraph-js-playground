@@ -139,8 +139,8 @@ export class BpmnJs {
 
       const task_2_1 = this.editor.graph.insertVertex(swimlane, null, 'service 2.1', 320, 150, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
       const task_2_2 = this.editor.graph.insertVertex(swimlane, null, 'business rule 2.2', 150, 150, 80, 60, 'taskBusinessRule;bpmn.symbols=loop');
-      const task_2_3 = this.editor.graph.insertVertex(swimlane, null, 'service 2.3', 40, 150, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
-      const task_2_4 = this.editor.graph.insertVertex(swimlane, null, 'service 2.4', 40, 250, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
+      const task_2_3 = this.editor.graph.insertVertex(swimlane, null, 'service 2.3', 40, 150, 60, 60, 'taskService;bpmn.symbols=loop');
+      const task_2_4 = this.editor.graph.insertVertex(swimlane, null, 'service 2.4', 40, 250, 60, 60, 'taskService;bpmn.symbols=multi-sequential');
 
       this.editor.graph.insertEdge(swimlane, null, '', gw2, task_2_1);
       this.editor.graph.insertEdge(swimlane, null, '', task_2_1, task_2_2);
