@@ -347,12 +347,15 @@ abstract class BpmnShapeTask extends mxRectangleShape {
   }
 
   private drawLoop(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    const baseX = -5;
+    const baseY = 5;
+
     c.begin();
-    c.moveTo(5.5, 19.08);
-    c.arcTo(10, 10, 0, 1, 1, 10.5, 21.0);
-    c.moveTo(5.5, 14.08);
-    c.lineTo(5.5, 19.08);
-    c.lineTo(0, 17.58);
+    c.moveTo(baseX, baseY);
+    c.arcTo(5, 5, 0, 1, 1, baseX + 2.5, baseY + 1);
+    c.moveTo(baseX + 1.0, baseY - 4.5);
+    c.lineTo(baseX, baseY);
+    c.lineTo(baseX - 4.5, baseY - 1.0);
     c.fillAndStroke();
     c.close();
 
