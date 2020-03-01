@@ -13,6 +13,7 @@ export enum BpmnGatewayType {
 }
 
 export const SHAPE_BPMN_GATEWAY = 'bpmn.gateway';
+export const SHAPE_BPMN_TASK_BUSINESS_RULE = 'bpmn.task.businessrule';
 export const SHAPE_BPMN_TASK_USER = 'bpmn.task.user';
 export const SHAPE_BPMN_TASK_SERVICE = 'bpmn.task.service';
 
@@ -240,7 +241,7 @@ abstract class BpmnShapeTask extends mxRectangleShape {
 
         switch (symbol) {
           case 'compensation': {
-            this.drawCompensation(c, x, y, symbolBaseSize/6, symbolBaseSize/6);
+            this.drawCompensation(c, x, y, symbolBaseSize / 6, symbolBaseSize / 6);
             break;
           }
           case 'loop': {
@@ -439,7 +440,7 @@ abstract class BpmnShapeTask extends mxRectangleShape {
 export class BpmnShapeTaskUser extends BpmnShapeTask {
   // TAKEN from mxgraph mxActor
   protected paintTaskSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
-    const actorBaseSize = Math.min(w, h);
+    const symbolBaseSize = Math.min(w, h);
 
     const xTranslation = x + w / 10;
     const yTranslation = y + h / 10;
@@ -447,7 +448,7 @@ export class BpmnShapeTaskUser extends BpmnShapeTask {
     c.translate(xTranslation, yTranslation);
     //c.translate(x + w/10, y + h/10);
     c.begin();
-    this.redrawActor(c, x, y, actorBaseSize / 6, actorBaseSize / 6);
+    this.redrawActor(c, x, y, symbolBaseSize / 6, symbolBaseSize / 6);
     // this.redrawActor(c, x, y, w/6, h/6);
     c.fillAndStroke();
 
@@ -551,6 +552,7 @@ export class BpmnShapeTaskService extends BpmnShapeTask {
 }
 
 /*
+from draw.io bpmn stencils
 <shape h="65" name="Business Rule Task" strokewidth="inherit" w="100">
     <connections/>
     <background>
@@ -569,8 +571,54 @@ export class BpmnShapeTaskService extends BpmnShapeTask {
         <stroke/>
     </foreground>
 </shape>
+ */
 
+export class BpmnShapeTaskBusinessRule extends BpmnShapeTask {
+  protected paintTaskSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    const xTranslation = x + w / 10;
+    const yTranslation = y + h / 10;
+    const symbolBaseSize = Math.min(w, h);
 
+    c.translate(xTranslation, yTranslation);
+
+    this.drawBusinessRuleSymbol(c, x, y, (symbolBaseSize * 1.4) / 5, symbolBaseSize / 5);
+
+    // TODO hack for translation
+    c.translate(-xTranslation, -yTranslation);
+  }
+
+  private drawBusinessRuleSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number):void {
+    c.begin();
+    c.rect(0, 0, w, h);
+    // c.setFillColor(this.stroke);
+    c.fillAndStroke();
+    c.close();
+
+    // c.setStrokeWidth(1);
+    // c.setFillColor(this.stroke);
+
+    c.begin();
+    // <move x="0" y="15"/>
+    c.moveTo(0, h * 0.2);
+    // <line x="100" y="15"/>
+    c.lineTo(w, h * 0.2);
+    // <move x="1" y="40"/>
+    c.moveTo(0, h * 0.6);
+    // <line x="99.4" y="40"/>
+    c.lineTo(w, h * 0.6);
+    // <move x="25" y="15"/>
+    c.moveTo(w * 0.25, h * 0.2);
+    // <line x="25" y="65"/>
+    c.lineTo(w * 0.25, h);
+
+    // const w2 = w / 5;
+
+    c.fillAndStroke();
+    c.close();
+  }
+}
+
+/*
 <shape h="59.28" name="Manual Task" strokewidth="inherit" w="91.4">
     <connections/>
     <background>

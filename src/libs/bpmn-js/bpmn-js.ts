@@ -4,10 +4,11 @@ import {
   BpmnGatewayType,
   GATEWAY_TYPE,
   SHAPE_BPMN_GATEWAY,
+  SHAPE_BPMN_TASK_BUSINESS_RULE,
   SHAPE_BPMN_TASK_USER,
   BpmnShapeTaskUser,
   SHAPE_BPMN_TASK_SERVICE,
-  BpmnShapeTaskService,
+  BpmnShapeTaskService, BpmnShapeTaskBusinessRule,
 } from './bpmn-shapes';
 
 const {
@@ -109,6 +110,10 @@ export class BpmnJs {
       styleGatewayExclusive[GATEWAY_TYPE] = BpmnGatewayType.EXCLUSIVE;
       this.editor.graph.getStylesheet().putCellStyle('gatewayExclusive', styleGatewayExclusive);
 
+      const styleTaskBusinessRule = mxUtils.clone(style);
+      styleTaskBusinessRule[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_TASK_BUSINESS_RULE;
+      this.editor.graph.getStylesheet().putCellStyle('taskBusinessRule', styleTaskBusinessRule);
+
       const styleTaskUser = mxUtils.clone(style);
       styleTaskUser[mxConstants.STYLE_SHAPE] = SHAPE_BPMN_TASK_USER;
       this.editor.graph.getStylesheet().putCellStyle('taskUser', styleTaskUser);
@@ -133,7 +138,7 @@ export class BpmnJs {
       this.editor.graph.insertEdge(swimlane, null, '', taskUser3, gw2);
 
       const task_2_1 = this.editor.graph.insertVertex(swimlane, null, 'service 2.1', 320, 150, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
-      const task_2_2 = this.editor.graph.insertVertex(swimlane, null, 'service 2.2', 150, 150, 80, 60, 'taskService;bpmn.symbols=loop');
+      const task_2_2 = this.editor.graph.insertVertex(swimlane, null, 'business rule 2.2', 150, 150, 80, 60, 'taskBusinessRule;bpmn.symbols=loop');
       const task_2_3 = this.editor.graph.insertVertex(swimlane, null, 'service 2.3', 40, 150, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
       const task_2_4 = this.editor.graph.insertVertex(swimlane, null, 'service 2.4', 40, 250, 60, 60, 'taskService;bpmn.symbols=multi-parallel');
 
@@ -195,6 +200,7 @@ export class BpmnJs {
   private registerCustomShapes(): void {
     console.info('####register BPMN Shapes');
     mxCellRenderer.registerShape(SHAPE_BPMN_GATEWAY, BpmnShapeGateway);
+    mxCellRenderer.registerShape(SHAPE_BPMN_TASK_BUSINESS_RULE, BpmnShapeTaskBusinessRule);
     mxCellRenderer.registerShape(SHAPE_BPMN_TASK_SERVICE, BpmnShapeTaskService);
     mxCellRenderer.registerShape(SHAPE_BPMN_TASK_USER, BpmnShapeTaskUser);
     console.info('####BPMN Shapes registered');
