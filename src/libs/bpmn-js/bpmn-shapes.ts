@@ -234,9 +234,6 @@ abstract class BpmnShapeTask extends mxRectangleShape {
 
         const xTranslation = x + w / 2;
         const yTranslation = y + (h * 8) / 10;
-
-        //c.moveTo(x + w / 2, y + h * 8 / 10);
-        // c.translate(x + w / 2, y + h * 8 / 10);
         c.translate(xTranslation, yTranslation);
 
         switch (symbol) {
@@ -301,37 +298,12 @@ abstract class BpmnShapeTask extends mxRectangleShape {
      */
   }
 
-
-  /*
-<shape aspect="fixed" h="14" name="Multiple Instances" strokewidth="inherit" w="9">
-    <connections/>
-    <background>
-        <path>
-            <move x="0" y="0"/>
-            <line x="3" y="0"/>
-            <line x="3" y="14"/>
-            <line x="0" y="14"/>
-            <close/>
-            <move x="6" y="0"/>
-            <line x="9" y="0"/>
-            <line x="9" y="14"/>
-            <line x="6" y="14"/>
-            <close/>
-        </path>
-    </background>
-    <foreground>
-        <fillstroke/>
-    </foreground>
-</shape>
- */
-
   // TODO duplication with parallel
   // TODO we could rotate the parallel symbol
   private drawMultipleSequential(c: mxgraph.mxXmlCanvas2D, w: number, h: number): void {
     c.begin();
     c.setStrokeWidth(1);
     c.setFillColor(this.stroke);
-    const w2 = w / 5;
     const h2 = h / 5;
     c.rect(0, 0, w, h2);
     c.fillAndStroke();
@@ -379,8 +351,8 @@ abstract class BpmnShapeTask extends mxRectangleShape {
     c.moveTo(5.5, 19.08);
     c.arcTo(10, 10, 0, 1, 1, 10.5, 21.0);
     c.moveTo(5.5, 14.08);
-    c.lineTo(5.5, 19.08)
-    c.lineTo(0, 17.58)
+    c.lineTo(5.5, 19.08);
+    c.lineTo(0, 17.58);
     c.fillAndStroke();
     c.close();
 
@@ -420,7 +392,6 @@ abstract class BpmnShapeTask extends mxRectangleShape {
     </shape>
     */
   }
-
 }
 
 export class BpmnShapeTaskUser extends BpmnShapeTask {
@@ -529,12 +500,113 @@ export class BpmnShapeTaskUser extends BpmnShapeTask {
     c.close();
   };
    */
-
 }
 
 export class BpmnShapeTaskService extends BpmnShapeTask {
   protected paintTaskSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
-    // TODO implement service task shape
+    // const xTranslation = x + 200;
+    // const yTranslation = y + 200;
+    const xTranslation = x + w / 10;
+    const yTranslation = y + h / 10;
+    const symbolBaseSize = Math.min(w, h);
+
+    c.translate(xTranslation, yTranslation);
+
+    // TODO do this with configuration
+    c.setFillColor('white');
+    //c.scale(0.2);
+    //this.scale = 0.2;
+    this.drawServiceSymbol(c, x, y, symbolBaseSize / 5, symbolBaseSize / 5);
+    // restore scale
+    //c.scale(1);
+    //c.restore();
+
+    // TODO hack for translation
+    c.translate(-xTranslation, -yTranslation);
+  }
+
+  private drawServiceSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
+    // background
+    c.begin();
+    c.moveTo(2.06, 24.62);
+    c.lineTo(10.17, 30.95);
+    c.lineTo(9.29, 37.73);
+    c.lineTo(0, 41.42);
+    c.lineTo(2.95, 54.24);
+    c.lineTo(13.41, 52.92);
+    c.lineTo(17.39, 58.52);
+    c.lineTo(13.56, 67.66);
+    c.lineTo(24.47, 74.44);
+    c.lineTo(30.81, 66.33);
+    c.lineTo(37.88, 67.21);
+    c.lineTo(41.57, 76.5);
+    c.lineTo(54.24, 73.55);
+    c.lineTo(53.06, 62.94);
+    c.lineTo(58.52, 58.52);
+    c.lineTo(67.21, 63.09);
+    c.lineTo(74.58, 51.88);
+    c.lineTo(66.03, 45.25);
+    c.lineTo(66.92, 38.62);
+    c.lineTo(76.5, 34.93);
+    c.lineTo(73.7, 22.26);
+    c.lineTo(62.64, 23.44);
+    c.lineTo(58.81, 18.42);
+    c.lineTo(62.79, 8.7);
+    c.lineTo(51.74, 2.21);
+    c.lineTo(44.81, 10.47);
+    c.lineTo(38.03, 9.43);
+    c.lineTo(33.75, 0);
+    c.lineTo(21.52, 3.24);
+    c.lineTo(22.7, 13.56);
+    c.lineTo(18.13, 17.54);
+    c.lineTo(8.7, 13.56);
+    c.close();
+    c.moveTo(24.8, 39);
+    c.arcTo(12, 12, 0, 1, 1, 51.8, 39);
+    c.arcTo(12, 12, 0, 0, 1, 24.8, 39);
+    c.close();
+    c.fillAndStroke();
+
+    // foreground
+    // c.begin();
+    // c.moveTo(16.46, 41.42);
+    // c.lineTo(24.57, 47.75);
+    // c.lineTo(23.69, 54.53);
+    // c.lineTo(14.4, 58.22);
+    // c.lineTo(17.35, 71.04);
+    // c.lineTo(27.81, 69.72);
+    // c.lineTo(31.79, 75.32);
+    // c.lineTo(27.96, 84.46);
+    // c.lineTo(38.87, 91.24);
+    // c.lineTo(45.21, 83.13);
+    // c.lineTo(52.28, 84.01);
+    // c.lineTo(55.97, 93.3);
+    // c.lineTo(68.64, 90.35);
+    // c.lineTo(67.46, 79.74);
+    // c.lineTo(72.92, 75.32);
+    // c.lineTo(81.61, 79.89);
+    // c.lineTo(88.98, 68.68);
+    // c.lineTo(80.43, 62.05);
+    // c.lineTo(81.32, 55.42);
+    // c.lineTo(90.9, 51.73);
+    // c.lineTo(88.1, 39.06);
+    // c.lineTo(77.04, 40.24);
+    // c.lineTo(73.21, 35.22);
+    // c.lineTo(77.19, 25.5);
+    // c.lineTo(66.14, 19.01);
+    // c.lineTo(59.21, 27.27);
+    // c.lineTo(52.43, 26.23);
+    // c.lineTo(48.15, 16.8);
+    // c.lineTo(35.92, 20.04);
+    // c.lineTo(37.1, 30.36);
+    // c.lineTo(32.53, 34.34);
+    // c.lineTo(23.1, 30.36);
+    // c.close();
+    // c.moveTo(39.2, 55.8);
+    // c.arcTo(12, 12, 0, 1, 1, 66.2, 55.8);
+    // c.arcTo(12, 12, 0, 0, 1, 39.2, 55.8);
+    // c.close();
+    // c.fillAndStroke();
 
     /*
     <shape h="93.3" name="Service Task" strokewidth="inherit" w="90.9">
@@ -642,7 +714,7 @@ export class BpmnShapeTaskBusinessRule extends BpmnShapeTask {
     c.translate(-xTranslation, -yTranslation);
   }
 
-  private drawBusinessRuleSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number):void {
+  private drawBusinessRuleSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     c.begin();
     c.rect(0, 0, w, h);
     // c.setFillColor(this.stroke);
