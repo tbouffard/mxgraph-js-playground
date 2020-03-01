@@ -394,24 +394,27 @@ abstract class BpmnShapeTask extends mxRectangleShape {
 }
 
 export class BpmnShapeTaskUser extends BpmnShapeTask {
-  // TAKEN from mxgraph mxActor
   protected paintTaskSymbol(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     const symbolBaseSize = Math.min(w, h);
-
     const xTranslation = x + w / 10;
     const yTranslation = y + h / 10;
 
+    const symbolsString = mxUtils.getValue(this.style, 'user-type', 'actor') as string;
+
     c.translate(xTranslation, yTranslation);
-    //c.translate(x + w/10, y + h/10);
     c.begin();
-    this.redrawActor(c, x, y, symbolBaseSize / 6, symbolBaseSize / 6);
-    // this.redrawActor(c, x, y, w/6, h/6);
+    if (symbolsString == 'actor') {
+      this.redrawActor(c, x, y, symbolBaseSize / 6, symbolBaseSize / 6);
+    } else {
+      this.redrawUser(c, symbolBaseSize, 0.3);
+    }
     c.fillAndStroke();
 
     // TODO hack for translation
     c.translate(-xTranslation, -yTranslation);
   }
 
+  // TAKEN from mxgraph mxActor
   private redrawActor(c: mxgraph.mxXmlCanvas2D, x: number, y: number, w: number, h: number): void {
     const width = w / 3;
     c.moveTo(0, h);
@@ -422,83 +425,109 @@ export class BpmnShapeTaskUser extends BpmnShapeTask {
     c.close();
   }
 
-  /*
-<shape h="91.81" name="User Task" strokewidth="inherit" w="94">
-    <connections/>
-    <background>
-        <path>
-            <move x="0" y="91.81"/>
-            <line x="0" y="63.81"/>
-            <arc large-arc-flag="0" rx="50" ry="50" sweep-flag="1" x="24" x-axis-rotation="0" y="42.81"/>
-            <arc large-arc-flag="0" rx="25" ry="25" sweep-flag="1" x="33" x-axis-rotation="0" y="41.81"/>
-            <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="0" x="48" x-axis-rotation="0" y="58.81"/>
-            <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="0" x="66" x-axis-rotation="0" y="41.81"/>
-            <arc large-arc-flag="0" rx="25" ry="25" sweep-flag="1" x="76.8" x-axis-rotation="0" y="42.81"/>
-            <arc large-arc-flag="0" rx="35" ry="35" sweep-flag="1" x="94" x-axis-rotation="0" y="63.81"/>
-            <line x="94" y="91.81"/>
-            <close/>
-            <move x="66" y="41.81"/>
-            <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="1" x="48" x-axis-rotation="0" y="58.81"/>
-            <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="1" x="33" x-axis-rotation="0" y="41.81"/>
-            <arc large-arc-flag="0" rx="25" ry="25" sweep-flag="0" x="38" x-axis-rotation="0" y="40.81"/>
-            <line x="39" y="36.81"/>
-            <arc large-arc-flag="0" rx="10" ry="10" sweep-flag="1" x="32" x-axis-rotation="0" y="30.81"/>
-            <arc large-arc-flag="1" rx="18" ry="12" sweep-flag="1" x="66" x-axis-rotation="0" y="30.81"/>
-            <arc large-arc-flag="0" rx="12" ry="12" sweep-flag="1" x="58" x-axis-rotation="0" y="36.81"/>
-            <line x="59" y="40.81"/>
-            <close/>
-        </path>
-    </background>
-    <foreground>
-        <fillstroke/>
-        <path>
-            <move x="16" y="75.81"/>
-            <line x="16" y="90.81"/>
-            <move x="75" y="75.81"/>
-            <line x="75" y="90.81"/>
-        </path>
-        <stroke/>
-        <fillcolor color="#000000"/>
-        <path>
-            <move x="32" y="30.81"/>
-            <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="1" x="29" x-axis-rotation="0" y="13.81"/>
-            <arc large-arc-flag="0" rx="22" ry="22" sweep-flag="1" x="48" x-axis-rotation="0" y="0.81"/>
-            <arc large-arc-flag="0" rx="22" ry="22" sweep-flag="1" x="70" x-axis-rotation="0" y="13.81"/>
-            <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="1" x="66" x-axis-rotation="0" y="30.81"/>
-            <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="64" x-axis-rotation="0" y="21.81"/>
-            <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="50" x-axis-rotation="0" y="20.81"/>
-            <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="35" x-axis-rotation="0" y="21.81"/>
-            <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="32" x-axis-rotation="0" y="30.81"/>
-            <close/>
-        </path>
-        <fillstroke/>
-    </foreground>
-</shape>
+  // inspired from draw.io "User Task" bpmn stencil
+  private redrawUser(c: mxgraph.mxXmlCanvas2D, parentSize: number, ratioFromParent: number): void {
+    // coordinates below fill a box of 90x90 (approximately)
+    const scaleFactor = (parentSize / 90) * ratioFromParent;
 
- */
-
-  /*
-  TAKEN from mxgraph mxActor
-
-  mxActor.prototype.paintVertexShape = function(c, x, y, w, h)
-  {
-    c.translate(x, y);
+    // background
     c.begin();
-    this.redrawPath(c, x, y, w, h);
-    c.fillAndStroke();
-  };
-
-  mxActor.prototype.redrawPath = function(c, x, y, w, h)
-  {
-    var width = w/3;
-    c.moveTo(0, h);
-    c.curveTo(0, 3 * h / 5, 0, 2 * h / 5, w / 2, 2 * h / 5);
-    c.curveTo(w / 2 - width, 2 * h / 5, w / 2 - width, 0, w / 2, 0);
-    c.curveTo(w / 2 + width, 0, w / 2 + width, 2 * h / 5, w / 2, 2 * h / 5);
-    c.curveTo(w, 2 * h / 5, w, 3 * h / 5, w, h);
+    c.moveTo(0 * scaleFactor, 91.81 * scaleFactor);
+    c.lineTo(0 * scaleFactor, 63.81 * scaleFactor);
+    c.arcTo(50 * scaleFactor, 50 * scaleFactor, 0, 0, 1, 24 * scaleFactor, 42.81 * scaleFactor);
+    c.arcTo(25 * scaleFactor, 25 * scaleFactor, 0, 0, 1, 33 * scaleFactor, 41.81 * scaleFactor);
+    c.arcTo(17 * scaleFactor, 17 * scaleFactor, 0, 0, 0, 48 * scaleFactor, 58.81 * scaleFactor);
+    c.arcTo(17 * scaleFactor, 17 * scaleFactor, 0, 0, 0, 66 * scaleFactor, 41.81 * scaleFactor);
+    c.arcTo(25 * scaleFactor, 25 * scaleFactor, 0, 0, 1, 76.8 * scaleFactor, 42.81 * scaleFactor);
+    c.arcTo(35 * scaleFactor, 35 * scaleFactor, 0, 0, 1, 94 * scaleFactor, 63.81 * scaleFactor);
+    c.lineTo(94 * scaleFactor, 91.81 * scaleFactor);
     c.close();
-  };
+    c.moveTo(66 * scaleFactor, 41.81 * scaleFactor);
+    c.arcTo(17 * scaleFactor, 17 * scaleFactor, 0, 0, 1, 48 * scaleFactor, 58.81 * scaleFactor);
+    c.arcTo(17 * scaleFactor, 17 * scaleFactor, 0, 0, 1, 33 * scaleFactor, 41.81 * scaleFactor);
+    c.arcTo(25 * scaleFactor, 25 * scaleFactor, 0, 0, 0, 38 * scaleFactor, 40.81 * scaleFactor);
+    c.lineTo(39 * scaleFactor, 36.81 * scaleFactor);
+    c.arcTo(10 * scaleFactor, 10 * scaleFactor, 0, 0, 1, 32 * scaleFactor, 30.81 * scaleFactor);
+    c.arcTo(18 * scaleFactor, 12 * scaleFactor, 0, 1, 1, 66 * scaleFactor, 30.81 * scaleFactor);
+    c.arcTo(12 * scaleFactor, 12 * scaleFactor, 0, 0, 1, 58 * scaleFactor, 36.81 * scaleFactor);
+    c.lineTo(59 * scaleFactor, 40.81 * scaleFactor);
+    c.close();
+    c.fillAndStroke();
+
+    // foreground
+    c.begin();
+    c.moveTo(16 * scaleFactor, 75.81 * scaleFactor);
+    c.lineTo(16 * scaleFactor, 90.81 * scaleFactor);
+    c.moveTo(75 * scaleFactor, 75.81 * scaleFactor);
+    c.lineTo(75 * scaleFactor, 90.81 * scaleFactor);
+    c.close();
+    c.setFillColor('#000000');
+    c.moveTo(32 * scaleFactor, 30.81 * scaleFactor);
+    c.arcTo(15 * scaleFactor, 15 * scaleFactor, 0, 0, 1, 29 * scaleFactor, 13.81 * scaleFactor);
+    c.arcTo(22 * scaleFactor, 22 * scaleFactor, 0, 0, 1, 48 * scaleFactor, 0.81 * scaleFactor);
+    c.arcTo(22 * scaleFactor, 22 * scaleFactor, 0, 0, 1, 70 * scaleFactor, 13.81 * scaleFactor);
+    c.arcTo(15 * scaleFactor, 15 * scaleFactor, 0, 0, 1, 66 * scaleFactor, 30.81 * scaleFactor);
+    c.arcTo(15 * scaleFactor, 15 * scaleFactor, 0, 0, 0, 64 * scaleFactor, 21.81 * scaleFactor);
+    c.arcTo(15 * scaleFactor, 15 * scaleFactor, 0, 0, 0, 50 * scaleFactor, 20.81 * scaleFactor);
+    c.arcTo(15 * scaleFactor, 15 * scaleFactor, 0, 0, 0, 35 * scaleFactor, 21.81 * scaleFactor);
+    c.arcTo(15 * scaleFactor, 15 * scaleFactor, 0, 0, 0, 32 * scaleFactor, 30.81 * scaleFactor);
+    c.close();
+    c.fillAndStroke();
+    /*
+  <shape h="91.81" name="User Task" strokewidth="inherit" w="94">
+      <connections/>
+      <background>
+          <path>
+              <move x="0" y="91.81"/>
+              <line x="0" y="63.81"/>
+              <arc large-arc-flag="0" rx="50" ry="50" sweep-flag="1" x="24" x-axis-rotation="0" y="42.81"/>
+              <arc large-arc-flag="0" rx="25" ry="25" sweep-flag="1" x="33" x-axis-rotation="0" y="41.81"/>
+              <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="0" x="48" x-axis-rotation="0" y="58.81"/>
+              <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="0" x="66" x-axis-rotation="0" y="41.81"/>
+              <arc large-arc-flag="0" rx="25" ry="25" sweep-flag="1" x="76.8" x-axis-rotation="0" y="42.81"/>
+              <arc large-arc-flag="0" rx="35" ry="35" sweep-flag="1" x="94" x-axis-rotation="0" y="63.81"/>
+              <line x="94" y="91.81"/>
+              <close/>
+              <move x="66" y="41.81"/>
+              <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="1" x="48" x-axis-rotation="0" y="58.81"/>
+              <arc large-arc-flag="0" rx="17" ry="17" sweep-flag="1" x="33" x-axis-rotation="0" y="41.81"/>
+              <arc large-arc-flag="0" rx="25" ry="25" sweep-flag="0" x="38" x-axis-rotation="0" y="40.81"/>
+              <line x="39" y="36.81"/>
+              <arc large-arc-flag="0" rx="10" ry="10" sweep-flag="1" x="32" x-axis-rotation="0" y="30.81"/>
+              <arc large-arc-flag="1" rx="18" ry="12" sweep-flag="1" x="66" x-axis-rotation="0" y="30.81"/>
+              <arc large-arc-flag="0" rx="12" ry="12" sweep-flag="1" x="58" x-axis-rotation="0" y="36.81"/>
+              <line x="59" y="40.81"/>
+              <close/>
+          </path>
+      </background>
+      <foreground>
+          <fillstroke/>
+          <path>
+              <move x="16" y="75.81"/>
+              <line x="16" y="90.81"/>
+              <move x="75" y="75.81"/>
+              <line x="75" y="90.81"/>
+          </path>
+          <stroke/>
+          <fillcolor color="#000000"/>
+          <path>
+              <move x="32" y="30.81"/>
+              <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="1" x="29" x-axis-rotation="0" y="13.81"/>
+              <arc large-arc-flag="0" rx="22" ry="22" sweep-flag="1" x="48" x-axis-rotation="0" y="0.81"/>
+              <arc large-arc-flag="0" rx="22" ry="22" sweep-flag="1" x="70" x-axis-rotation="0" y="13.81"/>
+              <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="1" x="66" x-axis-rotation="0" y="30.81"/>
+              <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="64" x-axis-rotation="0" y="21.81"/>
+              <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="50" x-axis-rotation="0" y="20.81"/>
+              <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="35" x-axis-rotation="0" y="21.81"/>
+              <arc large-arc-flag="0" rx="15" ry="15" sweep-flag="0" x="32" x-axis-rotation="0" y="30.81"/>
+              <close/>
+          </path>
+          <fillstroke/>
+      </foreground>
+  </shape>
+
    */
+  }
 }
 
 export class BpmnShapeTaskService extends BpmnShapeTask {
@@ -517,44 +546,43 @@ export class BpmnShapeTaskService extends BpmnShapeTask {
   }
 
   private drawServiceSymbol(c: mxgraph.mxXmlCanvas2D, parentSize: number, ratioFromParent: number): void {
-    // coordinates below fill a box of 80x80
-    //const scaleFactor = 0.2;
-    const scaleFactor = parentSize / 80 * ratioFromParent;
+    // coordinates below fill a box of 90x90 (approximately)
+    const scaleFactor = (parentSize / 90) * ratioFromParent;
 
     // background
     c.begin();
-    c.moveTo(2.06* scaleFactor, 24.62* scaleFactor);
-    c.lineTo(10.17* scaleFactor, 30.95* scaleFactor);
-    c.lineTo(9.29* scaleFactor, 37.73* scaleFactor);
-    c.lineTo(0* scaleFactor, 41.42* scaleFactor);
-    c.lineTo(2.95* scaleFactor, 54.24* scaleFactor);
-    c.lineTo(13.41* scaleFactor, 52.92* scaleFactor);
-    c.lineTo(17.39* scaleFactor, 58.52* scaleFactor);
-    c.lineTo(13.56* scaleFactor, 67.66* scaleFactor);
-    c.lineTo(24.47* scaleFactor, 74.44* scaleFactor);
-    c.lineTo(30.81* scaleFactor, 66.33* scaleFactor);
-    c.lineTo(37.88* scaleFactor, 67.21* scaleFactor);
-    c.lineTo(41.57* scaleFactor, 76.5* scaleFactor);
-    c.lineTo(54.24* scaleFactor, 73.55* scaleFactor);
-    c.lineTo(53.06* scaleFactor, 62.94* scaleFactor);
-    c.lineTo(58.52* scaleFactor, 58.52* scaleFactor);
-    c.lineTo(67.21* scaleFactor, 63.09* scaleFactor);
-    c.lineTo(74.58* scaleFactor, 51.88* scaleFactor);
-    c.lineTo(66.03* scaleFactor, 45.25* scaleFactor);
-    c.lineTo(66.92* scaleFactor, 38.62* scaleFactor);
-    c.lineTo(76.5* scaleFactor, 34.93* scaleFactor);
-    c.lineTo(73.7* scaleFactor, 22.26* scaleFactor);
-    c.lineTo(62.64* scaleFactor, 23.44* scaleFactor);
-    c.lineTo(58.81* scaleFactor, 18.42* scaleFactor);
-    c.lineTo(62.79* scaleFactor, 8.7* scaleFactor);
-    c.lineTo(51.74* scaleFactor, 2.21* scaleFactor);
-    c.lineTo(44.81* scaleFactor, 10.47* scaleFactor);
-    c.lineTo(38.03* scaleFactor, 9.43* scaleFactor);
-    c.lineTo(33.75* scaleFactor, 0* scaleFactor);
-    c.lineTo(21.52* scaleFactor, 3.24* scaleFactor);
-    c.lineTo(22.7* scaleFactor, 13.56* scaleFactor);
-    c.lineTo(18.13* scaleFactor, 17.54* scaleFactor);
-    c.lineTo(8.7* scaleFactor, 13.56* scaleFactor);
+    c.moveTo(2.06 * scaleFactor, 24.62 * scaleFactor);
+    c.lineTo(10.17 * scaleFactor, 30.95 * scaleFactor);
+    c.lineTo(9.29 * scaleFactor, 37.73 * scaleFactor);
+    c.lineTo(0 * scaleFactor, 41.42 * scaleFactor);
+    c.lineTo(2.95 * scaleFactor, 54.24 * scaleFactor);
+    c.lineTo(13.41 * scaleFactor, 52.92 * scaleFactor);
+    c.lineTo(17.39 * scaleFactor, 58.52 * scaleFactor);
+    c.lineTo(13.56 * scaleFactor, 67.66 * scaleFactor);
+    c.lineTo(24.47 * scaleFactor, 74.44 * scaleFactor);
+    c.lineTo(30.81 * scaleFactor, 66.33 * scaleFactor);
+    c.lineTo(37.88 * scaleFactor, 67.21 * scaleFactor);
+    c.lineTo(41.57 * scaleFactor, 76.5 * scaleFactor);
+    c.lineTo(54.24 * scaleFactor, 73.55 * scaleFactor);
+    c.lineTo(53.06 * scaleFactor, 62.94 * scaleFactor);
+    c.lineTo(58.52 * scaleFactor, 58.52 * scaleFactor);
+    c.lineTo(67.21 * scaleFactor, 63.09 * scaleFactor);
+    c.lineTo(74.58 * scaleFactor, 51.88 * scaleFactor);
+    c.lineTo(66.03 * scaleFactor, 45.25 * scaleFactor);
+    c.lineTo(66.92 * scaleFactor, 38.62 * scaleFactor);
+    c.lineTo(76.5 * scaleFactor, 34.93 * scaleFactor);
+    c.lineTo(73.7 * scaleFactor, 22.26 * scaleFactor);
+    c.lineTo(62.64 * scaleFactor, 23.44 * scaleFactor);
+    c.lineTo(58.81 * scaleFactor, 18.42 * scaleFactor);
+    c.lineTo(62.79 * scaleFactor, 8.7 * scaleFactor);
+    c.lineTo(51.74 * scaleFactor, 2.21 * scaleFactor);
+    c.lineTo(44.81 * scaleFactor, 10.47 * scaleFactor);
+    c.lineTo(38.03 * scaleFactor, 9.43 * scaleFactor);
+    c.lineTo(33.75 * scaleFactor, 0 * scaleFactor);
+    c.lineTo(21.52 * scaleFactor, 3.24 * scaleFactor);
+    c.lineTo(22.7 * scaleFactor, 13.56 * scaleFactor);
+    c.lineTo(18.13 * scaleFactor, 17.54 * scaleFactor);
+    c.lineTo(8.7 * scaleFactor, 13.56 * scaleFactor);
     c.close();
 
     const arc1Ray = 13.5 * scaleFactor;
@@ -568,40 +596,39 @@ export class BpmnShapeTaskService extends BpmnShapeTask {
 
     // foreground
     c.begin();
-    c.moveTo(16.46* scaleFactor, 41.42* scaleFactor);
-    c.lineTo(24.57* scaleFactor, 47.75* scaleFactor);
-    c.lineTo(23.69* scaleFactor, 54.53* scaleFactor);
-    c.lineTo(14.4* scaleFactor, 58.22* scaleFactor);
-    c.lineTo(17.35* scaleFactor, 71.04* scaleFactor);
-    c.lineTo(27.81* scaleFactor, 69.72* scaleFactor);
-    c.lineTo(31.79* scaleFactor, 75.32* scaleFactor);
-    c.lineTo(27.96* scaleFactor, 84.46* scaleFactor);
-    c.lineTo(38.87* scaleFactor, 91.24* scaleFactor);
-    c.lineTo(45.21* scaleFactor, 83.13* scaleFactor);
-    c.lineTo(52.28* scaleFactor, 84.01* scaleFactor);
-    c.lineTo(55.97* scaleFactor, 93.3* scaleFactor);
-    c.lineTo(68.64* scaleFactor, 90.35* scaleFactor);
-    c.lineTo(67.46* scaleFactor, 79.74* scaleFactor);
-    c.lineTo(72.92* scaleFactor, 75.32* scaleFactor);
-    c.lineTo(81.61* scaleFactor, 79.89* scaleFactor);
-    c.lineTo(88.98* scaleFactor, 68.68* scaleFactor);
-    c.lineTo(80.43* scaleFactor, 62.05* scaleFactor);
-    c.lineTo(81.32* scaleFactor, 55.42* scaleFactor);
-    c.lineTo(90.9* scaleFactor, 51.73* scaleFactor);
-    c.lineTo(88.1* scaleFactor, 39.06* scaleFactor);
-    c.lineTo(77.04* scaleFactor, 40.24* scaleFactor);
-    c.lineTo(73.21* scaleFactor, 35.22* scaleFactor);
-    c.lineTo(77.19* scaleFactor, 25.5* scaleFactor);
-    c.lineTo(66.14* scaleFactor, 19.01* scaleFactor);
-    c.lineTo(59.21* scaleFactor, 27.27* scaleFactor);
-    c.lineTo(52.43* scaleFactor, 26.23* scaleFactor);
-    c.lineTo(48.15* scaleFactor, 16.8* scaleFactor);
-    c.lineTo(35.92* scaleFactor, 20.04* scaleFactor);
-    c.lineTo(37.1* scaleFactor, 30.36* scaleFactor);
-    c.lineTo(32.53* scaleFactor, 34.34* scaleFactor);
-    c.lineTo(23.1* scaleFactor, 30.36* scaleFactor);
+    c.moveTo(16.46 * scaleFactor, 41.42 * scaleFactor);
+    c.lineTo(24.57 * scaleFactor, 47.75 * scaleFactor);
+    c.lineTo(23.69 * scaleFactor, 54.53 * scaleFactor);
+    c.lineTo(14.4 * scaleFactor, 58.22 * scaleFactor);
+    c.lineTo(17.35 * scaleFactor, 71.04 * scaleFactor);
+    c.lineTo(27.81 * scaleFactor, 69.72 * scaleFactor);
+    c.lineTo(31.79 * scaleFactor, 75.32 * scaleFactor);
+    c.lineTo(27.96 * scaleFactor, 84.46 * scaleFactor);
+    c.lineTo(38.87 * scaleFactor, 91.24 * scaleFactor);
+    c.lineTo(45.21 * scaleFactor, 83.13 * scaleFactor);
+    c.lineTo(52.28 * scaleFactor, 84.01 * scaleFactor);
+    c.lineTo(55.97 * scaleFactor, 93.3 * scaleFactor);
+    c.lineTo(68.64 * scaleFactor, 90.35 * scaleFactor);
+    c.lineTo(67.46 * scaleFactor, 79.74 * scaleFactor);
+    c.lineTo(72.92 * scaleFactor, 75.32 * scaleFactor);
+    c.lineTo(81.61 * scaleFactor, 79.89 * scaleFactor);
+    c.lineTo(88.98 * scaleFactor, 68.68 * scaleFactor);
+    c.lineTo(80.43 * scaleFactor, 62.05 * scaleFactor);
+    c.lineTo(81.32 * scaleFactor, 55.42 * scaleFactor);
+    c.lineTo(90.9 * scaleFactor, 51.73 * scaleFactor);
+    c.lineTo(88.1 * scaleFactor, 39.06 * scaleFactor);
+    c.lineTo(77.04 * scaleFactor, 40.24 * scaleFactor);
+    c.lineTo(73.21 * scaleFactor, 35.22 * scaleFactor);
+    c.lineTo(77.19 * scaleFactor, 25.5 * scaleFactor);
+    c.lineTo(66.14 * scaleFactor, 19.01 * scaleFactor);
+    c.lineTo(59.21 * scaleFactor, 27.27 * scaleFactor);
+    c.lineTo(52.43 * scaleFactor, 26.23 * scaleFactor);
+    c.lineTo(48.15 * scaleFactor, 16.8 * scaleFactor);
+    c.lineTo(35.92 * scaleFactor, 20.04 * scaleFactor);
+    c.lineTo(37.1 * scaleFactor, 30.36 * scaleFactor);
+    c.lineTo(32.53 * scaleFactor, 34.34 * scaleFactor);
+    c.lineTo(23.1 * scaleFactor, 30.36 * scaleFactor);
     c.close();
-
 
     const arc2Ray = 13.5 * scaleFactor;
     const arc2StartX = 39.2 * scaleFactor;
