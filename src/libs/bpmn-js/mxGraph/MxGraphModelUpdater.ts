@@ -1,14 +1,7 @@
 import { mxgraph } from 'mxgraph';
 import { MxGraphBpmnStyles } from './MxGraphBpmnStyles';
 import { mxgraphFactory } from '../../../components/mxgraph-factory';
-import {
-  BpmnEdge,
-  BpmnUserTask,
-  BpmnLane,
-  BpmnStartEvent,
-  BpmnTerminateEndEvent,
-  BpmnProcess, BpmnParallelGateway, BpmnServiceTask,
-} from '../model/BpmnModel';
+import { BpmnEdge, BpmnUserTask, BpmnLane, BpmnStartEvent, BpmnTerminateEndEvent, BpmnProcess, BpmnParallelGateway, BpmnServiceTask } from '../model/BpmnModel';
 
 const { mxUtils, mxPoint } = mxgraphFactory({
   mxLoadResources: false,
@@ -29,36 +22,71 @@ export const TASK_Y_LARGE = EVENT_Y_LARGE - 22;
 // export const TASK_Y_LITTLE = EVENT_Y_LITTLE - 22;
 
 export default class MxGraphModelUpdater {
-  constructor(readonly graph: mxgraph.mxGraph) {}
+  constructor(readonly graph: mxgraph.mxGraph, readonly relativeGeometry: boolean = false) {}
 
   // ===================================================================================================================
   // usage with custom bpmn model
   // ===================================================================================================================
 
   public createPoolWithId(process: BpmnProcess): void {
-    const pool = this.graph.insertVertex(this.graph.getDefaultParent(), process.id, process.label, process.x, process.y, process.width, process.height, MxGraphBpmnStyles.POOL);
+    const pool = this.graph.insertVertex(
+      this.graph.getDefaultParent(),
+      process.id,
+      process.label,
+      process.x,
+      process.y,
+      process.width,
+      process.height,
+      MxGraphBpmnStyles.POOL,
+      this.relativeGeometry,
+    );
     pool.setConnectable(false);
   }
 
   public createLaneWithId(poolId: string, lane: BpmnLane): void {
-    const mxLane = this.graph.insertVertex(this.getCell(poolId), lane.id, lane.label, lane.x, lane.y, lane.width, lane.height, MxGraphBpmnStyles.LANE);
+    const mxLane = this.graph.insertVertex(
+      // this.getCell(poolId),
+      this.graph.getDefaultParent(),
+      lane.id,
+      lane.label,
+      lane.x,
+      lane.y,
+      lane.width,
+      lane.height,
+      MxGraphBpmnStyles.LANE,
+      this.relativeGeometry,
+    );
     mxLane.setConnectable(false);
+
+    //mxLane.setParent(this.getCell(poolId));
   }
 
   public createUserTask(laneId: string, task: BpmnUserTask): void {
-    this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK);
+    this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK, this.relativeGeometry);
   }
 
   public createServiceTask(laneId: string, task: BpmnServiceTask): void {
-    this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK_SERVICE);
+    this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK_SERVICE, this.relativeGeometry);
   }
 
   public createStartEventWithId(laneId: string, event: BpmnStartEvent): void {
-    this.graph.insertVertex(this.getCell(laneId), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START);
+    // this.getCell(laneId)
+    const vertex = this.graph.insertVertex(this.graph.getDefaultParent(), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START, this.relativeGeometry);
+    // vertex.setParent(this.getCell(laneId));
+
+
+
+    // this.graph.addCells(cells,
+    //                         parent,
+    //                         null,
+    //                         null,
+    //                         null,
+    //                         true);
+
   }
 
   public createEndTerminateEventWithId(laneId: string, event: BpmnTerminateEndEvent): void {
-    this.graph.insertVertex(this.getCell(laneId), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_END_TERMINATE);
+    this.graph.insertVertex(this.getCell(laneId), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_END_TERMINATE, this.relativeGeometry);
   }
 
   public createSimpleTransition(parentId: string, edge: BpmnEdge): void {
@@ -73,7 +101,7 @@ export default class MxGraphModelUpdater {
   }
 
   public createParallelGateway(laneId: string, gateway: BpmnParallelGateway): void {
-    this.graph.insertVertex(this.getCell(laneId), gateway.id, gateway.label, gateway.x, gateway.y, TASK_HEIGHT, TASK_HEIGHT, MxGraphBpmnStyles.GATEWAY);
+    this.graph.insertVertex(this.getCell(laneId), gateway.id, gateway.label, gateway.x, gateway.y, TASK_HEIGHT, TASK_HEIGHT, MxGraphBpmnStyles.GATEWAY, this.relativeGeometry);
   }
 
   // ===================================================================================================================

@@ -53,8 +53,8 @@ export class BpmnLane extends AbstractBpmnShape {
   private readonly _elements = new Set<AbstractBpmnShape>();
   private readonly _edges = new Set<BpmnEdge>();
 
-  constructor(id: string, label: string, y = 0, width: number, height: number) {
-    super(id, -1, y, height, width, label, 'Lane');
+  constructor(id: string, label: string, x = 0, y = 0, width: number, height: number) {
+    super(id, x, y, height, width, label, 'Lane');
   }
 
   get elements(): Set<AbstractBpmnShape> {
