@@ -52,11 +52,11 @@ export default abstract class AbstractGraph {
 
       this.initMxLog();
 
-      this.handleClick();
-      this.autoResizeContainer();
+      // this.handleClick();
+      // this.autoResizeContainer();
       new MxGraphConfigurator(this.graph).configureStyles();
 
-      this.mxGraphModelUpdater = new MxGraphModelUpdater(this.graph);
+      this.mxGraphModelUpdater = new MxGraphModelUpdater(this.graph, false);
 
       /*// Animation on all transitions
       graph.addListener('size', function() {
