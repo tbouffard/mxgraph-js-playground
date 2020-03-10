@@ -22,7 +22,7 @@ export default class MainGraph extends AbstractGraph {
     new ModelConvertor(this.graph, this.mxGraphModelUpdater).updateMxGraphModel(process);
     console.info('Load Graph MODEL CONVERTED: ', new Date().getTime() - t0);
 
-    this.graph.fit();
+    // this.graph.fit();
     console.info('Load Graph FIT DONE: ', new Date().getTime() - t0);
   }
 
