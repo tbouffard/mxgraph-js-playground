@@ -20,8 +20,10 @@ export default class BpmnProcessCreatorExampleCodeOnly {
     // <dc:Bounds x="234" y="92" width="36" height="36" />
     lane1.add(new BpmnStartEvent('Start_1', 'Start', 92, 234));
     // <dc:Bounds x="312" y="70" width="100" height="80" />
-    lane1.add(new BpmnUserTask('HumanTask_1_1', 'Human 1_1', 312, 70, 100, 80));
-    lane1.add(new BpmnParallelGateway('ParallelGateway_1_1', 'Para Gw 1_1', 310, 27, 50, 100));
+    //lane1.add(new BpmnUserTask('HumanTask_1_1', 'Human 1_1', 312, 70, 80, 100));
+    // <dc:Bounds x="940" y="70" width="100" height="80" />
+    //lane1.add(new BpmnUserTask('HumanTask_1_2', 'Human 1_2', 940, 70, 80, 100));
+    //lane1.add(new BpmnParallelGateway('ParallelGateway_1_1', 'Para Gw 1_1', 310, 27, 50, 100));
     // lane1.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End 1', 50, 600));
     //
     lane1.addEdge(new BpmnEdge('Edge_1_1', 'Edge 1', 'Start_1', 'HumanTask_1_1'));
