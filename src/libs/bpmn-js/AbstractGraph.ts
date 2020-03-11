@@ -22,7 +22,7 @@ export const TASK_Y_LARGE = EVENT_Y_LARGE - 22;
 export const TASK_Y_LITTLE = EVENT_Y_LITTLE - 22;
 
 mxGraph.prototype.edgeLabelsMovable = false;
-mxGraph.prototype.cellsLocked = true;
+// mxGraph.prototype.cellsLocked = true;
 
 // Overrides method to provide a cell label in the display
 mxGraph.prototype.convertValueToString = function(cell) {
