@@ -19,17 +19,19 @@ export default class BpmnProcessCreatorExampleCodeOnly {
     process.addLane(lane1);
     // <dc:Bounds x="234" y="92" width="36" height="36" />
     lane1.add(new BpmnStartEvent('Start_1', 'Start', 92, 234));
-    // lane1.add(new BpmnUserTask('HumanTask_1_1', 'Human 1_1', 160, 40, 50, 100));
-    // lane1.add(new BpmnParallelGateway('ParallelGateway_1_1', 'Para Gw 1_1', 310, 27, 50, 100));
+    // <dc:Bounds x="312" y="70" width="100" height="80" />
+    lane1.add(new BpmnUserTask('HumanTask_1_1', 'Human 1_1', 312, 70, 100, 80));
+    lane1.add(new BpmnParallelGateway('ParallelGateway_1_1', 'Para Gw 1_1', 310, 27, 50, 100));
     // lane1.add(new BpmnTerminateEndEvent('TerminateEnd_1', 'End 1', 50, 600));
     //
-    // lane1.addEdge(new BpmnEdge('Edge_1_1', 'Edge 1', 'Start_1', 'HumanTask_1_1'));
-    // lane1.addEdge(new BpmnEdge('Edge_1_2', null, 'HumanTask_1_1', 'ParallelGateway_1_1'));
+    lane1.addEdge(new BpmnEdge('Edge_1_1', 'Edge 1', 'Start_1', 'HumanTask_1_1'));
+    lane1.addEdge(new BpmnEdge('Edge_1_2', null, 'HumanTask_1_1', 'ParallelGateway_1_1'));
     // lane1.addEdge(new BpmnEdge('Edge_1_3', 'Edge 2', 'ParallelGateway_1_1', 'TerminateEnd_1'));
 
     // // LANE 2
-    // const lane2 = new BpmnLane('Lane_2', 'Lane B', 200, 700, 120);
-    // process.addLane(lane2);
+    // <dc:Bounds x="188" y="175" width="1032" height="185" />
+    const lane2 = new BpmnLane('Lane_2', 'Lane B', 188, 175, 1032, 185);
+    process.addLane(lane2);
     // lane2.add(new BpmnUserTask('HumanTask_2_1', 'Human 2_1', 306, 40, 50, 80));
     // lane2.add(new BpmnUserTask('HumanTask_2_2', 'Human 2_2', 450, 40, 50, 80));
     // lane2.add(new BpmnTerminateEndEvent('TerminateEnd_2', 'End 2', 50, 600));
