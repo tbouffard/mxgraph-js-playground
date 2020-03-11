@@ -60,22 +60,13 @@ export default class MxGraphModelUpdater {
 
     //mxLane.setParent(this.getCell(poolId));
 
-    const mxLane = this.insertVertex(
-        poolId,
-      lane.id,
-      lane.label,
-      lane.x,
-      lane.y,
-      lane.width,
-      lane.height,
-      MxGraphBpmnStyles.LANE,
-      this.relativeGeometry,
-    );
+    const mxLane = this.insertVertexV2(poolId, lane.id, lane.label, lane.x, lane.y, lane.width, lane.height, MxGraphBpmnStyles.LANE, this.relativeGeometry);
     mxLane.setConnectable(false);
   }
 
   public createUserTask(laneId: string, task: BpmnUserTask): void {
-    this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK, this.relativeGeometry);
+    // this.graph.insertVertex(this.getCell(laneId), task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK, this.relativeGeometry);
+    this.insertVertexV2(laneId, task.id, task.label, task.x, task.y, task.width, task.height, MxGraphBpmnStyles.TASK, this.relativeGeometry);
   }
 
   public createServiceTask(laneId: string, task: BpmnServiceTask): void {
@@ -83,7 +74,7 @@ export default class MxGraphModelUpdater {
   }
 
   public createStartEventWithId(laneId: string, event: BpmnStartEvent): void {
-    this.insertVertex(laneId, event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START, this.relativeGeometry);
+    this.insertVertexV2(laneId, event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START, this.relativeGeometry);
 
     // // this.getCell(laneId)
     // //const vertex = this.graph.insertVertex(this.graph.getDefaultParent(), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START, this.relativeGeometry);
@@ -114,6 +105,50 @@ export default class MxGraphModelUpdater {
   }
 
   // using x and y with (absolute) coordinates related to the default parent
+  private insertVertexV2(
+    parentId: string,
+    id: string | null,
+    value: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    style?: string,
+    relative?: boolean,
+  ): mxgraph.mxCell {
+    const parent = this.getCell(parentId);
+
+    const vertex = this.graph.insertVertex(parent, id, value, x, y, width, height, style, relative);
+    const translateForRoot = this.getTranslateForRoot(parent);
+    this.graph.translateCell(vertex, translateForRoot.x, translateForRoot.y);
+    return vertex;
+  }
+
+  // inspired from  mxGraph#getTranslateForRoot
+  private getTranslateForRoot(cell: mxgraph.mxCell): mxgraph.mxPoint {
+    const model = this.graph.getModel();
+    const offset = new mxPoint(0, 0);
+    console.log('@@@@@@@@@@@starting cell');
+    console.log(cell);
+
+    while (cell != null) {
+      const geo = model.getGeometry(cell);
+
+      if (geo != null) {
+        offset.x -= geo.x;
+        offset.y -= geo.y;
+      }
+
+      cell = model.getParent(cell);
+      console.log('found parent cell');
+      console.log(cell);
+    }
+
+    console.log('@@@@@@@@@@@');
+    return offset;
+  }
+
+  // using x and y with (absolute) coordinates related to the default parent
   private insertVertex(
     parentId: string,
     id: string | null,
@@ -128,6 +163,8 @@ export default class MxGraphModelUpdater {
     const vertex = this.graph.createVertex(this.graph.getDefaultParent(), id, value, x, y, width, height, style, relative);
     return this.addCell(vertex, this.getCell(parentId));
   }
+
+  // see also mxGraph#translateCell
 
   // https://github.com/jgraph/mxgraph/blob/master/javascript/src/js/view/mxGraph.js#L4641
   // function(cells, parent, index, source, target, absolute, constrain, extend)
@@ -174,7 +211,7 @@ export default class MxGraphModelUpdater {
 
       model.setGeometry(cell, geo);
     }
-    return model.add(parent, cell);;
+    return model.add(parent, cell);
 
     // if (cells != null && parent != null && index != null)
     // {
