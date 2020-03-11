@@ -44,9 +44,24 @@ export default class MxGraphModelUpdater {
   }
 
   public createLaneWithId(poolId: string, lane: BpmnLane): void {
-    const mxLane = this.graph.insertVertex(
-      // this.getCell(poolId),
-      this.graph.getDefaultParent(),
+    // const mxLane = this.graph.insertVertex(
+    //   this.getCell(poolId),
+    //   //this.graph.getDefaultParent(),
+    //   lane.id,
+    //   lane.label,
+    //   lane.x,
+    //   lane.y,
+    //   lane.width,
+    //   lane.height,
+    //   MxGraphBpmnStyles.LANE,
+    //   this.relativeGeometry,
+    // );
+    // mxLane.setConnectable(false);
+
+    //mxLane.setParent(this.getCell(poolId));
+
+    const mxLane = this.insertVertex(
+        poolId,
       lane.id,
       lane.label,
       lane.x,
@@ -57,8 +72,6 @@ export default class MxGraphModelUpdater {
       this.relativeGeometry,
     );
     mxLane.setConnectable(false);
-
-    //mxLane.setParent(this.getCell(poolId));
   }
 
   public createUserTask(laneId: string, task: BpmnUserTask): void {
@@ -70,19 +83,196 @@ export default class MxGraphModelUpdater {
   }
 
   public createStartEventWithId(laneId: string, event: BpmnStartEvent): void {
-    // this.getCell(laneId)
-    const vertex = this.graph.insertVertex(this.graph.getDefaultParent(), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START, this.relativeGeometry);
-    // vertex.setParent(this.getCell(laneId));
+    this.insertVertex(laneId, event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START, this.relativeGeometry);
 
+    // // this.getCell(laneId)
+    // //const vertex = this.graph.insertVertex(this.graph.getDefaultParent(), event.id, event.label, event.x, event.y, EVENT_WIDTH, EVENT_WIDTH, MxGraphBpmnStyles.EVENT_START, this.relativeGeometry);
+    // // vertex.setParent(this.getCell(laneId));
+    //
+    // const vertex = this.graph.createVertex(
+    //   this.graph.getDefaultParent(),
+    //   event.id,
+    //   event.label,
+    //   event.x,
+    //   event.y,
+    //   EVENT_WIDTH,
+    //   EVENT_WIDTH,
+    //   MxGraphBpmnStyles.EVENT_START,
+    //   this.relativeGeometry,
+    // );
+    //
+    // // https://github.com/jgraph/mxgraph/blob/master/javascript/src/js/view/mxGraph.js#L4608
+    // ///this.graph.addCells(vertex, this.getCell(laneId), null, null, null, true);
+    //
+    // // this.graph.addCells(cells,
+    // //                         parent,
+    // //                         null,
+    // //                         null,
+    // //                         null,
+    // //                         true);
+    // this.addCell(vertex, this.getCell(laneId));
+  }
 
+  // using x and y with (absolute) coordinates related to the default parent
+  private insertVertex(
+    parentId: string,
+    id: string | null,
+    value: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    style?: string,
+    relative?: boolean,
+  ): mxgraph.mxCell {
+    const vertex = this.graph.createVertex(this.graph.getDefaultParent(), id, value, x, y, width, height, style, relative);
+    return this.addCell(vertex, this.getCell(parentId));
+  }
 
-    // this.graph.addCells(cells,
-    //                         parent,
-    //                         null,
-    //                         null,
-    //                         null,
-    //                         true);
+  // https://github.com/jgraph/mxgraph/blob/master/javascript/src/js/view/mxGraph.js#L4641
+  // function(cells, parent, index, source, target, absolute, constrain, extend)
+  private addCell(cell: mxgraph.mxCell, parent: mxgraph.mxCell): mxgraph.mxCell {
+    // const model =  this.graph.getModel();
 
+    const model = this.graph.getModel();
+    // const oldParent = model.getParent(cell);
+    const oldParent = this.graph.getDefaultParent();
+    const zero = new mxPoint(0, 0);
+
+    // const parentState = absolute ? this.view.getState(parent) : null;
+    const newParentState = this.graph.getView().getState(parent);
+    console.log('new parent state');
+    console.log(newParentState);
+    // TODO this is the right way to do
+    // const originNewParent = parentState != null ? parentState.origin : null;
+
+    const oldState = this.graph.getView().getState(oldParent);
+    console.log('old parent state');
+    console.log(oldState);
+    const originOldParent = oldState != null ? oldState.origin : zero;
+    let geo = model.getGeometry(cell);
+
+    // console.info('geometry OldParent');
+    // console.info(oldParent.getGeometry());
+
+    console.info('geometry new Parent');
+    const geometryNewParent = parent.getGeometry();
+    console.info(geometryNewParent);
+    const originNewParent = new mxPoint(geometryNewParent.x, geometryNewParent.y);
+
+    console.info('origin originOldParent ');
+    console.info(originOldParent);
+    console.info('origin originNewParent ');
+    console.info(originNewParent);
+    if (geo != null) {
+      const dx = originOldParent.x - originNewParent.x;
+      const dy = originOldParent.y - originNewParent.y;
+
+      // to avoid forward references in sessions.
+      geo = geo.clone();
+      geo.translate(dx, dy);
+
+      model.setGeometry(cell, geo);
+    }
+    return model.add(parent, cell);;
+
+    // if (cells != null && parent != null && index != null)
+    // {
+    //   this.model.beginUpdate();
+    //   try
+    //   {
+    //     var parentState = (absolute) ? this.view.getState(parent) : null;
+    //     var o1 = (parentState != null) ? parentState.origin : null;
+    //     var zero = new mxPoint(0, 0);
+    //
+    //     for (var i = 0; i < cells.length; i++)
+    //     {
+    //       if (cells[i] == null)
+    //       {
+    //         index--;
+    //       }
+    //       else
+    //       {
+    //         var oldParent = this.model.getParent(cells[i]);
+    //
+    //         // Keeps the cell at its absolute location
+    //         if (o1 != null && cells[i] != parent && parent != oldParent)
+    //         {
+    //           var oldState = this.view.getState(oldParent);
+    //           var o2 = (oldState != null) ? oldState.origin : zero;
+    //           var geo = this.model.getGeometry(cells[i]);
+    //
+    //           if (geo != null)
+    //           {
+    //             var dx = o2.x - o1.x;
+    //             var dy = o2.y - o1.y;
+    //
+    //             // FIXME: Cells should always be inserted first before any other edit
+    //             // to avoid forward references in sessions.
+    //             geo = geo.clone();
+    //             geo.translate(dx, dy);
+    //
+    //             if (!geo.relative && this.model.isVertex(cells[i]) &&
+    //                 !this.isAllowNegativeCoordinates())
+    //             {
+    //               geo.x = Math.max(0, geo.x);
+    //               geo.y = Math.max(0, geo.y);
+    //             }
+    //
+    //             this.model.setGeometry(cells[i], geo);
+    //           }
+    //         }
+    //
+    //         // Decrements all following indices
+    //         // if cell is already in parent
+    //         if (parent == oldParent && index + i > this.model.getChildCount(parent))
+    //         {
+    //           index--;
+    //         }
+    //
+    //         this.model.add(parent, cells[i], index + i);
+    //
+    //         if (this.autoSizeCellsOnAdd)
+    //         {
+    //           this.autoSizeCell(cells[i], true);
+    //         }
+    //
+    //         // Extends the parent or constrains the child
+    //         if ((extend == null || extend) &&
+    //             this.isExtendParentsOnAdd(cells[i]) && this.isExtendParent(cells[i]))
+    //         {
+    //           this.extendParent(cells[i]);
+    //         }
+    //
+    //         // Additionally constrains the child after extending the parent
+    //         if (constrain == null || constrain)
+    //         {
+    //           this.constrainChild(cells[i]);
+    //         }
+    //
+    //         // Sets the source terminal
+    //         if (source != null)
+    //         {
+    //           this.cellConnected(cells[i], source, true);
+    //         }
+    //
+    //         // Sets the target terminal
+    //         if (target != null)
+    //         {
+    //           this.cellConnected(cells[i], target, false);
+    //         }
+    //       }
+    //     }
+    //
+    //     this.fireEvent(new mxEventObject(mxEvent.CELLS_ADDED, 'cells', cells,
+    //         'parent', parent, 'index', index, 'source', source, 'target', target,
+    //         'absolute', absolute));
+    //   }
+    //   finally
+    //   {
+    //     this.model.endUpdate();
+    //   }
+    // }
   }
 
   public createEndTerminateEventWithId(laneId: string, event: BpmnTerminateEndEvent): void {
