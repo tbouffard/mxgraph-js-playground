@@ -267,7 +267,7 @@ abstract class BpmnShapeTask extends mxRectangleShape {
           }
         }
         // TODO hack translation
-        //c.translate(-xTranslation, -yTranslation);
+        c.translate(-xTranslation, -yTranslation);
       });
     console.debug('@@symbolsString DONE');
   }
